@@ -1,21 +1,32 @@
-import express from "express";
-import cors from "cors";
-import "dotenv/config";
-import path from "path";
-import { fileURLToPath } from "url";
+import express from 'express'
+import cors from 'cors'
 
-const app = express();
-const port = process.env.PORT || 8080;
+import customerRoute from './src/routes/customerRoutes.js'
+import productRoute from './src/routes/productRoutes.js'
+import brandRoute from './src/routes/brandRoutes.js'
+import staffRoute from './src/routes/staffRoutes.js'
+import orderRoute from './src/routes/orderRoutes.js'
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import AppError from './src/utils/appError.js'
 
-app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
+const app = express()
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+// Middleware
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+app.use(cors())
+app.use(express.static('public'))
 
-app.listen(port, () => {
-  console.log(`App is listening at http://localhost:${port}`);
-});
+// Routes
+app.use('/api/v1/customers', customerRoute)
+app.use('/api/v1/products', productRoute)
+app.use('/api/v1/brands', brandRoute)
+app.use('/api/v1/staffs', staffRoute)
+app.use('/api/v1/orders', orderRoute)
+
+// Error Handling
+app.all('*', (req, res, next) => {
+    next(new AppError(`Can't find ${req.originalUrl} on this server`, 404))
+})
+
+export default app

@@ -1,37 +1,23 @@
-import express from "express";
+import express from 'express'
 import {
-  getAllProducts,
-  getProductById,
-  createProduct,
-  updateProduct,
-  deleteProduct,
-} from "../controllers/productController";
-import { uploadProductImg } from "../middlewares/uploadImage/multer";
+    getAllProducts,
+    getProductById,
+    createProduct,
+    updateProduct,
+    deleteProduct,
+} from '../controllers/productController.js'
+import { uploadProductImg } from '../middlewares/uploadImage/uploads/multer.js'
 
-const router = express.Router();
+const router = express.Router()
 
-router.get("/", async (req, res) => {
-  getAllProducts(req, res);
-});
+router
+    .route('/')
+    .get(getAllProducts)
+    .post(uploadProductImg.single('product-form'), createProduct)
+router
+    .route('/:id')
+    .get(getProductById)
+    .put(uploadProductImg.single('product-form'), updateProduct)
+    .delete(deleteProduct)
 
-router.get("/:id", async (req, res) => {
-  getProductById(req, res);
-});
-
-router.post("/", uploadProductImg.single("product-form"), async (req, res) => {
-  createProduct(req, res);
-});
-
-router.put(
-  "/:id",
-  uploadProductImg.single("product-form"),
-  async (req, res) => {
-    updateProduct(req, res);
-  }
-);
-
-router.delete("/:id", async (req, res) => {
-  deleteProduct(req, res);
-});
-
-export default router;
+export default router

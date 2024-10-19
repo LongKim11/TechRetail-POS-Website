@@ -1,5 +1,7 @@
 import express from 'express'
 import cors from 'cors'
+import { configDotenv } from 'dotenv'
+import morgan from 'morgan'
 
 import customerRoute from './src/routes/customerRoutes.js'
 import productRoute from './src/routes/productRoutes.js'
@@ -9,6 +11,8 @@ import orderRoute from './src/routes/orderRoutes.js'
 
 import AppError from './src/utils/appError.js'
 
+configDotenv({ path: './config.env' })
+
 const app = express()
 
 // Middleware
@@ -16,6 +20,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cors())
 app.use(express.static('public'))
+app.use(morgan('dev'))
 
 // Routes
 app.use('/api/v1/customers', customerRoute)

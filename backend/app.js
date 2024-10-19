@@ -10,6 +10,7 @@ import staffRoute from './src/routes/staffRoutes.js'
 import orderRoute from './src/routes/orderRoutes.js'
 
 import AppError from './src/utils/appError.js'
+import globalErrorHandler from './src/controllers/errorController.js'
 
 configDotenv({ path: './config.env' })
 
@@ -33,5 +34,8 @@ app.use('/api/v1/orders', orderRoute)
 app.all('*', (req, res, next) => {
     next(new AppError(`Can't find ${req.originalUrl} on this server`, 404))
 })
+
+// Global Error Handling Middleware
+app.use(globalErrorHandler)
 
 export default app

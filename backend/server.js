@@ -3,7 +3,11 @@ import app from './app.js'
 
 const PORT = process.env.PORT || 8080
 const MONGODB_URL =
-    process.env.MONGODB_URL || `mongodb://localhost/phone-store-pos`
+    process.env.MONGO_ATLAS_URL.replace(
+        '<db_username>',
+        process.env.MONGO_ATLAS_USERNAME,
+    ).replace('<db_password>', process.env.MONGO_ATLAS_PASSWORD) ||
+    `mongodb://localhost/phone-store-pos`
 
 mongoose
     .connect(MONGODB_URL, {})

@@ -7,7 +7,7 @@ import {
     deleteStaff,
 } from '../controllers/staffController.js'
 
-import { uploadAvatar } from '../middlewares/uploadImage/uploads/multer.js'
+import { uploadAvatar } from '../middlewares/uploadImage/multer.js'
 
 const router = express.Router()
 

@@ -6,7 +6,7 @@ import {
     updateProduct,
     deleteProduct,
 } from '../controllers/productController.js'
-import { uploadProductImg } from '../middlewares/uploadImage/uploads/multer.js'
+import { uploadProductImg } from '../middlewares/uploadImage/multer.js'
 
 const router = express.Router()
 

@@ -1,7 +1,7 @@
-import React from "react";
+import Router from "./Routers/Routers";
 
 const App = () => {
-  return <div className="bg-red-400">Hello world</div>;
+  return <Router></Router>;
 };
 
 export default App;

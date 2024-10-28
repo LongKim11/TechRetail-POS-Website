@@ -4,7 +4,7 @@ import { FaLock } from "react-icons/fa";
 const LoginPage = () => {
   return (
     <div className="min-w-screen min-h-screen bg-[#004AAD] px-10 sm:px-24 py-24 bg-center bg-cover bg-[url('https://img.freepik.com/free-vector/gradient-dynamic-blue-lines-background_23-2148995756.jpg?t=st=1730133716~exp=1730137316~hmac=e877d9a23ad12af7e2f66568c443ab19fec7b1e2637ce1e420b2c782eb035eb7&w=1380')]">
-      <div className="sm:w-[490px] sm:h-[590px] mx-auto rounded-lg p-7 bg-white">
+      <div className="sm:w-[490px] sm:h-[590px] mx-auto rounded-lg p-7 bg-white ">
         <div className="flex flex-row items-center justify-center sm:mb-10">
           <div>
             <img
@@ -47,6 +47,9 @@ const LoginPage = () => {
               Quên mật khẩu?
             </a>
           </div>
+          <span className="text-xs text-[#A6A6A6] mt-10 block">
+            Copyright &#169; 2024 | Powered by We Bare Bears Team{" "}
+          </span>
         </form>
       </div>
     </div>

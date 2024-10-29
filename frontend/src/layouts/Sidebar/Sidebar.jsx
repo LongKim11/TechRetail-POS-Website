@@ -17,7 +17,7 @@ const Sidebar = () => {
     <div
       className={` ${
         open ? "w-72" : "w-20 "
-      } bg-dark-purple h-screen p-5  pt-8 relative duration-300`}
+      } bg-dark-purple h-screen p-5 pt-8 relative duration-300`}
     >
       <img
         src="./src/assets/control.png"
@@ -33,7 +33,7 @@ const Sidebar = () => {
           }  w-[40px] h-[40px]`}
         />
         <h1
-          className={`text-[#FFD166] origin-left font-medium text-xl duration-300 ${
+          className={`text-yellow-300 origin-left font-medium text-xl duration-300 ${
             !open && "scale-0"
           }`}
         >

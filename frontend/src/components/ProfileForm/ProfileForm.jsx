@@ -1,4 +1,4 @@
-import { Avatar, Typography, Button, Chip } from "@material-tailwind/react";
+import { Avatar, Typography, Button } from "@material-tailwind/react";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { GrUpdate } from "react-icons/gr";
 

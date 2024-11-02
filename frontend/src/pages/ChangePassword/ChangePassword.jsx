@@ -1,28 +1,23 @@
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Navbar from "../../components/Navbar/Navbar";
-import DashboardBox from "../../components/DashboardBox/DashboardBox";
+import ChangePasswordForm from "../../components/ChangePasswordForm/ChangePasswordForm";
 
-const Home = () => {
+const ChangePassword = () => {
   return (
     <div className="flex">
       <Sidebar />
       <div className="flex-1 p-7 bg-slate-100">
         <Navbar
-          heading="Hi, Welcome back 👋"
+          heading="Tài khoản"
           username="Username"
           fullname="Nguyễn Văn A"
           email="nguyenvana@gmail.com"
           avatar="./src/assets/user-avatar.png"
         />
-        <DashboardBox
-          employees={20}
-          bills={100}
-          income={11000000}
-          products={400}
-        />
+        <ChangePasswordForm />
       </div>
     </div>
   );
 };
 
-export default Home;
+export default ChangePassword;

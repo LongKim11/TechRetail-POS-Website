@@ -3,14 +3,14 @@ import { FaLock } from "react-icons/fa";
 
 const LoginPage = () => {
   return (
-    <div className="min-w-screen min-h-screen px-10 sm:px-24 py-24 bg-center bg-cover bg-[url('https://img.freepik.com/free-vector/gradient-dynamic-blue-lines-background_23-2148995756.jpg?t=st=1730133716~exp=1730137316~hmac=e877d9a23ad12af7e2f66568c443ab19fec7b1e2637ce1e420b2c782eb035eb7&w=1380')]">
+    <div className="min-w-screen min-h-screen px-10 sm:px-24 py-24 bg-center bg-cover bg-[url('./src/assets/login-bg.jpg')]">
       <div className="sm:w-[490px] sm:h-[590px] mx-auto rounded-lg p-7 bg-white shadow-2xl shadow-yellow-800">
-        <div className="flex flex-row items-center justify-center sm:mb-10">
+        <div className="flex flex-row items-center justify-center sm:mb-10 gap-x-5">
           <div>
             <img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQocNNLtlcAtDpCRhqp9_6gETyDrdRQ32PLfQ&s"
+              src="./src/assets/logo-vector.png"
               alt="logo"
-              className="w-[100px] h-[100px] mx-auto"
+              className="w-[80px] h-[80px] mx-auto"
             />
           </div>
           <div>
@@ -47,7 +47,7 @@ const LoginPage = () => {
               Quên mật khẩu?
             </a>
           </div>
-          <span className="text-xs text-[#A6A6A6] mt-10 block">
+          <span className="text-xs text-[#A6A6A6] mt-16 block">
             Copyright &#169; 2024 | Powered by We Bare Bears Team{" "}
           </span>
         </form>

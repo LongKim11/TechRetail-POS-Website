@@ -1,16 +1,23 @@
 import { useState } from "react";
 
+import { FaTachometerAlt } from "react-icons/fa";
+import { FaRegCircleUser } from "react-icons/fa6";
+import { FaUserPlus } from "react-icons/fa6";
+import { FaUsers } from "react-icons/fa";
+import { PiDevicesFill } from "react-icons/pi";
+import { FaChartLine } from "react-icons/fa6";
+import { FiLogOut } from "react-icons/fi";
+
 const Sidebar = () => {
   const [open, setOpen] = useState(true);
   const Menus = [
-    { title: "Dashboard", src: "Chart_fill" },
-    { title: "Inbox", src: "Chat" },
-    { title: "Accounts", src: "User", gap: true },
-    { title: "Schedule ", src: "Calendar" },
-    { title: "Search", src: "Search" },
-    { title: "Analytics", src: "Chart" },
-    { title: "Files ", src: "Folder", gap: true },
-    { title: "Setting", src: "Setting" },
+    { title: "Dashboard", src: <FaTachometerAlt /> },
+    { title: "Profile", src: <FaRegCircleUser /> },
+    { title: "Staffs", src: <FaUserPlus />, gap: true },
+    { title: "Products", src: <PiDevicesFill /> },
+    { title: "Customers", src: <FaUsers /> },
+    { title: "Analys", src: <FaChartLine /> },
+    { title: "Log out", src: <FiLogOut />, gap: true },
   ];
 
   return (
@@ -49,7 +56,7 @@ const Sidebar = () => {
               index === 0 && "bg-light-white"
             } `}
           >
-            <img src={`./src/assets/${Menu.src}.png`} />
+            <span className="text-2xl text-white">{Menu.src}</span>
             <span className={`${!open && "hidden"} origin-left duration-200`}>
               {Menu.title}
             </span>

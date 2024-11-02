@@ -56,7 +56,7 @@ const ProfileForm = ({ avatar, username, email, fullname }) => {
         <div className="flex justify-center mt-14">
           <Button variant="gradient" className="flex items-center gap-3">
             <GrUpdate className="text-lg" />
-            Sửa thông tin
+            Đổi mật khẩu
           </Button>
         </div>
       </form>

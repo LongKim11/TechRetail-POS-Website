@@ -10,7 +10,7 @@ const Routers = () => {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/" element={<Home />} />
       <Route path="/profile" element={<Profile />}></Route>
-      <Route path="/changpassword" element={<ChangePassword />}></Route>
+      <Route path="/changepassword" element={<ChangePassword />}></Route>
     </Routes>
   );
 };

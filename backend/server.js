@@ -1,23 +1,28 @@
 import mongoose from 'mongoose'
 import app from './app.js'
+import { connectDB } from './src/config/database.js'
 
 const PORT = process.env.PORT || 8080
-const MONGODB_URL =
-    process.env.MONGO_ATLAS_URL.replace(
-        '<db_username>',
-        process.env.MONGO_ATLAS_USERNAME,
-    ).replace('<db_password>', process.env.MONGO_ATLAS_PASSWORD) ||
-    `mongodb://localhost/phone-store-pos`
 
-mongoose
-    .connect(MONGODB_URL, {})
-    .then(() => {
-        console.log('Connected to MongoDB')
-    })
-    .catch((error) => {
-        console.log(error)
-    })
+connectDB()
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT} http://localhost:${PORT}`)
+const server = app.listen(PORT, () => {
+    console.log(`App running on port ${PORT}...`)
 })
+
+process.on('unhandledRejection', (err) => {
+    console.log('UHANDLED REJECTION ERROR! Shutting down...');
+    console.log(err.name, err.message);
+    server.close(() => {
+        process.exit(1);
+    });
+});
+
+process.on('uncaughtException', (err) => {
+    console.log('UNCAUGHT EXCEPTION ERROR! Shutting down...');
+    console.log(err.name, err.message);
+    server.close(() => {
+        process.exit(1);
+    });
+});
+

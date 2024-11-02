@@ -4,15 +4,15 @@ const customerSchema = mongoose.Schema(
     {
         fullname: {
             type: String,
-            required: true,
+            required: [true, 'Full name is required'],
         },
         address: {
             type: String,
-            required: true,
+            required: [true, 'Address is required'],
         },
         phone: {
             type: Number,
-            required: true,
+            required: [true, 'Phone number is required'],
         },
     },
     { timestamps: true },

@@ -1,3 +1,5 @@
+import fs from 'fs'
+
 import catchAsync from '../utils/catchAsync.js'
 import AppError from '../utils/appError.js'
 
@@ -31,27 +33,12 @@ const getStaffById = catchAsync(async (req, res, next) => {
 })
 
 const createStaff = catchAsync(async (req, res, next) => {
-    const {
-        fullname,
-        email,
-        account_username,
-        account_password,
-        status,
-        is_locked,
-    } = req.body
-
     const avatar = req.file.filename
-
+    const { username, password } = req.body
     const newStaff = await Staff.create({
-        fullname,
-        email,
+        ...req.body,
+        account: { username, password },
         avatar,
-        account: {
-            username: account_username,
-            password: account_password,
-        },
-        status,
-        is_locked,
     })
 
     if (!newStaff) {
@@ -67,12 +54,16 @@ const createStaff = catchAsync(async (req, res, next) => {
 })
 
 const updateStaff = catchAsync(async (req, res, next) => {
-    const editStaff = await Staff.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-        runValidators: true,
-    })
+    const editStaff = await Staff.findByIdAndUpdate(
+        req.params.id,
+        { ...req.body, avatar: req.file.filename },
+        {
+            new: true,
+            runValidators: true,
+        },
+    )
 
-    if (!staff) {
+    if (!editStaff) {
         return next(new AppError('No staff found with that ID', 404))
     }
 
@@ -87,13 +78,13 @@ const updateStaff = catchAsync(async (req, res, next) => {
 const deleteStaff = catchAsync(async (req, res, next) => {
     const deleteStaff = await Staff.findByIdAndDelete(req.params.id)
 
-    if (!staff) {
+    if (!deleteStaff) {
         return next(new AppError('No staff found with that ID', 404))
     }
 
     res.status(204).json({
         status: 'success',
-        data: null,
+        data: deleteStaff,
     })
 })
 

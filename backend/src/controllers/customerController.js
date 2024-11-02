@@ -60,7 +60,7 @@ const updateCustomer = catchAsync(async (req, res, next) => {
     })
 })
 const deleteCustomer = catchAsync(async (req, res, next) => {
-    const deleteCustomer = await Customer.findByIdAndDelete(req.params.id)
+    const customer = await Customer.findByIdAndDelete(req.params.id)
 
     if (!customer) {
         return next(new AppError('No customer found with that ID', 404))
@@ -68,7 +68,7 @@ const deleteCustomer = catchAsync(async (req, res, next) => {
 
     res.status(204).json({
         status: 'success',
-        data: deleteCustomer,
+        data: customer,
     })
 })
 

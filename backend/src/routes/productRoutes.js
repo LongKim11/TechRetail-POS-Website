@@ -6,9 +6,15 @@ import {
     updateProduct,
     deleteProduct,
 } from '../controllers/productController.js'
-import { uploadProductImg } from '../middlewares/uploadImage/multer.js'
+import { uploadProductImg } from '../middlewares/uploadImage/uploads/multer.js'
+import { isAuthenticated } from '../middlewares/auth/auth.js'
+import { login } from '../controllers/authController.js'
 
 const router = express.Router()
+
+// Protect all routes after this middleware
+router.route('/login').post(login)
+router.use(isAuthenticated)
 
 router
     .route('/')

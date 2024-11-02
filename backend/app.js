@@ -3,6 +3,7 @@ import cors from 'cors'
 import { configDotenv } from 'dotenv'
 import morgan from 'morgan'
 
+import authRoute from './src/routes/authRoutes.js'
 import customerRoute from './src/routes/customerRoutes.js'
 import productRoute from './src/routes/productRoutes.js'
 import brandRoute from './src/routes/brandRoutes.js'
@@ -18,12 +19,13 @@ const app = express()
 
 // Middleware
 app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: false }))
 app.use(cors())
 app.use(express.static('public'))
 app.use(morgan('dev'))
 
 // Routes
+app.use('/api/v1/auth', authRoute)
 app.use('/api/v1/customers', customerRoute)
 app.use('/api/v1/products', productRoute)
 app.use('/api/v1/brands', brandRoute)

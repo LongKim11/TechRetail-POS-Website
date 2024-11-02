@@ -47,7 +47,7 @@ const updateBrand = catchAsync(async (req, res, next) => {
         runValidators: true,
     })
 
-    if (!brand) {
+    if (!editBrand) {
         return next(new AppError('No brand found with that ID', 404))
     }
 
@@ -62,7 +62,7 @@ const updateBrand = catchAsync(async (req, res, next) => {
 const deleteBrand = catchAsync(async (req, res, next) => {
     const deleteBrand = await Brand.findByIdAndDelete(req.params.id)
 
-    if (!brand) {
+    if (!deleteBrand) {
         return next(new AppError('No brand found with that ID', 404))
     }
 

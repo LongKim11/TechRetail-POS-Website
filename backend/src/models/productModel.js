@@ -4,30 +4,33 @@ const productSchema = mongoose.Schema(
     {
         brand_id: {
             type: Schema.Types.ObjectId,
-            required: true,
+            required: [true, 'Brand ID is required'],
             ref: 'Brand',
         },
         name: {
             type: String,
-            required: true,
+            required: [true, 'Product name is required'],
         },
         barcode: {
             type: String,
-            required: true,
+            required: [true, 'Barcode is required'],
         },
         import_price: {
             type: Schema.Types.Decimal128,
-            required: true,
+            required: [true, 'Import price is required'],
         },
         retail_price: {
             type: Schema.Types.Decimal128,
-            required: true,
+            required: [true, 'Retail price is required'],
         },
         category: {
             name: {
                 type: String,
-                required: true,
-                enum: ['phone', 'accessories'],
+                required: [true, 'Category name is required'],
+                enum: {
+                    values: ['phone', 'accessories'],
+                    message: 'Category name must be either phone or accessories',
+                },
             },
             type: {
                 type: String,
@@ -35,7 +38,7 @@ const productSchema = mongoose.Schema(
         },
         image: {
             type: String,
-            required: true,
+            required: [true, 'Image URL is required'],
         },
     },
     { timestamps: true },

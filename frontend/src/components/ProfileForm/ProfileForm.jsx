@@ -7,7 +7,14 @@ const ProfileForm = ({ avatar, username, email, fullname }) => {
     <div className="w-2/3 2xl:w-1/2 mx-auto mt-7">
       <div className="flex justify-between items-center">
         <div className="flex items-center">
-          <Avatar src={avatar} alt="avatar" size="xl" />
+          <Avatar
+            src={avatar}
+            alt="avatar"
+            size="xl"
+            withBorder={true}
+            className="p-1"
+            color="blue"
+          />
           <div className="ml-5">
             <h1 className="text-2xl font-semibold">{username}</h1>
             <p className="text-gray-500">{email}</p>

@@ -51,7 +51,7 @@ const ChangePasswordForm = () => {
         </form>
         <div>
           <img
-            src="https://img.freepik.com/free-vector/smartphone-data-protection-flat-composition-with-laptop-computer-screens-human-character-inserting-letters-into-password-vector-illustration_1284-82084.jpg?t=st=1730521233~exp=1730524833~hmac=a1d4887fb936463e88334df3d8556a8ce1426b655558aa295f52a673a63d73c2&w=1380"
+            src="./src/assets/change-password.png"
             className="mix-blend-multiply"
           ></img>
         </div>

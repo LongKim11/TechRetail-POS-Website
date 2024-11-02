@@ -8,35 +8,35 @@ import StaffTable from "../../components/StaffTable/StaffTable";
 const StaffManagementPage = () => {
   const TABLE_ROWS = [
     {
-      img: "https://docs.material-tailwind.com/img/logos/logo-spotify.svg",
+      img: "./src/assets/user-avatar.png",
       name: "John Michael",
       createdAt: "2021-10-10",
       status: "Active",
       is_locked: "false",
     },
     {
-      img: "https://docs.material-tailwind.com/img/logos/logo-spotify.svg",
+      img: "./src/assets/user-avatar.png",
       name: "Alexa Liras",
       createdAt: "2021-10-10",
       status: "Inactive",
       is_locked: "true",
     },
     {
-      img: "https://docs.material-tailwind.com/img/logos/logo-spotify.svg",
+      img: "./src/assets/user-avatar.png",
       name: "Laurent Perrier",
       createdAt: "2021-10-10",
       status: "Active",
       is_locked: "true",
     },
     {
-      img: "https://docs.material-tailwind.com/img/logos/logo-spotify.svg",
+      img: "./src/assets/user-avatar.png",
       name: "Michael Levi",
       createdAt: "2021-10-10",
       status: "Active",
       is_locked: "true",
     },
     {
-      img: "https://docs.material-tailwind.com/img/logos/logo-spotify.svg",
+      img: "./src/assets/user-avatar.png",
       name: "Richard Gran",
       createdAt: "2021-10-10",
       status: "Inactive",
@@ -53,7 +53,7 @@ const StaffManagementPage = () => {
           username="Username"
           fullname="Nguyễn Văn A"
           email="nguyenvana@gmail.com"
-          avatar="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"
+          avatar="./src/assets/user-avatar.png"
         />
         <div className="flex justify-between mt-11 items-center">
           <h1 className="text-2xl font-semibold">Danh sách</h1>

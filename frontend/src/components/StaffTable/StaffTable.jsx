@@ -21,7 +21,7 @@ const TABLE_HEAD = [
 const StaffTable = ({ TABLE_ROWS }) => {
   return (
     <Card className="h-full w-full">
-      <table className="w-full min-w-max table-auto text-left table-auto">
+      <table className="w-full min-w-max text-left table-auto">
         <thead>
           <tr>
             {TABLE_HEAD.map((head) => (
@@ -44,6 +44,8 @@ const StaffTable = ({ TABLE_ROWS }) => {
                         src={img}
                         alt={name}
                         size="md"
+                        withBorder={true}
+                        color="blue"
                         className="border object-contain p-1"
                       />
                       <Typography variant="small" className="font-semibold">

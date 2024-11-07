@@ -2,51 +2,50 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import Navbar from "../../components/Navbar/Navbar";
 import { Button } from "@material-tailwind/react";
 import { IoFilter } from "react-icons/io5";
-import StaffTable from "../../components/StaffTable/StaffTable";
 import ProductTable from "../../components/ProductTable/ProductTable";
 import { TbDevicesPlus } from "react-icons/tb";
 
 const ProductManagementPage = () => {
   const TABLE_ROWS = [
     {
-      img: "./src/assets/user-avatar.png",
-      name: "John Michael",
+      barcode: "P000001",
+      name: "Iphone 13 Pro Max 256GB",
+      import_price: "2000",
+      retail_price: "2500",
+      category: { name: "phone", type: "smartphone" },
       createdAt: "2021-10-10",
-      status: "Active",
-      is_locked: "false",
-      date: "2021-10-10",
     },
     {
-      img: "./src/assets/user-avatar.png",
-      name: "Alexa Liras",
+      barcode: "P000001",
+      name: "Sạc Smartphone Samsung 25W",
+      import_price: "2000",
+      retail_price: "2500",
+      category: { name: "accessories", type: "charging" },
       createdAt: "2021-10-10",
-      status: "Inactive",
-      is_locked: "true",
-      date: "2021-10-10",
     },
     {
-      img: "./src/assets/user-avatar.png",
-      name: "Laurent Perrier",
+      barcode: "P000001",
+      name: "Xiomi Redmi Note 10 Pro 128GB",
+      import_price: "2000",
+      retail_price: "2500",
+      category: { name: "phone", type: "smartphone" },
       createdAt: "2021-10-10",
-      status: "Active",
-      is_locked: "true",
-      date: "2021-10-10",
     },
     {
-      img: "./src/assets/user-avatar.png",
-      name: "Michael Levi",
+      barcode: "P000001",
+      name: "Apple Watch Series 7 44mm",
+      import_price: "2000",
+      retail_price: "2500",
+      category: { name: "accessories", type: "watch" },
       createdAt: "2021-10-10",
-      status: "Active",
-      is_locked: "true",
-      date: "2021-10-10",
     },
     {
-      img: "./src/assets/user-avatar.png",
-      name: "Michael Levi",
+      barcode: "P000001",
+      name: "Iphone 13 Pro Max 256GB",
+      import_price: "2000",
+      retail_price: "2500",
+      category: { name: "phone", type: "smartphone" },
       createdAt: "2021-10-10",
-      status: "Active",
-      is_locked: "true",
-      date: "2021-10-10",
     },
   ];
   return (

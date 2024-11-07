@@ -1,12 +1,5 @@
-import {
-  Card,
-  Typography,
-  Avatar,
-  Chip,
-  Button,
-  Tooltip,
-} from "@material-tailwind/react";
-import { IoIosMail } from "react-icons/io";
+import { Card, Typography, Tooltip } from "@material-tailwind/react";
+import { BsInfoCircle } from "react-icons/bs";
 import { AiOutlineEdit } from "react-icons/ai";
 import { MdOutlineDelete } from "react-icons/md";
 
@@ -37,67 +30,80 @@ const ProductTable = ({ TABLE_ROWS }) => {
         </thead>
         <tbody>
           {TABLE_ROWS.map(
-            ({ img, name, createdAt, status, is_locked, date }, index) => {
+            (
+              {
+                barcode,
+                name,
+                import_price,
+                retail_price,
+                category,
+                createdAt,
+              },
+              index
+            ) => {
               return (
                 <tr key={index} className="hover:bg-slate-50">
                   <td className="p-4">
-                    <div className="flex items-center gap-x-3">
-                      <Avatar
-                        src={img}
-                        alt={name}
-                        size="md"
-                        withBorder={true}
-                        color="blue"
-                        className="border object-contain p-1"
-                      />
-                      <Typography variant="small" className="font-semibold">
-                        {name}
-                      </Typography>
-                    </div>
+                    <Typography
+                      variant="mmedium"
+                      className="font-semibold text-orange-600"
+                    >
+                      {barcode}
+                    </Typography>
                   </td>
                   <td className="p-4">
-                    <Typography variant="small" className="font-semibold">
+                    <Typography
+                      variant="medium"
+                      className="font-semibold text-blue-700"
+                    >
+                      {name}
+                    </Typography>
+                  </td>
+                  <td className="p-4">
+                    <Typography
+                      variant="medium"
+                      className="font-semibold text-green-500"
+                    >
+                      {import_price}$
+                    </Typography>
+                  </td>
+                  <td className="p-4">
+                    <Typography
+                      variant="medium"
+                      className="font-semibold text-green-500"
+                    >
+                      {retail_price}$
+                    </Typography>
+                  </td>
+                  <td className="p-4">
+                    <Typography
+                      variant="medium"
+                      className="font-semibold text-slate-500"
+                    >
+                      {category.type}
+                    </Typography>
+                  </td>
+                  <td className="p-4">
+                    <Typography
+                      variant="medium"
+                      className="font-semibold text-slate-500"
+                    >
                       {createdAt}
                     </Typography>
                   </td>
                   <td className="p-4">
-                    <div className="w-max">
-                      <Chip
-                        size="lg"
-                        variant="ghost"
-                        value={status}
-                        color={status == "Active" ? "green" : "amber"}
-                      />
-                    </div>
-                  </td>
-                  <td className="p-4">
-                    <div className="w-max">
-                      <Chip
-                        size="lg"
-                        variant="ghost"
-                        value={is_locked}
-                        color={is_locked == "true" ? "red" : "cyan"}
-                      />
-                    </div>
-                  </td>
-                  <td className="p-4">
-                    <Button
-                      className="flex items-center gap-3"
-                      size="sm"
-                      color="blue"
-                      variant="outlined"
-                    >
-                      <IoIosMail className="text-xl text-blue-500" />
-                      Gửi
-                    </Button>
-                  </td>
-                  <td className="p-4">
-                    <Typography variant="small" className="font-semibold">
-                      {date}
-                    </Typography>
-                  </td>
-                  <td className="p-4">
                     <div className="flex items-center gap-x-5">
+                      <Tooltip
+                        content="Xem chi tiết"
+                        animate={{
+                          mount: { scale: 1, y: 0 },
+                          unmount: { scale: 0, y: 25 },
+                        }}
+                      >
+                        <a href="#">
+                          <BsInfoCircle className="text-2xl text-green-600" />
+                        </a>
+                      </Tooltip>
                       <Tooltip
                         content="Chỉnh sửa"
                         animate={{
@@ -106,7 +112,7 @@ const ProductTable = ({ TABLE_ROWS }) => {
                         }}
                       >
                         <a href="#">
-                          <AiOutlineEdit className="text-2xl text-green-600" />
+                          <AiOutlineEdit className="text-2xl text-yellow-600" />
                         </a>
                       </Tooltip>
                       <Tooltip

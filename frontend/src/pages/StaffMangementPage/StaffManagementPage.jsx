@@ -26,13 +26,13 @@ const StaffManagementPage = () => {
       name: "Laurent Perrier",
       createdAt: "2021-10-10",
       status: "Active",
-      is_locked: "true",
+      is_locked: "false",
     },
     {
       img: "./src/assets/user-avatar.png",
       name: "Michael Levi",
       createdAt: "2021-10-10",
-      status: "Active",
+      status: "Inactive",
       is_locked: "true",
     },
     {

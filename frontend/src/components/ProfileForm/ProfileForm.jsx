@@ -4,7 +4,7 @@ import { GrUpdate } from "react-icons/gr";
 
 const ProfileForm = ({ avatar, username, email, fullname }) => {
   return (
-    <div className="w-3/4 mx-auto mt-11 flex items-center">
+    <div className="px-11 mx-auto mt-11 flex items-center">
       <div className="w-1/2">
         <div className="flex justify-between items-center">
           <div className="flex items-center">

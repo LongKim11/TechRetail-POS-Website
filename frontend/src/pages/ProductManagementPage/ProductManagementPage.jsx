@@ -1,11 +1,12 @@
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Navbar from "../../components/Navbar/Navbar";
 import { Button } from "@material-tailwind/react";
-import { FaUserPlus } from "react-icons/fa";
 import { IoFilter } from "react-icons/io5";
 import StaffTable from "../../components/StaffTable/StaffTable";
+import ProductTable from "../../components/ProductTable/ProductTable";
+import { TbDevicesPlus } from "react-icons/tb";
 
-const StaffManagementPage = () => {
+const ProductManagementPage = () => {
   const TABLE_ROWS = [
     {
       img: "./src/assets/user-avatar.png",
@@ -13,6 +14,7 @@ const StaffManagementPage = () => {
       createdAt: "2021-10-10",
       status: "Active",
       is_locked: "false",
+      date: "2021-10-10",
     },
     {
       img: "./src/assets/user-avatar.png",
@@ -20,6 +22,7 @@ const StaffManagementPage = () => {
       createdAt: "2021-10-10",
       status: "Inactive",
       is_locked: "true",
+      date: "2021-10-10",
     },
     {
       img: "./src/assets/user-avatar.png",
@@ -27,6 +30,7 @@ const StaffManagementPage = () => {
       createdAt: "2021-10-10",
       status: "Active",
       is_locked: "true",
+      date: "2021-10-10",
     },
     {
       img: "./src/assets/user-avatar.png",
@@ -34,6 +38,7 @@ const StaffManagementPage = () => {
       createdAt: "2021-10-10",
       status: "Active",
       is_locked: "true",
+      date: "2021-10-10",
     },
     {
       img: "./src/assets/user-avatar.png",
@@ -41,15 +46,15 @@ const StaffManagementPage = () => {
       createdAt: "2021-10-10",
       status: "Active",
       is_locked: "true",
+      date: "2021-10-10",
     },
   ];
-
   return (
     <div className="flex">
       <Sidebar />
       <div className="flex-1 p-7 bg-slate-100">
         <Navbar
-          heading="Quản lý nhân viên"
+          heading="Quản lý sản phẩm"
           username="Username"
           fullname="Nguyễn Văn A"
           email="nguyenvana@gmail.com"
@@ -58,8 +63,8 @@ const StaffManagementPage = () => {
         <div className="flex justify-between mt-11 items-center">
           <h1 className="text-2xl font-semibold">Danh sách</h1>
           <Button color="green" className="flex items-center gap-3">
-            <FaUserPlus className="text-lg" />
-            Thêm nhân viên
+            <TbDevicesPlus className="text-lg" />
+            Thêm sản phẩm
           </Button>
         </div>
         <div className="w-full bg-white rounded-xl mt-7 border border-slate-200">
@@ -86,7 +91,7 @@ const StaffManagementPage = () => {
                 <input
                   type="search"
                   className="block w-full p-3 ps-10 text-sm border border-gray-300 rounded-lg  focus:ring-blue-500 focus:outline-none focus:ring-1 focus:border-blue-500 "
-                  placeholder="Tìm nhân viên.."
+                  placeholder="Tìm sản phẩm.."
                   required
                 />
               </div>
@@ -97,11 +102,11 @@ const StaffManagementPage = () => {
               </Button>
             </div>
           </div>
-          <StaffTable TABLE_ROWS={TABLE_ROWS} />
+          <ProductTable TABLE_ROWS={TABLE_ROWS} />
         </div>
       </div>
     </div>
   );
 };
 
-export default StaffManagementPage;
+export default ProductManagementPage;

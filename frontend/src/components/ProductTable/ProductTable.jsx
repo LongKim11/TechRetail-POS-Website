@@ -7,20 +7,20 @@ import {
   Tooltip,
 } from "@material-tailwind/react";
 import { IoIosMail } from "react-icons/io";
-import { BsInfoCircle } from "react-icons/bs";
-import { MdLockPerson } from "react-icons/md";
-import { RiBillLine } from "react-icons/ri";
+import { AiOutlineEdit } from "react-icons/ai";
+import { MdOutlineDelete } from "react-icons/md";
 
 const TABLE_HEAD = [
-  "Họ và tên",
+  "Barcode",
+  "Tên sản phẩm",
+  "Giá nhập",
+  "Giá bán lẻ",
+  "Loại sản phẩm",
   "Ngày tạo",
-  "Trạng thái",
-  "Khóa",
-  "Gửi lại mail",
   "Thao tác",
 ];
 
-const StaffTable = ({ TABLE_ROWS }) => {
+const ProductTable = ({ TABLE_ROWS }) => {
   return (
     <Card className="h-full w-full">
       <table className="w-full min-w-max table-auto text-left">
@@ -37,7 +37,7 @@ const StaffTable = ({ TABLE_ROWS }) => {
         </thead>
         <tbody>
           {TABLE_ROWS.map(
-            ({ img, name, createdAt, status, is_locked }, index) => {
+            ({ img, name, createdAt, status, is_locked, date }, index) => {
               return (
                 <tr key={index} className="hover:bg-slate-50">
                   <td className="p-4">
@@ -92,38 +92,32 @@ const StaffTable = ({ TABLE_ROWS }) => {
                     </Button>
                   </td>
                   <td className="p-4">
+                    <Typography variant="small" className="font-semibold">
+                      {date}
+                    </Typography>
+                  </td>
+                  <td className="p-4">
                     <div className="flex items-center gap-x-5">
                       <Tooltip
-                        content="Xem chi tiết"
+                        content="Chỉnh sửa"
                         animate={{
                           mount: { scale: 1, y: 0 },
                           unmount: { scale: 0, y: 25 },
                         }}
                       >
                         <a href="#">
-                          <BsInfoCircle className="text-2xl text-green-600" />
+                          <AiOutlineEdit className="text-2xl text-green-600" />
                         </a>
                       </Tooltip>
                       <Tooltip
-                        content="Xem thông tin bán hàng"
+                        content="Xóa sản phẩm"
                         animate={{
                           mount: { scale: 1, y: 0 },
                           unmount: { scale: 0, y: 25 },
                         }}
                       >
                         <a href="#">
-                          <RiBillLine className="text-2xl text-blue-600" />
-                        </a>
-                      </Tooltip>
-                      <Tooltip
-                        content="Khóa tài khoản"
-                        animate={{
-                          mount: { scale: 1, y: 0 },
-                          unmount: { scale: 0, y: 25 },
-                        }}
-                      >
-                        <a href="#">
-                          <MdLockPerson className="text-2xl text-red-600" />
+                          <MdOutlineDelete className="text-2xl text-red-600" />
                         </a>
                       </Tooltip>
                     </div>
@@ -138,4 +132,4 @@ const StaffTable = ({ TABLE_ROWS }) => {
   );
 };
 
-export default StaffTable;
+export default ProductTable;

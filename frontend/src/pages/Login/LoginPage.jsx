@@ -3,7 +3,7 @@ import { FaLock } from "react-icons/fa";
 
 const LoginPage = () => {
   return (
-    <div className="min-w-screen min-h-screen px-10 sm:px-24 py-24 bg-center bg-cover bg-[url('./src/assets/login-bg.jpg')]">
+    <div className="min-w-screen min-h-screen px-10 sm:px-24 py-12 bg-center bg-cover bg-[url('./src/assets/login-bg.jpg')]">
       <div className="sm:w-[490px] sm:h-[590px] mx-auto rounded-lg p-7 bg-white shadow-2xl shadow-yellow-800">
         <div className="flex flex-row items-center justify-center sm:mb-10 gap-x-5">
           <div>

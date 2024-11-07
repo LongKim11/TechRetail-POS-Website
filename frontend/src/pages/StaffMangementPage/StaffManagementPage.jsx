@@ -37,10 +37,10 @@ const StaffManagementPage = () => {
     },
     {
       img: "./src/assets/user-avatar.png",
-      name: "Richard Gran",
+      name: "Michael Levi",
       createdAt: "2021-10-10",
-      status: "Inactive",
-      is_locked: "false",
+      status: "Active",
+      is_locked: "true",
     },
   ];
 

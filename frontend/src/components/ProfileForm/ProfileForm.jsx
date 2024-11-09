@@ -12,9 +12,11 @@ import { useState } from "react";
 import { PiNumpad } from "react-icons/pi";
 
 const ProfileForm = ({ avatar, username, email, fullname }) => {
-  const [open, setOpen] = useState(false);
+  const [openCPModal, setOpenCPModal] = useState(false);
+  const [openCAModal, setOpenCAModal] = useState(false);
 
-  const handleOpen = () => setOpen((cur) => !cur);
+  const handleOpenCPModal = () => setOpenCPModal((cur) => !cur);
+  const handleOpenCAModal = () => setOpenCAModal((cur) => !cur);
   return (
     <div className="px-11 mx-auto mt-11 flex items-center">
       <div className="w-1/2">
@@ -37,6 +39,7 @@ const ProfileForm = ({ avatar, username, email, fullname }) => {
             variant="gradient"
             className="flex items-center gap-3"
             color="blue"
+            onClick={handleOpenCAModal}
           >
             <GrUpdate className="text-lg" />
             Đổi ảnh mới
@@ -74,15 +77,15 @@ const ProfileForm = ({ avatar, username, email, fullname }) => {
             <Button
               variant="gradient"
               className="flex items-center gap-3"
-              onClick={handleOpen}
+              onClick={handleOpenCPModal}
             >
               <PiNumpad className="text-lg" />
               Đổi mật khẩu
             </Button>
             <Dialog
-              size="sx"
-              open={open}
-              handler={handleOpen}
+              size="sm"
+              open={openCPModal}
+              handler={handleOpenCPModal}
               className="bg-transparent shadow-none"
             >
               <Card className="mx-auto w-full max-w-[28rem]">
@@ -119,8 +122,48 @@ const ProfileForm = ({ avatar, username, email, fullname }) => {
                   ></input>
                 </CardBody>
                 <CardFooter className="pt-0">
-                  <Button variant="gradient" onClick={handleOpen} fullWidth>
+                  <Button
+                    variant="gradient"
+                    onClick={handleOpenCPModal}
+                    fullWidth
+                  >
                     Đổi mật khẩu
+                  </Button>
+                </CardFooter>
+              </Card>
+            </Dialog>
+            <Dialog
+              size="sm"
+              open={openCAModal}
+              handler={handleOpenCAModal}
+              className="bg-transparent shadow-none"
+            >
+              <Card className="mx-auto w-full max-w-[28rem]">
+                <CardBody className="flex flex-col gap-4">
+                  <Typography variant="h4" color="blue-gray">
+                    Cập nhật ảnh đại diện
+                  </Typography>
+                  <Typography
+                    className="font-normal text-slate-400"
+                    variant="paragraph"
+                  >
+                    Ảnh phải thuộc định dạng JPG, PNG.
+                  </Typography>
+                  <Typography className="" variant="h6">
+                    Tải ảnh lên
+                  </Typography>
+                  <input
+                    type="file"
+                    className="font-semibold file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200"
+                  ></input>
+                </CardBody>
+                <CardFooter className="pt-0">
+                  <Button
+                    variant="gradient"
+                    onClick={handleOpenCAModal}
+                    fullWidth
+                  >
+                    Lưu ảnh đại diện
                   </Button>
                 </CardFooter>
               </Card>

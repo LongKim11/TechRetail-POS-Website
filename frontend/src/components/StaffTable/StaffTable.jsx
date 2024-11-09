@@ -32,9 +32,11 @@ const TABLE_HEAD = [
 ];
 
 const StaffTable = ({ TABLE_ROWS }) => {
-  const [open, setOpen] = useState(false);
+  const [openDetailModal, setOpenDetailModal] = useState(false);
+  const [openLockModal, setOpenLockModal] = useState(false);
 
-  const handleOpen = () => setOpen(!open);
+  const handleOpenDetailModal = () => setOpenDetailModal(!openDetailModal);
+  const handleOpenLockModal = () => setOpenLockModal(!openLockModal);
 
   return (
     <Card className="h-full w-full">
@@ -115,7 +117,7 @@ const StaffTable = ({ TABLE_ROWS }) => {
                           unmount: { scale: 0, y: 25 },
                         }}
                       >
-                        <a href="#" onClick={handleOpen}>
+                        <a href="#" onClick={handleOpenDetailModal}>
                           <BsInfoCircle className="text-2xl text-green-600" />
                         </a>
                       </Tooltip>
@@ -137,7 +139,7 @@ const StaffTable = ({ TABLE_ROWS }) => {
                           unmount: { scale: 0, y: 25 },
                         }}
                       >
-                        <a href="#">
+                        <a href="#" onClick={handleOpenLockModal}>
                           <MdLockPerson className="text-2xl text-red-600" />
                         </a>
                       </Tooltip>
@@ -149,12 +151,10 @@ const StaffTable = ({ TABLE_ROWS }) => {
           )}
         </tbody>
       </table>
-      <Dialog open={open} handler={handleOpen} size="sm">
+      <Dialog open={openDetailModal} handler={handleOpenDetailModal} size="sm">
         <DialogHeader className="relative m-0 block">
-          <div>
-            <Typography variant="h3">Chi tiết nhân viên</Typography>
-          </div>
-          <Typography className="mt-1 font-normal text-gray-600">
+          <Typography variant="h3">Chi tiết nhân viên</Typography>
+          <Typography className="mt-1 font-normal text-slate-500">
             Mã nhân viên: 6kqh183j8qcnqm7160
           </Typography>
         </DialogHeader>
@@ -166,7 +166,7 @@ const StaffTable = ({ TABLE_ROWS }) => {
             </div>
             <input
               value="Nguyễn Văn A"
-              className="p-2 rounded-md w-full mt-2 border border-gray-100"
+              className="p-2 rounded-md w-full mt-2 border border-gray-100 text-slate-500 font-normal"
               disabled
             ></input>
           </div>
@@ -177,7 +177,7 @@ const StaffTable = ({ TABLE_ROWS }) => {
             </div>
             <input
               value="nguyenvana"
-              className="p-2 rounded-md w-full mt-2 border border-gray-100"
+              className="p-2 rounded-md w-full mt-2 border border-gray-100 text-slate-500 font-normal"
               disabled
             ></input>
           </div>
@@ -189,7 +189,7 @@ const StaffTable = ({ TABLE_ROWS }) => {
               </div>
               <input
                 value="Active"
-                className="p-2 rounded-md w-full mt-2 border border-gray-100"
+                className="p-2 rounded-md w-full mt-2 border border-gray-100 text-slate-500 font-normal"
                 disabled
               ></input>
             </div>
@@ -200,7 +200,7 @@ const StaffTable = ({ TABLE_ROWS }) => {
               </div>
               <input
                 value="false"
-                className="p-2 rounded-md w-full mt-2 border border-gray-100"
+                className="p-2 rounded-md w-full mt-2 border border-gray-100 text-slate-500 font-normal"
                 disabled
               ></input>
             </div>
@@ -212,7 +212,7 @@ const StaffTable = ({ TABLE_ROWS }) => {
             </div>
             <input
               value="nguyenvana@gmail.com"
-              className="p-2 rounded-md w-full mt-2 border border-gray-100"
+              className="p-2 rounded-md w-full mt-2 border border-gray-100 text-slate-500 font-normal"
               disabled
             ></input>
           </div>
@@ -223,14 +223,33 @@ const StaffTable = ({ TABLE_ROWS }) => {
             </div>
             <input
               value="22/2/2023"
-              className="p-2 rounded-md w-full mt-2 border border-gray-100"
+              className="p-2 rounded-md w-full mt-2 border border-gray-100 text-slate-500 font-normal"
               disabled
             ></input>
           </div>
         </DialogBody>
         <DialogFooter>
-          <Button color="red" onClick={handleOpen}>
+          <Button color="red" onClick={handleOpenDetailModal}>
             <span>Đóng</span>
+          </Button>
+        </DialogFooter>
+      </Dialog>
+
+      <Dialog open={openLockModal} handler={handleOpenLockModal} size="sm">
+        <DialogHeader className="relative m-0 block">
+          <Typography variant="h3">Khóa tài khoản</Typography>
+        </DialogHeader>
+        <DialogBody>
+          <p className="font-normal text-slate-500">
+            Bạn có chắc chắn muốn khóa tài khoản của nhân viên này không?
+          </p>
+        </DialogBody>
+        <DialogFooter>
+          <Button variant="text" onClick={handleOpenLockModal} className="mr-1">
+            <span>Đóng</span>
+          </Button>
+          <Button color="red" onClick={handleOpenLockModal}>
+            <span>Đồng ý</span>
           </Button>
         </DialogFooter>
       </Dialog>

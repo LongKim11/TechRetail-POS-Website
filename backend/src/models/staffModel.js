@@ -63,7 +63,7 @@ staffSchema.pre('save', function (next) {
     next()
 })
 
-staffSchema.methods.comparePassword = async (enteredPassword,   userPassword) => {
+staffSchema.methods.comparePassword = async (enteredPassword, userPassword) => {
     console.log(enteredPassword, userPassword)
     return await bcrypt.compare(enteredPassword, userPassword)
 }

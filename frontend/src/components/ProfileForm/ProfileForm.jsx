@@ -1,8 +1,20 @@
-import { Avatar, Typography, Button } from "@material-tailwind/react";
-import { FaCloudUploadAlt } from "react-icons/fa";
+import {
+  Avatar,
+  Typography,
+  Button,
+  Dialog,
+  Card,
+  CardBody,
+  CardFooter,
+} from "@material-tailwind/react";
 import { GrUpdate } from "react-icons/gr";
+import { useState } from "react";
+import { PiNumpad } from "react-icons/pi";
 
 const ProfileForm = ({ avatar, username, email, fullname }) => {
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => setOpen((cur) => !cur);
   return (
     <div className="px-11 mx-auto mt-11 flex items-center">
       <div className="w-1/2">
@@ -26,7 +38,7 @@ const ProfileForm = ({ avatar, username, email, fullname }) => {
             className="flex items-center gap-3"
             color="blue"
           >
-            <FaCloudUploadAlt className="text-lg" />
+            <GrUpdate className="text-lg" />
             Đổi ảnh mới
           </Button>
         </div>
@@ -59,10 +71,60 @@ const ProfileForm = ({ avatar, username, email, fullname }) => {
             />
           </div>
           <div className="flex justify-center mt-14">
-            <Button variant="gradient" className="flex items-center gap-3">
-              <GrUpdate className="text-lg" />
+            <Button
+              variant="gradient"
+              className="flex items-center gap-3"
+              onClick={handleOpen}
+            >
+              <PiNumpad className="text-lg" />
               Đổi mật khẩu
             </Button>
+            <Dialog
+              size="sx"
+              open={open}
+              handler={handleOpen}
+              className="bg-transparent shadow-none"
+            >
+              <Card className="mx-auto w-full max-w-[28rem]">
+                <CardBody className="flex flex-col gap-4">
+                  <Typography variant="h4" color="blue-gray">
+                    Đổi mật khẩu mới
+                  </Typography>
+                  <Typography
+                    className="font-normal text-slate-400"
+                    variant="paragraph"
+                  >
+                    Mật khẩu cần ít nhất 6 kí tự.
+                  </Typography>
+                  <Typography className="" variant="h6">
+                    Mật khẩu cũ
+                  </Typography>
+                  <input
+                    type="password"
+                    className="border border-slate-300 rounded-lg p-2 w-full focus:outline-none focus:border-blue-500"
+                  ></input>
+                  <Typography className="" variant="h6">
+                    Mật khẩu mới
+                  </Typography>
+                  <input
+                    type="password"
+                    className="border border-slate-300 rounded-lg p-2 w-full focus:outline-none focus:border-blue-500"
+                  ></input>
+                  <Typography className="" variant="h6">
+                    Nhập lại mật khẩu mới
+                  </Typography>
+                  <input
+                    type="password"
+                    className="border border-slate-300 rounded-lg p-2 w-full focus:outline-none focus:border-blue-500"
+                  ></input>
+                </CardBody>
+                <CardFooter className="pt-0">
+                  <Button variant="gradient" onClick={handleOpen} fullWidth>
+                    Đổi mật khẩu
+                  </Button>
+                </CardFooter>
+              </Card>
+            </Dialog>
           </div>
         </form>
       </div>

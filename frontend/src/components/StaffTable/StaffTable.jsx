@@ -4,12 +4,23 @@ import {
   Avatar,
   Chip,
   Button,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
   Tooltip,
 } from "@material-tailwind/react";
+import { useState } from "react";
 import { IoIosMail } from "react-icons/io";
 import { BsInfoCircle } from "react-icons/bs";
 import { MdLockPerson } from "react-icons/md";
 import { RiBillLine } from "react-icons/ri";
+import { FaRegUser } from "react-icons/fa";
+import { MdOutlineLockPerson } from "react-icons/md";
+import { MdMailOutline } from "react-icons/md";
+import { MdOutlineDateRange } from "react-icons/md";
+import { MdOutlineSignalWifiStatusbarNull } from "react-icons/md";
+import { MdWorkOutline } from "react-icons/md";
 
 const TABLE_HEAD = [
   "Họ và tên",
@@ -21,6 +32,10 @@ const TABLE_HEAD = [
 ];
 
 const StaffTable = ({ TABLE_ROWS }) => {
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => setOpen(!open);
+
   return (
     <Card className="h-full w-full">
       <table className="w-full min-w-max table-auto text-left">
@@ -100,7 +115,7 @@ const StaffTable = ({ TABLE_ROWS }) => {
                           unmount: { scale: 0, y: 25 },
                         }}
                       >
-                        <a href="#">
+                        <a href="#" onClick={handleOpen}>
                           <BsInfoCircle className="text-2xl text-green-600" />
                         </a>
                       </Tooltip>
@@ -134,6 +149,91 @@ const StaffTable = ({ TABLE_ROWS }) => {
           )}
         </tbody>
       </table>
+      <Dialog open={open} handler={handleOpen} size="sm">
+        <DialogHeader className="relative m-0 block">
+          <div>
+            <Typography variant="h3">Chi tiết nhân viên</Typography>
+          </div>
+          <Typography className="mt-1 font-normal text-gray-600">
+            Mã nhân viên: 6kqh183j8qcnqm7160
+          </Typography>
+        </DialogHeader>
+        <DialogBody>
+          <div className="mb-6">
+            <div className="flex gap-x-2 items-center">
+              <FaRegUser className="text-lg" />
+              <Typography variant="h6">Họ và tên</Typography>
+            </div>
+            <input
+              value="Nguyễn Văn A"
+              className="p-2 rounded-md w-full mt-2 border border-gray-100"
+              disabled
+            ></input>
+          </div>
+          <div className="mb-6">
+            <div className="flex gap-x-2 items-center">
+              <MdWorkOutline className="text-lg" />
+              <Typography variant="h6">Tên đăng nhập</Typography>
+            </div>
+            <input
+              value="nguyenvana"
+              className="p-2 rounded-md w-full mt-2 border border-gray-100"
+              disabled
+            ></input>
+          </div>
+          <div className="flex gap-x-6 justify-between mb-6">
+            <div className="w-1/2">
+              <div className="flex gap-x-2 items-center">
+                <MdOutlineSignalWifiStatusbarNull className="text-lg" />
+                <Typography variant="h6">Trạng thái</Typography>
+              </div>
+              <input
+                value="Active"
+                className="p-2 rounded-md w-full mt-2 border border-gray-100"
+                disabled
+              ></input>
+            </div>
+            <div className="w-1/2">
+              <div className="flex gap-x-2 items-center">
+                <MdOutlineLockPerson className="text-xl" />
+                <Typography variant="h6">Khóa</Typography>
+              </div>
+              <input
+                value="false"
+                className="p-2 rounded-md w-full mt-2 border border-gray-100"
+                disabled
+              ></input>
+            </div>
+          </div>
+          <div className="mb-6">
+            <div className="flex gap-x-2 items-center">
+              <MdMailOutline className="text-xl" />
+              <Typography variant="h6">Địa chỉ email</Typography>
+            </div>
+            <input
+              value="nguyenvana@gmail.com"
+              className="p-2 rounded-md w-full mt-2 border border-gray-100"
+              disabled
+            ></input>
+          </div>
+          <div className="mb-6">
+            <div className="flex gap-x-2 items-center">
+              <MdOutlineDateRange className="text-xl" />
+              <Typography variant="h6">Ngày tạo</Typography>
+            </div>
+            <input
+              value="22/2/2023"
+              className="p-2 rounded-md w-full mt-2 border border-gray-100"
+              disabled
+            ></input>
+          </div>
+        </DialogBody>
+        <DialogFooter>
+          <Button color="red" onClick={handleOpen}>
+            <span>Đóng</span>
+          </Button>
+        </DialogFooter>
+      </Dialog>
     </Card>
   );
 };

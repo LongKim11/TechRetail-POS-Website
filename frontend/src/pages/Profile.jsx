@@ -1,6 +1,6 @@
-import Sidebar from "../../components/Sidebar/Sidebar";
-import Navbar from "../../components/Navbar/Navbar";
-import ProfileForm from "../../components/ProfileForm/ProfileForm";
+import Sidebar from "../components/Sidebar";
+import Navbar from "../components/Navbar";
+import ProfileForm from "../components/ProfileForm";
 
 const Profile = () => {
   return (

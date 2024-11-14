@@ -1,9 +1,9 @@
-import Sidebar from "../../components/Sidebar/Sidebar";
-import Navbar from "../../components/Navbar/Navbar";
+import Sidebar from "../../components/Sidebar";
+import Navbar from "../../components/Navbar";
 import { Button } from "@material-tailwind/react";
 import { FaUserPlus } from "react-icons/fa";
 import { IoFilter } from "react-icons/io5";
-import StaffTable from "../../components/StaffTable/StaffTable";
+import StaffTable from "../../components/StaffTable";
 
 const StaffManagementPage = () => {
   const TABLE_ROWS = [

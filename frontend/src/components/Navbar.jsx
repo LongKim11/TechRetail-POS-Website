@@ -8,6 +8,8 @@ import {
 } from "@material-tailwind/react";
 import { FaRegUserCircle, FaFingerprint, FaSignOutAlt } from "react-icons/fa";
 import { MdSettings } from "react-icons/md";
+import UserAvatar from "../assets/user-avatar.png";
+import { Link } from "react-router-dom";
 
 const Navbar = ({ heading, username, fullname, email, avatar }) => {
   return (
@@ -23,7 +25,7 @@ const Navbar = ({ heading, username, fullname, email, avatar }) => {
               withBorder={true}
               color="blue"
               className="cursor-pointer"
-              src={avatar}
+              src={UserAvatar}
             />
           </MenuHandler>
           <MenuList>
@@ -40,15 +42,19 @@ const Navbar = ({ heading, username, fullname, email, avatar }) => {
             <hr className="my-2 border-blue-gray-50" />
             <MenuItem className="flex items-center gap-3 mb-2 hover:bg-gray-200">
               <FaRegUserCircle className="text-xl" />
-              <Typography variant="small" className="font-medium">
-                Thông tin tài khoản
-              </Typography>
+              <Link to={"/profile"}>
+                <Typography variant="small" className="font-medium">
+                  Thông tin tài khoản
+                </Typography>
+              </Link>
             </MenuItem>
             <MenuItem className="flex items-center gap-3 mb-2 hover:bg-gray-200">
               <FaFingerprint className="text-xl" />
-              <Typography variant="small" className="font-medium">
-                Đổi mật khẩu
-              </Typography>
+              <Link to={"/change-password"}>
+                <Typography variant="small" className="font-medium">
+                  Đổi mật khẩu
+                </Typography>
+              </Link>
             </MenuItem>
             <MenuItem className="flex items-center gap-3 mb-2 hover:bg-gray-200">
               <MdSettings className="text-xl" />
@@ -59,9 +65,14 @@ const Navbar = ({ heading, username, fullname, email, avatar }) => {
             <hr className="my-2 border-blue-gray-50" />
             <MenuItem className="flex items-center gap-3 hover:bg-gray-200">
               <FaSignOutAlt className="text-xl text-red-600" />
-              <Typography variant="small" className="font-medium text-red-600">
-                Đăng xuất
-              </Typography>
+              <Link to={"/login"}>
+                <Typography
+                  variant="small"
+                  className="font-medium text-red-600"
+                >
+                  Đăng xuất
+                </Typography>
+              </Link>
             </MenuItem>
           </MenuList>
         </Menu>

@@ -10,6 +10,7 @@ import {
 import { GrUpdate } from "react-icons/gr";
 import { useState } from "react";
 import { PiNumpad } from "react-icons/pi";
+import ProfileBG from "../assets/profile-bg.jpg";
 
 const ProfileForm = ({ avatar, username, email, fullname }) => {
   const [openCPModal, setOpenCPModal] = useState(false);
@@ -172,10 +173,7 @@ const ProfileForm = ({ avatar, username, email, fullname }) => {
         </form>
       </div>
       <div className="w-1/2">
-        <img
-          src="./src/assets/profile-bg.jpg"
-          className="mix-blend-multiply"
-        ></img>
+        <img src={ProfileBG} className="mix-blend-multiply"></img>
       </div>
     </div>
   );

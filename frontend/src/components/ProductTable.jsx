@@ -16,7 +16,7 @@ const TABLE_HEAD = [
 const ProductTable = ({ TABLE_ROWS }) => {
   return (
     <Card className="h-full w-full">
-      <table className="w-full min-w-max table-auto text-left">
+      <table className="w-full min-w-max table-auto">
         <thead className="">
           <tr>
             {TABLE_HEAD.map((head) => (
@@ -43,7 +43,7 @@ const ProductTable = ({ TABLE_ROWS }) => {
             ) => {
               return (
                 <tr key={index} className="hover:bg-slate-50">
-                  <td className="p-4">
+                  <td className="p-4 text-center">
                     <Typography
                       variant="mmedium"
                       className="font-semibold text-orange-600"
@@ -51,7 +51,7 @@ const ProductTable = ({ TABLE_ROWS }) => {
                       {barcode}
                     </Typography>
                   </td>
-                  <td className="p-4">
+                  <td className="p-4 text-center">
                     <Typography
                       variant="medium"
                       className="font-semibold text-blue-700"
@@ -59,7 +59,7 @@ const ProductTable = ({ TABLE_ROWS }) => {
                       {name}
                     </Typography>
                   </td>
-                  <td className="p-4">
+                  <td className="p-4 text-center">
                     <Typography
                       variant="medium"
                       className="font-semibold text-green-500"
@@ -67,7 +67,7 @@ const ProductTable = ({ TABLE_ROWS }) => {
                       {import_price}$
                     </Typography>
                   </td>
-                  <td className="p-4">
+                  <td className="p-4 text-center">
                     <Typography
                       variant="medium"
                       className="font-semibold text-green-500"
@@ -75,15 +75,15 @@ const ProductTable = ({ TABLE_ROWS }) => {
                       {retail_price}$
                     </Typography>
                   </td>
-                  <td className="p-4">
+                  <td className="p-4 text-center">
                     <Typography
                       variant="medium"
-                      className="font-semibold text-pink-500"
+                      className="font-semibold text-slate-500"
                     >
                       {category.type}
                     </Typography>
                   </td>
-                  <td className="p-4">
+                  <td className="p-4 text-center">
                     <Typography
                       variant="medium"
                       className="font-semibold text-slate-500"
@@ -91,7 +91,7 @@ const ProductTable = ({ TABLE_ROWS }) => {
                       {createdAt}
                     </Typography>
                   </td>
-                  <td className="p-4">
+                  <td className="p-4 flex justify-center">
                     <div className="flex items-center gap-x-5">
                       <Tooltip
                         content="Xem chi tiết"

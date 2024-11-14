@@ -1,10 +1,10 @@
 import { Routes, Route } from "react-router-dom";
-import LoginPage from "../pages/Login/LoginPage";
-import Home from "../pages/Home/Home";
-import Profile from "../pages/Profile/Profile";
-import ChangePassword from "../pages/ChangePassword/ChangePassword";
-import StaffManagementPage from "../pages/StaffMangementPage/StaffManagementPage";
-import ProductManagementPage from "../pages/ProductManagementPage/ProductManagementPage";
+import LoginPage from "../pages/LoginPage";
+import Home from "../pages/Admin/Home";
+import Profile from "../pages/Profile";
+import ChangePassword from "../pages/ChangePassword";
+import StaffManagementPage from "../pages/Admin/StaffManagementPage";
+import ProductManagementPage from "../pages/Admin/ProductManagementPage";
 
 const Routers = () => {
   return (

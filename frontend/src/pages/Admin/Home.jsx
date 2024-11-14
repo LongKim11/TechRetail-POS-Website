@@ -1,6 +1,6 @@
-import Sidebar from "../../components/Sidebar/Sidebar";
-import Navbar from "../../components/Navbar/Navbar";
-import DashboardBox from "../../components/DashboardBox/DashboardBox";
+import Sidebar from "../../components/Sidebar";
+import Navbar from "../../components/Navbar";
+import DashboardBox from "../../components/DashboardBox";
 
 const Home = () => {
   return (

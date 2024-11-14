@@ -1,8 +1,8 @@
-import Sidebar from "../../components/Sidebar/Sidebar";
-import Navbar from "../../components/Navbar/Navbar";
+import Sidebar from "../../components/Sidebar";
+import Navbar from "../../components/Navbar";
 import { Button } from "@material-tailwind/react";
 import { IoFilter } from "react-icons/io5";
-import ProductTable from "../../components/ProductTable/ProductTable";
+import ProductTable from "../../components/ProductTable";
 import { TbDevicesPlus } from "react-icons/tb";
 
 const ProductManagementPage = () => {

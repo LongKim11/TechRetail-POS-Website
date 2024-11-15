@@ -13,8 +13,8 @@ import { login } from '../controllers/authController.js'
 const router = express.Router()
 
 // Protect all routes after this middleware
-router.route('/login').post(login)
-router.use(isAuthenticated)
+// router.route('/login').post(login)
+// router.use(isAuthenticated)
 
 router
     .route('/')

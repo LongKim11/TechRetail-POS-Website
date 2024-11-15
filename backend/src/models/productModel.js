@@ -1,12 +1,7 @@
-import {mongoose, Schema} from 'mongoose'
+import { mongoose, Schema } from 'mongoose'
 
 const productSchema = mongoose.Schema(
     {
-        brand_id: {
-            type: Schema.Types.ObjectId,
-            required: [true, 'Brand ID is required'],
-            ref: 'Brand',
-        },
         name: {
             type: String,
             required: [true, 'Product name is required'],
@@ -15,31 +10,26 @@ const productSchema = mongoose.Schema(
             type: String,
             required: [true, 'Barcode is required'],
         },
+        brand_name: {
+            type: String,
+            required: [true, 'Brand name is required'],
+        },
         import_price: {
-            type: Schema.Types.Decimal128,
+            type: String,
             required: [true, 'Import price is required'],
         },
         retail_price: {
-            type: Schema.Types.Decimal128,
+            type: String,
             required: [true, 'Retail price is required'],
         },
         category: {
-            name: {
-                type: String,
-                required: [true, 'Category name is required'],
-                enum: {
-                    values: ['phone', 'accessories'],
-                    message: 'Category name must be either phone or accessories',
-                },
-            },
-            type: {
-                type: String,
-            },
-        },
-        image: {
             type: String,
-            required: [true, 'Image URL is required'],
+            required: [true, 'Category name is required'],
         },
+        // image: {
+        //     type: String,
+        //     required: [true, 'Image URL is required'],
+        // },
     },
     { timestamps: true },
 )

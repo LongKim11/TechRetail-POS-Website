@@ -25,10 +25,10 @@ const getProductById = catchAsync(async (req, res, next) => {
 })
 
 const createProduct = catchAsync(async (req, res, next) => {
-    const image = req.file.filename
-    const newProduct = new Product({ ...req.body, image })
+    // const image = req.file.filename
+    // const newProduct = new Product({ ...req.body, image })
 
-    const savedProduct = await Product.create(newProduct)
+    const savedProduct = await Product.create(req.body)
     res.json(savedProduct)
 })
 

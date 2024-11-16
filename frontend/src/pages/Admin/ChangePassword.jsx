@@ -1,6 +1,6 @@
-import Sidebar from "../components/Sidebar";
-import Navbar from "../components/Navbar";
-import ChangePasswordForm from "../components/ChangePasswordForm";
+import Sidebar from "../../components/Sidebar";
+import Navbar from "../../components/Navbar";
+import ChangePasswordForm from "../../components/ChangePasswordForm";
 
 const ChangePassword = () => {
   return (

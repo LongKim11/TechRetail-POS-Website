@@ -67,13 +67,13 @@ const StaffTable = ({ TABLE_ROWS }) => {
                         color="blue"
                         className="border object-contain p-1"
                       />
-                      <Typography variant="small" className="font-semibold">
+                      <Typography variant="medium" className="font-semibold">
                         {name}
                       </Typography>
                     </div>
                   </td>
                   <td className="p-4">
-                    <Typography variant="small" className="font-semibold">
+                    <Typography variant="medium" className="font-semibold">
                       {createdAt}
                     </Typography>
                   </td>

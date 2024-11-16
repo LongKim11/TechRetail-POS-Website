@@ -1,19 +1,19 @@
-import Sidebar from "../components/Sidebar";
-import Navbar from "../components/Navbar";
-import ProfileForm from "../components/ProfileForm";
+import SidebarStaff from "../../components/SidebarStaff";
+import NavbarStaff from "../../components/NavbarStaff";
+import ProfileForm from "../../components/ProfileForm";
 
-const Profile = () => {
+const ProfileStaff = () => {
   return (
     <div className="flex">
-      <Sidebar></Sidebar>
+      <SidebarStaff></SidebarStaff>
       <div className="flex-1 p-7 bg-slate-100">
-        <Navbar
+        <NavbarStaff
           heading="Thông tin cá nhân"
           username="Username"
           fullname="Nguyễn Văn A"
           email="nguyenvana@gmail.com"
           avatar="./src/assets/user-avatar.png"
-        ></Navbar>
+        ></NavbarStaff>
         <ProfileForm
           avatar="./src/assets/user-avatar.png"
           username="Username"
@@ -25,4 +25,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default ProfileStaff;

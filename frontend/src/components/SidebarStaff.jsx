@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { FaTachometerAlt } from "react-icons/fa";
 import { FaRegCircleUser } from "react-icons/fa6";
-import { FaUserPlus } from "react-icons/fa6";
 import { FaUsers } from "react-icons/fa";
 import { PiDevicesFill } from "react-icons/pi";
 import { FaChartLine } from "react-icons/fa6";
@@ -9,8 +8,10 @@ import { FiLogOut } from "react-icons/fi";
 import Control from "../assets/control.png";
 import YellowLogo from "../assets/logo-yellow-bg.png";
 import { Link } from "react-router-dom";
+import { GrTransaction } from "react-icons/gr";
 
-const Sidebar = () => {
+
+const SidebarStaff = () => {
   const [open, setOpen] = useState(true);
 
   return (
@@ -41,7 +42,7 @@ const Sidebar = () => {
         </h1>
       </div>
       <ul className="pt-12">
-        <Link to={"/admin/home"}>
+        <Link to={"/staff/home"}>
           <li className="flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4 mt-5">
             <span className="text-2xl text-white">
               <FaTachometerAlt></FaTachometerAlt>
@@ -51,7 +52,7 @@ const Sidebar = () => {
             </span>
           </li>
         </Link>
-        <Link to={"/admin/profile"}>
+        <Link to={"/staff/profile"}>
           <li className="flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4 mt-5">
             <span className="text-2xl text-white">
               <FaRegCircleUser></FaRegCircleUser>
@@ -61,17 +62,17 @@ const Sidebar = () => {
             </span>
           </li>
         </Link>
-        <Link to={"/admin/staffs"}>
+        <Link to={"/staff/transaction"}>
           <li className="flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4 mt-12">
             <span className="text-2xl text-white">
-              <FaUserPlus></FaUserPlus>
+              <GrTransaction></GrTransaction>
             </span>
             <span className={`${!open && "hidden"} origin-left duration-200`}>
-              Staffs
+              Transaction
             </span>
           </li>
         </Link>
-        <Link to={"/admin/products"}>
+        <Link to={"/staff/products"}>
           <li className="flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4 mt-5">
             <span className="text-2xl text-white">
               <PiDevicesFill></PiDevicesFill>
@@ -81,7 +82,7 @@ const Sidebar = () => {
             </span>
           </li>
         </Link>
-        <Link to={"/admin/customers"}>
+        <Link to={"/staff/customers"}>
           <li className="flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4 mt-5">
             <span className="text-2xl text-white">
               <FaUsers></FaUsers>
@@ -114,4 +115,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default SidebarStaff;

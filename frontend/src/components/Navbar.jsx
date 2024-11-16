@@ -42,7 +42,7 @@ const Navbar = ({ heading, username, fullname, email, avatar }) => {
             <hr className="my-2 border-blue-gray-50" />
             <MenuItem className="flex items-center gap-3 mb-2 hover:bg-gray-200">
               <FaRegUserCircle className="text-xl" />
-              <Link to={"/profile"}>
+              <Link to={"/admin/profile"}>
                 <Typography variant="small" className="font-medium">
                   Thông tin tài khoản
                 </Typography>
@@ -50,7 +50,7 @@ const Navbar = ({ heading, username, fullname, email, avatar }) => {
             </MenuItem>
             <MenuItem className="flex items-center gap-3 mb-2 hover:bg-gray-200">
               <FaFingerprint className="text-xl" />
-              <Link to={"/change-password"}>
+              <Link to={"/admin/change-password"}>
                 <Typography variant="small" className="font-medium">
                   Đổi mật khẩu
                 </Typography>

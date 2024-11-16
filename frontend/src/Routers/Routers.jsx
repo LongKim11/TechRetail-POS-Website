@@ -11,6 +11,9 @@ import ProductManagementPage from "../pages/Admin/ProductManagementPage";
 import ProductMPageStaff from "../pages/Staff/ProductMPageStaff";
 import CustomersPage from "../pages/Admin/CustomersPage";
 import CustomersPageStaff from "../pages/Staff/CustomerPageStaff";
+import TransactionPage from "../pages/Staff/TransactionPage";
+import ConfirmTransaction from "../pages/Staff/ConfirmTransaction";
+import InvoicePage from "../pages/Staff/InvoicePage";
 
 const Routers = () => {
   return (
@@ -28,11 +31,13 @@ const Routers = () => {
 
       <Route path="/staff">
         <Route path="home" element={<HomeStaff />} />
-        <Route path="transaction"/>
+        <Route path="transaction" element={<TransactionPage />} />
+        <Route path="confirm-transaction" element={<ConfirmTransaction />} />
+        <Route path="invoice" element={<InvoicePage />} />
         <Route path="products" element={<ProductMPageStaff />} />
-        <Route path="customers" element={<CustomersPageStaff />}/>
-        <Route path="profile" element={<ProfileStaff/>} />
-        <Route path="change-password" element={<ChangePasswordStaff/>}/>
+        <Route path="customers" element={<CustomersPageStaff />} />
+        <Route path="profile" element={<ProfileStaff />} />
+        <Route path="change-password" element={<ChangePasswordStaff />} />
       </Route>
     </Routes>
   );

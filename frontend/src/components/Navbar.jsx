@@ -63,17 +63,17 @@ const Navbar = ({ heading, username, fullname, email, avatar }) => {
               </Typography>
             </MenuItem>
             <hr className="my-2 border-blue-gray-50" />
-            <MenuItem className="flex items-center gap-3 hover:bg-gray-200">
-              <FaSignOutAlt className="text-xl text-red-600" />
-              <Link to={"/login"}>
+            <a href="/login">
+              <MenuItem className="flex items-center gap-3 hover:bg-gray-200">
+                <FaSignOutAlt className="text-xl text-red-600" />
                 <Typography
                   variant="small"
                   className="font-medium text-red-600"
                 >
                   Đăng xuất
                 </Typography>
-              </Link>
-            </MenuItem>
+              </MenuItem>
+            </a>
           </MenuList>
         </Menu>
       </div>

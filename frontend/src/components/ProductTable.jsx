@@ -78,7 +78,7 @@ const ProductTable = ({ TABLE_ROWS }) => {
                   <td className="p-4 text-center">
                     <Typography
                       variant="medium"
-                      className="font-semibold text-slate-500"
+                      className="font-semibold text-pink-500"
                     >
                       {category.type}
                     </Typography>

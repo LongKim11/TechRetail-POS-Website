@@ -14,6 +14,10 @@ const router = express.Router()
 router.use(isAuthenticated)
 
 router.route('/').get(getAllCustomers).post(createCustomer)
-router.route('/:id').get(getCustomerById).put(updateCustomer).delete(deleteCustomer)
+router
+    .route('/:id')
+    .get(getCustomerById)
+    .put(updateCustomer)
+    .delete(deleteCustomer)
 
 export default router

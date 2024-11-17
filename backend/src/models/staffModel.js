@@ -2,6 +2,7 @@ import mongoose from 'mongoose'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import validator from 'validator'
+import crypto from 'crypto'
 
 const accountSchema = mongoose.Schema(
     {
@@ -52,6 +53,8 @@ const staffSchema = mongoose.Schema(
             enum: ['true', 'false'],
             default: 'false',
         },
+        passwordResetToken: String,
+        passwordResetExpires: Date,
     },
     { timestamps: true },
 )
@@ -66,6 +69,19 @@ staffSchema.pre('save', function (next) {
 staffSchema.methods.comparePassword = async (enteredPassword, userPassword) => {
     console.log(enteredPassword, userPassword)
     return await bcrypt.compare(enteredPassword, userPassword)
+}
+
+staffSchema.methods.createPasswordResetToken = function () {
+    const resetToken = crypto.randomBytes(32).toString('hex')
+    this.passwordResetToken = crypto
+        .createHash('sha256')
+        .update(resetToken)
+        .digest('hex')
+    
+    this.passwordResetExpires = Date.now() + 10 * 60 * 1000
+    
+    console.log({ resetToken }, this.passwordResetToken, this.passwordResetExpires)
+    return resetToken
 }
 
 staffSchema.methods.jwtToken = function () {

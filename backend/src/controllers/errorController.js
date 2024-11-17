@@ -1,4 +1,3 @@
-import mongoose from 'mongoose'
 import fs from 'fs'
 import AppError from '../utils/appError.js'
 

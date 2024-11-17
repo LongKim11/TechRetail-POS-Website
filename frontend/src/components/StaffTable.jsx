@@ -160,7 +160,7 @@ const StaffTable = ({ staffs }) => {
             </div>
             <input
               value={selectedStaff?.name}
-              className="p-2 rounded-md w-full mt-2 border border-gray-100 text-slate-500 font-normal"
+              className="p-2 rounded-md w-full mt-2 border border-gray-200 font-normal text-slate-700"
               disabled
             ></input>
           </div>
@@ -171,7 +171,7 @@ const StaffTable = ({ staffs }) => {
             </div>
             <input
               value={selectedStaff?.username}
-              className="p-2 rounded-md w-full mt-2 border border-gray-100 text-slate-500 font-normal"
+              className="p-2 rounded-md w-full mt-2 border border-gray-200 font-normal text-slate-700"
               disabled
             ></input>
           </div>
@@ -183,7 +183,7 @@ const StaffTable = ({ staffs }) => {
               </div>
               <input
                 value={selectedStaff?.status}
-                className="p-2 rounded-md w-full mt-2 border border-gray-100 text-slate-500 font-normal"
+                className="p-2 rounded-md w-full mt-2 border border-gray-200 font-normal text-slate-700"
                 disabled
               ></input>
             </div>
@@ -194,7 +194,7 @@ const StaffTable = ({ staffs }) => {
               </div>
               <input
                 value={selectedStaff?.is_locked}
-                className="p-2 rounded-md w-full mt-2 border border-gray-100 text-slate-500 font-normal"
+                className="p-2 rounded-md w-full mt-2 border border-gray-200 font-normal text-slate-700"
                 disabled
               ></input>
             </div>
@@ -206,7 +206,7 @@ const StaffTable = ({ staffs }) => {
             </div>
             <input
               value={selectedStaff?.email}
-              className="p-2 rounded-md w-full mt-2 border border-gray-100 text-slate-500 font-normal"
+              className="p-2 rounded-md w-full mt-2 border border-gray-200 font-normal text-slate-700"
               disabled
             ></input>
           </div>
@@ -217,7 +217,7 @@ const StaffTable = ({ staffs }) => {
             </div>
             <input
               value={selectedStaff?.createdAt}
-              className="p-2 rounded-md w-full mt-2 border border-gray-100 text-slate-500 font-normal"
+              className="p-2 rounded-md w-full mt-2 border border-gray-200 font-normal text-slate-700"
               disabled
             ></input>
           </div>

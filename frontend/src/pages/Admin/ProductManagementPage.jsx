@@ -20,13 +20,13 @@ import { BiCategory } from "react-icons/bi";
 import { MdOutlineDevices } from "react-icons/md";
 
 const ProductManagementPage = () => {
-  const TABLE_ROWS = [
+  const products = [
     {
       barcode: "P000001",
       name: "Iphone 13 Pro Max 256GB",
       import_price: "2000",
       retail_price: "2500",
-      category: { name: "phone", type: "smartphone" },
+      category: "smartphone",
       createdAt: "2021-10-10",
     },
     {
@@ -34,7 +34,7 @@ const ProductManagementPage = () => {
       name: "Sạc Smartphone Samsung 25W",
       import_price: "2000",
       retail_price: "2500",
-      category: { name: "accessories", type: "charging" },
+      category: "charging",
       createdAt: "2021-10-10",
     },
     {
@@ -42,7 +42,7 @@ const ProductManagementPage = () => {
       name: "Xiomi Redmi Note 10 Pro 128GB",
       import_price: "2000",
       retail_price: "2500",
-      category: { name: "phone", type: "smartphone" },
+      category: "smartphone",
       createdAt: "2021-10-10",
     },
     {
@@ -50,7 +50,7 @@ const ProductManagementPage = () => {
       name: "Apple Watch Series 7 44mm",
       import_price: "2000",
       retail_price: "2500",
-      category: { name: "accessories", type: "watch" },
+      category: "watch",
       createdAt: "2021-10-10",
     },
     {
@@ -58,7 +58,7 @@ const ProductManagementPage = () => {
       name: "Iphone 13 Pro Max 256GB",
       import_price: "2000",
       retail_price: "2500",
-      category: { name: "phone", type: "smartphone" },
+      category: "smartphone",
       createdAt: "2021-10-10",
     },
   ];
@@ -189,7 +189,7 @@ const ProductManagementPage = () => {
               </Button>
             </div>
           </div>
-          <ProductTable TABLE_ROWS={TABLE_ROWS} />
+          <ProductTable products={products} />
         </div>
       </div>
     </div>

@@ -3,43 +3,47 @@ import NavbarStaff from "../../components/NavbarStaff";
 import { Button } from "@material-tailwind/react";
 import { IoFilter } from "react-icons/io5";
 import ProductTableStaff from "../../components/ProductTableStaff";
-import { TbDevicesPlus } from "react-icons/tb";
 
 const ProductMPageStaff = () => {
-  const TABLE_ROWS = [
+  const products = [
     {
       barcode: "P000001",
       name: "Iphone 13 Pro Max 256GB",
+      import_price: "2000",
       retail_price: "2500",
-      category: { name: "phone", type: "smartphone" },
+      category: "smartphone",
       createdAt: "2021-10-10",
     },
     {
       barcode: "P000001",
       name: "Sạc Smartphone Samsung 25W",
+      import_price: "2000",
       retail_price: "2500",
-      category: { name: "accessories", type: "charging" },
+      category: "charging",
       createdAt: "2021-10-10",
     },
     {
       barcode: "P000001",
       name: "Xiomi Redmi Note 10 Pro 128GB",
+      import_price: "2000",
       retail_price: "2500",
-      category: { name: "phone", type: "smartphone" },
+      category: "smartphone",
       createdAt: "2021-10-10",
     },
     {
       barcode: "P000001",
       name: "Apple Watch Series 7 44mm",
+      import_price: "2000",
       retail_price: "2500",
-      category: { name: "accessories", type: "watch" },
+      category: "watch",
       createdAt: "2021-10-10",
     },
     {
       barcode: "P000001",
       name: "Iphone 13 Pro Max 256GB",
+      import_price: "2000",
       retail_price: "2500",
-      category: { name: "phone", type: "smartphone" },
+      category: "smartphone",
       createdAt: "2021-10-10",
     },
   ];
@@ -92,7 +96,7 @@ const ProductMPageStaff = () => {
               </Button>
             </div>
           </div>
-          <ProductTableStaff TABLE_ROWS={TABLE_ROWS} />
+          <ProductTableStaff products={products} />
         </div>
       </div>
     </div>

@@ -1,9 +1,19 @@
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
-import { Button } from "@material-tailwind/react";
 import { FaUserPlus } from "react-icons/fa";
 import { IoFilter } from "react-icons/io5";
 import StaffTable from "../../components/StaffTable";
+import {
+  Button,
+  Typography,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+} from "@material-tailwind/react";
+import { useState } from "react";
+import { FaRegUser } from "react-icons/fa";
+import { MdMailOutline } from "react-icons/md";
 
 const StaffManagementPage = () => {
   const TABLE_ROWS = [
@@ -44,6 +54,11 @@ const StaffManagementPage = () => {
     },
   ];
 
+  const [openAddStaffModal, setOpenAddStaffModal] = useState(false);
+
+  const handleOpenAddStaffModal = () =>
+    setOpenAddStaffModal(!openAddStaffModal);
+
   return (
     <div className="flex">
       <Sidebar />
@@ -57,7 +72,11 @@ const StaffManagementPage = () => {
         />
         <div className="flex justify-between mt-11 items-center">
           <h1 className="text-2xl font-semibold">Danh sách</h1>
-          <Button color="green" className="flex items-center gap-3">
+          <Button
+            color="green"
+            className="flex items-center gap-3"
+            onClick={handleOpenAddStaffModal}
+          >
             <FaUserPlus className="text-lg" />
             Thêm nhân viên
           </Button>
@@ -100,6 +119,39 @@ const StaffManagementPage = () => {
           <StaffTable TABLE_ROWS={TABLE_ROWS} />
         </div>
       </div>
+      <Dialog
+        open={openAddStaffModal}
+        handler={handleOpenAddStaffModal}
+        size="sm"
+      >
+        <DialogHeader className="relative m-0 block">
+          <Typography variant="h3">Thêm nhân viên mới</Typography>
+          <Typography className="mt-1 font-normal text-slate-500">
+            Điền các thông tin cần thiết để tiến hành thêm
+          </Typography>
+        </DialogHeader>
+        <DialogBody>
+          <div className="mb-6">
+            <div className="flex gap-x-2 items-center">
+              <FaRegUser className="text-lg" />
+              <Typography variant="h6">Họ và tên</Typography>
+            </div>
+            <input className="p-2 rounded-md w-full mt-2 border border-gray-300 font-normal focus:border-blue-500 focus:outline-none"></input>
+          </div>
+          <div className="mb-6">
+            <div className="flex gap-x-2 items-center">
+              <MdMailOutline className="text-xl" />
+              <Typography variant="h6">Địa chỉ email</Typography>
+            </div>
+            <input className="p-2 rounded-md w-full mt-2 border border-gray-300 font-normal focus:border-blue-500 focus:outline-none"></input>
+          </div>
+        </DialogBody>
+        <DialogFooter>
+          <Button color="blue" onClick={handleOpenAddStaffModal}>
+            <span>Thêm mới</span>
+          </Button>
+        </DialogFooter>
+      </Dialog>
     </div>
   );
 };

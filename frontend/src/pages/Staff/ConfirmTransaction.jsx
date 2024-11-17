@@ -20,7 +20,7 @@ const ConfirmTransaction = () => {
           <div className="w-1/3 bg-white rounded-lg shadow-md">
             <div className="p-3">
               <h3 className="text-xl font-semibold my-3 text-center">
-                Thông tin hóa đơn
+                Thông tin thanh toán
               </h3>
               <hr></hr>
             </div>
@@ -111,7 +111,7 @@ const ConfirmTransaction = () => {
           <div className="w-1/3 bg-white rounded-lg shadow-md">
             <div className="p-3">
               <h3 className="text-xl font-semibold my-3 text-center">
-                Thông tin chung
+                Thông tin hóa đơn
               </h3>
               <hr></hr>
             </div>

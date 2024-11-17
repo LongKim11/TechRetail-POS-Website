@@ -13,7 +13,6 @@ import {
 } from "@material-tailwind/react";
 import { useState } from "react";
 import { CgSmartphoneChip } from "react-icons/cg";
-import { MdMailOutline } from "react-icons/md";
 import { FaBarcode } from "react-icons/fa6";
 import { FaSackDollar } from "react-icons/fa6";
 import { IoMdPricetags } from "react-icons/io";

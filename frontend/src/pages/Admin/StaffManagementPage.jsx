@@ -16,7 +16,7 @@ import { FaRegUser } from "react-icons/fa";
 import { MdMailOutline } from "react-icons/md";
 
 const StaffManagementPage = () => {
-  const TABLE_ROWS = [
+  const staffs = [
     {
       img: "./src/assets/user-avatar.png",
       name: "John Michael",
@@ -116,7 +116,7 @@ const StaffManagementPage = () => {
               </Button>
             </div>
           </div>
-          <StaffTable TABLE_ROWS={TABLE_ROWS} />
+          <StaffTable staffs={staffs} />
         </div>
       </div>
       <Dialog

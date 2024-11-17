@@ -8,7 +8,6 @@ const isAuthenticated = async (req, res, next) => {
     if (req.body.username === 'admin' && req.body.password === '123') {
         return next()
     }
-
     let token
 
     if (
@@ -17,12 +16,11 @@ const isAuthenticated = async (req, res, next) => {
     ) {
         token = req.headers.authorization.split(' ')[1]
     }
-
     if (!token) {
-        return new AppError(
+        return next(new AppError(
             `You don't have permission to access this route.`,
             401,
-        )
+        ))
     }
 
     // Take role from payload
@@ -37,7 +35,6 @@ const isAuthenticated = async (req, res, next) => {
             ),
         )
     }
-
     req.staff = await Staff.findById(decoded.id)
     
     next()

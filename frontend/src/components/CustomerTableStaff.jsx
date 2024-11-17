@@ -10,7 +10,7 @@ const TABLE_HEAD = [
   "Thao tác",
 ];
 
-const CustomerTable = ({ TABLE_ROWS }) => {
+const CustomerTableStaff = ({ TABLE_ROWS }) => {
   return (
     <Card className="h-full w-full">
       <table className="w-full min-w-max table-auto">
@@ -69,7 +69,7 @@ const CustomerTable = ({ TABLE_ROWS }) => {
                       unmount: { scale: 0, y: 25 },
                     }}
                   >
-                    <Link to="/admin/purchase-history">
+                    <Link to="/staff/purchase-history">
                       <RiBillLine className="text-2xl text-orange-500" />
                     </Link>
                   </Tooltip>
@@ -83,4 +83,4 @@ const CustomerTable = ({ TABLE_ROWS }) => {
   );
 };
 
-export default CustomerTable;
+export default CustomerTableStaff;

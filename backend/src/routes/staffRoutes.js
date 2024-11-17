@@ -12,7 +12,7 @@ import { isAuthenticated } from '../middlewares/auth/auth.js'
 
 const router = express.Router()
 
-router.use(isAuthenticated)
+// router.use(isAuthenticated)
 
 router.route('/').get(getAllStaffs).post(uploadAvatar.single('avatar'), createStaff)
 

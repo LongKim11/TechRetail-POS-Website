@@ -1,3 +1,5 @@
+import ChangeBG from "../assets/change-password.png";
+
 const ChangePasswordForm = () => {
   return (
     <div className="px-11 mt-11">
@@ -51,7 +53,7 @@ const ChangePasswordForm = () => {
         </form>
         <div className="w-1/2">
           <img
-            src="./src/assets/change-password.png"
+            src={ ChangeBG }
             className="mix-blend-multiply"
           ></img>
         </div>

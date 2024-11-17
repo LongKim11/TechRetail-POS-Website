@@ -14,7 +14,6 @@ import { useState } from "react";
 import { IoIosMail } from "react-icons/io";
 import { BsInfoCircle } from "react-icons/bs";
 import { MdLockPerson } from "react-icons/md";
-import { RiBillLine } from "react-icons/ri";
 import { FaRegUser } from "react-icons/fa";
 import { MdOutlineLockPerson } from "react-icons/md";
 import { MdMailOutline } from "react-icons/md";
@@ -31,12 +30,19 @@ const TABLE_HEAD = [
   "Thao tác",
 ];
 
-const StaffTable = ({ TABLE_ROWS }) => {
+const StaffTable = ({ staffs }) => {
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [openLockModal, setOpenLockModal] = useState(false);
+  const [selectedStaff, setSelectedStaff] = useState(null);
 
-  const handleOpenDetailModal = () => setOpenDetailModal(!openDetailModal);
-  const handleOpenLockModal = () => setOpenLockModal(!openLockModal);
+  const handleOpenDetailModal = (staff) => {
+    setOpenDetailModal(!openDetailModal);
+    setSelectedStaff(staff);
+  };
+  const handleOpenLockModal = (staff) => {
+    setSelectedStaff(staff);
+    setOpenLockModal(!openLockModal);
+  };
 
   return (
     <Card className="h-full w-full">
@@ -53,109 +59,97 @@ const StaffTable = ({ TABLE_ROWS }) => {
           </tr>
         </thead>
         <tbody>
-          {TABLE_ROWS.map(
-            ({ img, name, createdAt, status, is_locked }, index) => {
-              return (
-                <tr key={index} className="hover:bg-slate-50">
-                  <td className="p-4">
-                    <div className="flex items-center gap-x-3">
-                      <Avatar
-                        src={img}
-                        alt={name}
-                        size="md"
-                        withBorder={true}
-                        color="blue"
-                        className="border object-contain p-1"
-                      />
-                      <Typography variant="small" className="font-semibold">
-                        {name}
-                      </Typography>
-                    </div>
-                  </td>
-                  <td className="p-4">
-                    <Typography variant="small" className="font-semibold">
-                      {createdAt}
-                    </Typography>
-                  </td>
-                  <td className="p-4">
-                    <div className="w-max">
-                      <Chip
-                        size="lg"
-                        variant="ghost"
-                        value={status}
-                        color={status == "Active" ? "green" : "amber"}
-                      />
-                    </div>
-                  </td>
-                  <td className="p-4">
-                    <div className="w-max">
-                      <Chip
-                        size="lg"
-                        variant="ghost"
-                        value={is_locked}
-                        color={is_locked == "true" ? "red" : "cyan"}
-                      />
-                    </div>
-                  </td>
-                  <td className="p-4">
-                    <Button
-                      className="flex items-center gap-3"
-                      size="sm"
+          {staffs.map((staff, index) => {
+            return (
+              <tr key={index} className="hover:bg-slate-50">
+                <td className="p-4">
+                  <div className="flex items-center gap-x-3">
+                    <Avatar
+                      src={staff.img}
+                      alt={staff.name}
+                      size="md"
+                      withBorder={true}
                       color="blue"
-                      variant="outlined"
+                      className="border object-contain p-1"
+                    />
+                    <Typography className="font-semibold">
+                      {staff.name}
+                    </Typography>
+                  </div>
+                </td>
+                <td className="p-4">
+                  <Typography className="font-semibold">
+                    {staff.createdAt}
+                  </Typography>
+                </td>
+                <td className="p-4">
+                  <div className="w-max">
+                    <Chip
+                      size="lg"
+                      variant="ghost"
+                      value={staff.status}
+                      color={staff.status == "Active" ? "green" : "amber"}
+                    />
+                  </div>
+                </td>
+                <td className="p-4">
+                  <div className="w-max">
+                    <Chip
+                      size="lg"
+                      variant="ghost"
+                      value={staff.is_locked}
+                      color={staff.is_locked == "true" ? "red" : "cyan"}
+                    />
+                  </div>
+                </td>
+                <td className="p-4">
+                  <Button
+                    className="flex items-center gap-3"
+                    size="sm"
+                    color="blue"
+                    variant="outlined"
+                  >
+                    <IoIosMail className="text-xl text-blue-500" />
+                    Gửi
+                  </Button>
+                </td>
+                <td className="p-4">
+                  <div className="flex items-center gap-x-5">
+                    <Tooltip
+                      content="Xem chi tiết"
+                      animate={{
+                        mount: { scale: 1, y: 0 },
+                        unmount: { scale: 0, y: 25 },
+                      }}
                     >
-                      <IoIosMail className="text-xl text-blue-500" />
-                      Gửi
-                    </Button>
-                  </td>
-                  <td className="p-4">
-                    <div className="flex items-center gap-x-5">
-                      <Tooltip
-                        content="Xem chi tiết"
-                        animate={{
-                          mount: { scale: 1, y: 0 },
-                          unmount: { scale: 0, y: 25 },
-                        }}
-                      >
-                        <a href="#" onClick={handleOpenDetailModal}>
-                          <BsInfoCircle className="text-2xl text-green-600" />
-                        </a>
-                      </Tooltip>
-                      <Tooltip
-                        content="Xem thông tin bán hàng"
-                        animate={{
-                          mount: { scale: 1, y: 0 },
-                          unmount: { scale: 0, y: 25 },
-                        }}
-                      >
-                        <a href="#">
-                          <RiBillLine className="text-2xl text-blue-600" />
-                        </a>
-                      </Tooltip>
-                      <Tooltip
-                        content="Khóa tài khoản"
-                        animate={{
-                          mount: { scale: 1, y: 0 },
-                          unmount: { scale: 0, y: 25 },
-                        }}
-                      >
-                        <a href="#" onClick={handleOpenLockModal}>
-                          <MdLockPerson className="text-2xl text-red-600" />
-                        </a>
-                      </Tooltip>
-                    </div>
-                  </td>
-                </tr>
-              );
-            }
-          )}
+                      <a href="#" onClick={() => handleOpenDetailModal(staff)}>
+                        <BsInfoCircle className="text-2xl text-green-600" />
+                      </a>
+                    </Tooltip>
+
+                    <Tooltip
+                      content="Khóa tài khoản"
+                      animate={{
+                        mount: { scale: 1, y: 0 },
+                        unmount: { scale: 0, y: 25 },
+                      }}
+                    >
+                      <a href="#" onClick={() => handleOpenLockModal(staff)}>
+                        <MdLockPerson className="text-2xl text-red-600" />
+                      </a>
+                    </Tooltip>
+                  </div>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
       <Dialog open={openDetailModal} handler={handleOpenDetailModal} size="sm">
         <DialogHeader className="relative m-0 block">
           <Typography variant="h3">Chi tiết nhân viên</Typography>
           <Typography className="mt-1 font-normal text-slate-500">
-            Mã nhân viên: 6kqh183j8qcnqm7160
+            Mã nhân viên: {selectedStaff?.id}
           </Typography>
         </DialogHeader>
         <DialogBody>
@@ -165,8 +159,8 @@ const StaffTable = ({ TABLE_ROWS }) => {
               <Typography variant="h6">Họ và tên</Typography>
             </div>
             <input
-              value="Nguyễn Văn A"
-              className="p-2 rounded-md w-full mt-2 border border-gray-100 text-slate-500 font-normal"
+              value={selectedStaff?.name}
+              className="p-2 rounded-md w-full mt-2 border border-gray-200 font-normal text-slate-700"
               disabled
             ></input>
           </div>
@@ -176,8 +170,8 @@ const StaffTable = ({ TABLE_ROWS }) => {
               <Typography variant="h6">Tên đăng nhập</Typography>
             </div>
             <input
-              value="nguyenvana"
-              className="p-2 rounded-md w-full mt-2 border border-gray-100 text-slate-500 font-normal"
+              value={selectedStaff?.username}
+              className="p-2 rounded-md w-full mt-2 border border-gray-200 font-normal text-slate-700"
               disabled
             ></input>
           </div>
@@ -188,8 +182,8 @@ const StaffTable = ({ TABLE_ROWS }) => {
                 <Typography variant="h6">Trạng thái</Typography>
               </div>
               <input
-                value="Active"
-                className="p-2 rounded-md w-full mt-2 border border-gray-100 text-slate-500 font-normal"
+                value={selectedStaff?.status}
+                className="p-2 rounded-md w-full mt-2 border border-gray-200 font-normal text-slate-700"
                 disabled
               ></input>
             </div>
@@ -199,8 +193,8 @@ const StaffTable = ({ TABLE_ROWS }) => {
                 <Typography variant="h6">Khóa</Typography>
               </div>
               <input
-                value="false"
-                className="p-2 rounded-md w-full mt-2 border border-gray-100 text-slate-500 font-normal"
+                value={selectedStaff?.is_locked}
+                className="p-2 rounded-md w-full mt-2 border border-gray-200 font-normal text-slate-700"
                 disabled
               ></input>
             </div>
@@ -211,8 +205,8 @@ const StaffTable = ({ TABLE_ROWS }) => {
               <Typography variant="h6">Địa chỉ email</Typography>
             </div>
             <input
-              value="nguyenvana@gmail.com"
-              className="p-2 rounded-md w-full mt-2 border border-gray-100 text-slate-500 font-normal"
+              value={selectedStaff?.email}
+              className="p-2 rounded-md w-full mt-2 border border-gray-200 font-normal text-slate-700"
               disabled
             ></input>
           </div>
@@ -222,8 +216,8 @@ const StaffTable = ({ TABLE_ROWS }) => {
               <Typography variant="h6">Ngày tạo</Typography>
             </div>
             <input
-              value="22/2/2023"
-              className="p-2 rounded-md w-full mt-2 border border-gray-100 text-slate-500 font-normal"
+              value={selectedStaff?.createdAt}
+              className="p-2 rounded-md w-full mt-2 border border-gray-200 font-normal text-slate-700"
               disabled
             ></input>
           </div>
@@ -234,14 +228,14 @@ const StaffTable = ({ TABLE_ROWS }) => {
           </Button>
         </DialogFooter>
       </Dialog>
-
       <Dialog open={openLockModal} handler={handleOpenLockModal} size="sm">
         <DialogHeader className="relative m-0 block">
           <Typography variant="h3">Khóa tài khoản</Typography>
         </DialogHeader>
         <DialogBody>
           <p className="font-normal text-slate-500">
-            Bạn có chắc chắn muốn khóa tài khoản của nhân viên này không?
+            Bạn có chắc chắn muốn khóa tài khoản của nhân viên{" "}
+            <span className="font-bold">{selectedStaff?.name}</span> này không?
           </p>
         </DialogBody>
         <DialogFooter>

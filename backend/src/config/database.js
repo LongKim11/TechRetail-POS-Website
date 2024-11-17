@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 const MONGODB_URI =
-    process.env.MONGODB_URI || `mongodb://localhost/phone-store-pos`
+    process.env.MONGO_URI || `mongodb://localhost/phone-store-pos`
 
 const connectDB = async () => {
     try {

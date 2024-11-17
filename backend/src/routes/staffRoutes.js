@@ -12,7 +12,8 @@ import { isAuthenticated } from '../middlewares/auth/auth.js'
 import { restrictTo } from '../controllers/authController.js'
 
 const router = express.Router()
-router.use(isAuthenticated)
+
+// router.use(isAuthenticated)
 
 router.route('/').get(getAllStaffs).post(restrictTo('admin'), uploadAvatar.single('avatar'), createStaff)
 

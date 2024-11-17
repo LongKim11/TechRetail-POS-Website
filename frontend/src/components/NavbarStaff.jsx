@@ -11,7 +11,7 @@ import { MdSettings } from "react-icons/md";
 import UserAvatar from "../assets/user-avatar.png";
 import { Link } from "react-router-dom";
 
-const Navbar = ({ staff, heading }) => {
+const NavbarStaff = ({ heading, staff }) => {
   return (
     <div className="flex justify-between items-center">
       <h1 className="text-2xl font-semibold ">{heading}</h1>
@@ -34,7 +34,7 @@ const Navbar = ({ staff, heading }) => {
               <Typography
                 variant="small"
                 color="gray"
-                className="text-slate-500 font-normal"
+                className="font-normal text-slate-600"
               >
                 {staff.email}
               </Typography>
@@ -42,7 +42,7 @@ const Navbar = ({ staff, heading }) => {
             <hr className="my-2 border-blue-gray-50" />
             <MenuItem className="flex items-center gap-3 mb-2 hover:bg-gray-200">
               <FaRegUserCircle className="text-xl" />
-              <Link to={"/admin/profile"}>
+              <Link to={"/staff/profile"}>
                 <Typography variant="small" className="font-medium">
                   Thông tin tài khoản
                 </Typography>
@@ -50,7 +50,7 @@ const Navbar = ({ staff, heading }) => {
             </MenuItem>
             <MenuItem className="flex items-center gap-3 mb-2 hover:bg-gray-200">
               <FaFingerprint className="text-xl" />
-              <Link to={"/admin/change-password"}>
+              <Link to={"/staff/change-password"}>
                 <Typography variant="small" className="font-medium">
                   Đổi mật khẩu
                 </Typography>
@@ -81,4 +81,4 @@ const Navbar = ({ staff, heading }) => {
   );
 };
 
-export default Navbar;
+export default NavbarStaff;

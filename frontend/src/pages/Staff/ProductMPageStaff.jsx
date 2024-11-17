@@ -1,55 +1,66 @@
-import Sidebar from "../components/Sidebar";
-import Navbar from "../components/Navbar";
+import SidebarStaff from "../../components/SidebarStaff";
+import NavbarStaff from "../../components/NavbarStaff";
 import { Button } from "@material-tailwind/react";
 import { IoFilter } from "react-icons/io5";
-import CustomerTable from "../components/CustomerTable";
+import ProductTableStaff from "../../components/ProductTableStaff";
 
-const CustomersPage = () => {
-  const TABLE_ROWS = [
+const ProductMPageStaff = () => {
+  const staff = {
+    fullname: "Nguyễn Văn A",
+    email: "nguyenvana@gmail.com",
+    username: "Username",
+  };
+
+  const products = [
     {
-      fullname: "Nguyen Van B",
-      address: "123 Lac Long Quan, TPHCM",
-      phone: "0123456789",
-      createdAt: "20/10/2021",
+      barcode: "P000001",
+      name: "Iphone 13 Pro Max 256GB",
+      import_price: "2000",
+      retail_price: "2500",
+      category: "smartphone",
+      createdAt: "2021-10-10",
     },
     {
-      fullname: "Nguyen Van B",
-      address: "123 Lac Long Quan, TPHCM",
-      phone: "0123456789",
-      createdAt: "20/10/2021",
+      barcode: "P000001",
+      name: "Sạc Smartphone Samsung 25W",
+      import_price: "2000",
+      retail_price: "2500",
+      category: "charging",
+      createdAt: "2021-10-10",
     },
     {
-      fullname: "Nguyen Van B",
-      address: "123 Lac Long Quan, TPHCM",
-      phone: "0123456789",
-      createdAt: "20/10/2021",
+      barcode: "P000001",
+      name: "Xiomi Redmi Note 10 Pro 128GB",
+      import_price: "2000",
+      retail_price: "2500",
+      category: "smartphone",
+      createdAt: "2021-10-10",
     },
     {
-      fullname: "Nguyen Van B",
-      address: "123 Lac Long Quan, TPHCM",
-      phone: "0123456789",
-      createdAt: "20/10/2021",
+      barcode: "P000001",
+      name: "Apple Watch Series 7 44mm",
+      import_price: "2000",
+      retail_price: "2500",
+      category: "watch",
+      createdAt: "2021-10-10",
     },
     {
-      fullname: "Nguyen Van B",
-      address: "123 Lac Long Quan, TPHCM",
-      phone: "0123456789",
-      createdAt: "20/10/2021",
+      barcode: "P000001",
+      name: "Iphone 13 Pro Max 256GB",
+      import_price: "2000",
+      retail_price: "2500",
+      category: "smartphone",
+      createdAt: "2021-10-10",
     },
   ];
-
   return (
     <div className="flex">
-      <Sidebar />
+      <SidebarStaff />
       <div className="flex-1 p-7 bg-slate-100">
-        <Navbar
-          heading="Quản lý khách hàng"
-          username="Username"
-          fullname="Nguyễn Văn A"
-          email="nguyenvana@gmail.com"
-          avatar="./src/assets/user-avatar.png"
-        />
-        <h1 className="text-2xl font-semibold mt-11">Danh sách</h1>
+        <NavbarStaff heading="Quản lý sản phẩm" staff={staff} />
+        <div className="mt-11">
+          <h1 className="text-2xl font-semibold">Danh sách</h1>
+        </div>
         <div className="w-full bg-white rounded-xl mt-7 border border-slate-200">
           <div className="flex justify-between items-center p-5">
             <form>
@@ -74,7 +85,7 @@ const CustomersPage = () => {
                 <input
                   type="search"
                   className="block w-full p-3 ps-10 text-sm border border-gray-300 rounded-lg  focus:ring-blue-500 focus:outline-none focus:ring-1 focus:border-blue-500 "
-                  placeholder="Tìm khách hàng.."
+                  placeholder="Tìm sản phẩm.."
                   required
                 />
               </div>
@@ -85,11 +96,11 @@ const CustomersPage = () => {
               </Button>
             </div>
           </div>
-          <CustomerTable TABLE_ROWS={TABLE_ROWS} />
+          <ProductTableStaff products={products} />
         </div>
       </div>
     </div>
   );
 };
 
-export default CustomersPage;
+export default ProductMPageStaff;

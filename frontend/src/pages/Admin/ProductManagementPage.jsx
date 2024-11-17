@@ -20,6 +20,12 @@ import { BiCategory } from "react-icons/bi";
 import { MdOutlineDevices } from "react-icons/md";
 
 const ProductManagementPage = () => {
+  const staff = {
+    fullname: "Nguyễn Văn A",
+    email: "nguyenvana@gmail.com",
+    username: "Username",
+  };
+
   const products = [
     {
       barcode: "P000001",
@@ -73,13 +79,7 @@ const ProductManagementPage = () => {
     <div className="flex">
       <Sidebar />
       <div className="flex-1 p-7 bg-slate-100">
-        <Navbar
-          heading="Quản lý sản phẩm"
-          username="Username"
-          fullname="Nguyễn Văn A"
-          email="nguyenvana@gmail.com"
-          avatar="./src/assets/user-avatar.png"
-        />
+        <Navbar heading="Quản lý sản phẩm" staff={staff} />
         <div className="flex justify-between mt-11 items-center">
           <h1 className="text-2xl font-semibold">Danh sách</h1>
           <Button

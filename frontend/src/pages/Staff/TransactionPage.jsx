@@ -7,6 +7,11 @@ import { FaArrowRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 const TransactionPage = () => {
+  const staff = {
+    fullname: "Nguyễn Văn A",
+    email: "nguyenvana@gmail.com",
+    username: "Username",
+  };
   const TABLE_HEAD = ["Tên sản phẩm", "Số lượng", "Đơn giá", "Tổng tiền"];
 
   const TABLE_ROWS = [
@@ -84,13 +89,7 @@ const TransactionPage = () => {
     <div className="flex">
       <SidebarStaff />
       <div className="flex-1 p-7 bg-slate-100">
-        <NavbarStaff
-          heading="Trang xử lý mua hàng"
-          username="Username"
-          fullname="Nguyễn Văn A"
-          email="nguyenvana@gmail.com"
-          avatar="./src/assets/user-avatar.png"
-        />
+        <NavbarStaff heading="Trang xử lý mua hàng" staff={staff} />
         <div className="flex gap-x-5 mt-11">
           <div className="w-2/3 bg-white rounded-lg shadow-md">
             <div className="flex justify-between items-center p-3">

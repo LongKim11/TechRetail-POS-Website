@@ -4,6 +4,12 @@ import Logo from "../../assets/logo-vector.png";
 import { Typography } from "@material-tailwind/react";
 
 const InvoicePage = () => {
+  const staff = {
+    fullname: "Nguyễn Văn A",
+    email: "nguyenvana@gmail.com",
+    username: "Username",
+  };
+
   const TABLE_HEAD = ["Tên sản phẩm", "Số lượng", "Đơn giá", "Tổng tiền"];
 
   const PRODUCTS_ROWS = [
@@ -43,13 +49,7 @@ const InvoicePage = () => {
     <div className="flex">
       <SidebarStaff />
       <div className="flex-1 p-7 bg-slate-100">
-        <NavbarStaff
-          heading="Xuất hóa đơn"
-          username="Username"
-          fullname="Nguyễn Văn A"
-          email="nguyenvana@gmail.com"
-          avatar="./src/assets/user-avatar.png"
-        />
+        <NavbarStaff heading="Xuất hóa đơn" staff={staff} />
         <div className="mx-auto bg-white rounded-lg w-1/2 p-5 mt-11 border-slate-200 border shadow-md">
           <div className="flex items-center justify-center gap-x-5">
             <div>
@@ -90,7 +90,7 @@ const InvoicePage = () => {
             Danh sách sản phẩm
           </h1>
           <table className="w-full min-w-max table-auto">
-            <thead className="">
+            <thead>
               <tr>
                 {TABLE_HEAD.map((head) => (
                   <th key={head} className="p-4">
@@ -151,7 +151,7 @@ const InvoicePage = () => {
             </div>
           </div>
           <hr className="mb-5 mt-3 border-slate-300"></hr>
-          <h3 className="text-center text-slate-500">
+          <h3 className="text-center text-slate-500 font-medium">
             Trân trọng cảm ơn quý khách đã mua hàng tại Ceasar POS Website
           </h3>
         </div>

@@ -2,9 +2,15 @@ import SidebarStaff from "../../components/SidebarStaff";
 import NavbarStaff from "../../components/NavbarStaff";
 import { Button } from "@material-tailwind/react";
 import { IoFilter } from "react-icons/io5";
-import CustomerTable from "../../components/CustomerTable";
+import CustomerTableStaff from "../../components/CustomerTableStaff";
 
 const CustomersPageStaff = () => {
+  const staff = {
+    fullname: "Nguyễn Văn A",
+    email: "nguyenvana@gmail.com",
+    username: "Username",
+  };
+
   const TABLE_ROWS = [
     {
       fullname: "Nguyen Van B",
@@ -42,13 +48,7 @@ const CustomersPageStaff = () => {
     <div className="flex">
       <SidebarStaff />
       <div className="flex-1 p-7 bg-slate-100">
-        <NavbarStaff
-          heading="Quản lý khách hàng"
-          username="Username"
-          fullname="Nguyễn Văn A"
-          email="nguyenvana@gmail.com"
-          avatar="./src/assets/user-avatar.png"
-        />
+        <NavbarStaff heading="Quản lý khách hàng" staff={staff} />
         <h1 className="text-2xl font-semibold mt-11">Danh sách</h1>
         <div className="w-full bg-white rounded-xl mt-7 border border-slate-200">
           <div className="flex justify-between items-center p-5">
@@ -85,7 +85,7 @@ const CustomersPageStaff = () => {
               </Button>
             </div>
           </div>
-          <CustomerTable TABLE_ROWS={TABLE_ROWS} />
+          <CustomerTableStaff TABLE_ROWS={TABLE_ROWS} />
         </div>
       </div>
     </div>

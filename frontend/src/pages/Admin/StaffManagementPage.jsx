@@ -16,6 +16,12 @@ import { FaRegUser } from "react-icons/fa";
 import { MdMailOutline } from "react-icons/md";
 
 const StaffManagementPage = () => {
+  const staff = {
+    fullname: "Nguyễn Văn A",
+    email: "nguyenvana@gmail.com",
+    username: "Username",
+  };
+
   const staffs = [
     {
       img: "./src/assets/user-avatar.png",
@@ -63,13 +69,7 @@ const StaffManagementPage = () => {
     <div className="flex">
       <Sidebar />
       <div className="flex-1 p-7 bg-slate-100">
-        <Navbar
-          heading="Quản lý nhân viên"
-          username="Username"
-          fullname="Nguyễn Văn A"
-          email="nguyenvana@gmail.com"
-          avatar="./src/assets/user-avatar.png"
-        />
+        <Navbar heading="Quản lý nhân viên" staff={staff} />
         <div className="flex justify-between mt-11 items-center">
           <h1 className="text-2xl font-semibold">Danh sách</h1>
           <Button

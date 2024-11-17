@@ -11,12 +11,12 @@ import { MdSettings } from "react-icons/md";
 import UserAvatar from "../assets/user-avatar.png";
 import { Link } from "react-router-dom";
 
-const Navbar = ({ heading, username, fullname, email, avatar }) => {
+const Navbar = ({ staff, heading }) => {
   return (
     <div className="flex justify-between items-center">
       <h1 className="text-2xl font-semibold ">{heading}</h1>
       <div className="flex items-center gap-4">
-        <Typography variant="h6">{username}</Typography>
+        <Typography variant="h6">{staff.username}</Typography>
         <Menu placement="bottom-end">
           <MenuHandler>
             <Avatar
@@ -30,13 +30,13 @@ const Navbar = ({ heading, username, fullname, email, avatar }) => {
           </MenuHandler>
           <MenuList>
             <MenuItem className="cursor-default">
-              <Typography variant="h6">{fullname}</Typography>
+              <Typography variant="h6">{staff.fullname}</Typography>
               <Typography
                 variant="small"
                 color="gray"
-                className="text-sm text-slate-600"
+                className="text-slate-500 font-normal"
               >
-                {email}
+                {staff.email}
               </Typography>
             </MenuItem>
             <hr className="my-2 border-blue-gray-50" />

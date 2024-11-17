@@ -5,6 +5,12 @@ import { IoFilter } from "react-icons/io5";
 import ProductTableStaff from "../../components/ProductTableStaff";
 
 const ProductMPageStaff = () => {
+  const staff = {
+    fullname: "Nguyễn Văn A",
+    email: "nguyenvana@gmail.com",
+    username: "Username",
+  };
+
   const products = [
     {
       barcode: "P000001",
@@ -51,13 +57,7 @@ const ProductMPageStaff = () => {
     <div className="flex">
       <SidebarStaff />
       <div className="flex-1 p-7 bg-slate-100">
-        <NavbarStaff
-          heading="Quản lý sản phẩm"
-          username="Username"
-          fullname="Nguyễn Văn A"
-          email="nguyenvana@gmail.com"
-          avatar="./src/assets/user-avatar.png"
-        />
+        <NavbarStaff heading="Quản lý sản phẩm" staff={staff} />
         <div className="mt-11">
           <h1 className="text-2xl font-semibold">Danh sách</h1>
         </div>

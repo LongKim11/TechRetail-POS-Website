@@ -3,17 +3,17 @@ import NavbarStaff from "../../components/NavbarStaff";
 import DashboardBoxStaff from "../../components/DashboardBoxStaff";
 
 const HomeStaff = () => {
+  const staff = {
+    fullname: "Nguyễn Văn A",
+    email: "nguyenvana@gmail.com",
+    username: "Username",
+  };
+
   return (
     <div className="flex">
       <SidebarStaff />
       <div className="flex-1 p-7 bg-slate-100">
-        <NavbarStaff
-          heading="Hi, Welcome back 👋"
-          username="Username"
-          fullname="Nguyễn Văn A"
-          email="nguyenvana@gmail.com"
-          avatar="./src/assets/user-avatar.png"
-        />
+        <NavbarStaff heading="Hi, Welcome back 👋" staff={staff} />
         <DashboardBoxStaff
           employees={20}
           bills={100}

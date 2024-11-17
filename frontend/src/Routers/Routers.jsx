@@ -14,6 +14,8 @@ import CustomersPageStaff from "../pages/Staff/CustomerPageStaff";
 import TransactionPage from "../pages/Staff/TransactionPage";
 import ConfirmTransaction from "../pages/Staff/ConfirmTransaction";
 import InvoicePage from "../pages/Staff/InvoicePage";
+import PurchaseHistory from "../pages/Admin/PurchaseHistory";
+import PurchaseHistoryStaff from "../pages/Staff/PurchaseHistoryStaff";
 
 const Routers = () => {
   return (
@@ -25,6 +27,7 @@ const Routers = () => {
         <Route path="staffs" element={<StaffManagementPage />} />
         <Route path="products" element={<ProductManagementPage />} />
         <Route path="customers" element={<CustomersPage />} />
+        <Route path="purchase-history" element={<PurchaseHistory />} />
         <Route path="profile" element={<Profile />} />
         <Route path="change-password" element={<ChangePassword />} />
       </Route>
@@ -36,6 +39,7 @@ const Routers = () => {
         <Route path="invoice" element={<InvoicePage />} />
         <Route path="products" element={<ProductMPageStaff />} />
         <Route path="customers" element={<CustomersPageStaff />} />
+        <Route path="purchase-history" element={<PurchaseHistoryStaff />} />
         <Route path="profile" element={<ProfileStaff />} />
         <Route path="change-password" element={<ChangePasswordStaff />} />
       </Route>

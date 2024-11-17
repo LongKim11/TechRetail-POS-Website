@@ -5,17 +5,17 @@ import { Button, Typography } from "@material-tailwind/react";
 import { FaArrowRight } from "react-icons/fa";
 
 const ConfirmTransaction = () => {
+  const staff = {
+    fullname: "Nguyễn Văn A",
+    email: "nguyenvana@gmail.com",
+    username: "Username",
+  };
+
   return (
     <div className="flex">
       <SidebarStaff />
       <div className="flex-1 p-7 bg-slate-100">
-        <NavbarStaff
-          heading="Trang xác nhận mua hàng"
-          username="Username"
-          fullname="Nguyễn Văn A"
-          email="nguyenvana@gmail.com"
-          avatar="./src/assets/user-avatar.png"
-        />
+        <NavbarStaff heading="Trang xác nhận mua hàng" staff={staff} />
         <div className="flex gap-x-5 mt-11">
           <div className="w-1/3 bg-white rounded-lg shadow-md">
             <div className="p-3">

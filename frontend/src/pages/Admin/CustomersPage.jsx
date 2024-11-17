@@ -5,6 +5,12 @@ import { IoFilter } from "react-icons/io5";
 import CustomerTable from "../../components/CustomerTable";
 
 const CustomersPage = () => {
+  const staff = {
+    fullname: "Nguyễn Văn A",
+    email: "nguyenvana@gmail.com",
+    username: "Username",
+  };
+
   const TABLE_ROWS = [
     {
       fullname: "Nguyen Van B",
@@ -42,13 +48,7 @@ const CustomersPage = () => {
     <div className="flex">
       <Sidebar />
       <div className="flex-1 p-7 bg-slate-100">
-        <Navbar
-          heading="Quản lý khách hàng"
-          username="Username"
-          fullname="Nguyễn Văn A"
-          email="nguyenvana@gmail.com"
-          avatar="./src/assets/user-avatar.png"
-        />
+        <Navbar heading="Quản lý khách hàng" staff={staff} />
         <h1 className="text-2xl font-semibold mt-11">Danh sách</h1>
         <div className="w-full bg-white rounded-xl mt-7 border border-slate-200">
           <div className="flex justify-between items-center p-5">

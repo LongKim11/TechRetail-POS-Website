@@ -3,17 +3,17 @@ import NavbarStaff from "../../components/NavbarStaff";
 import ProfileForm from "../../components/ProfileForm";
 
 const ProfileStaff = () => {
+  const staff = {
+    fullname: "Nguyễn Văn A",
+    email: "nguyenvana@gmail.com",
+    username: "Username",
+  };
+
   return (
     <div className="flex">
       <SidebarStaff></SidebarStaff>
       <div className="flex-1 p-7 bg-slate-100">
-        <NavbarStaff
-          heading="Thông tin cá nhân"
-          username="Username"
-          fullname="Nguyễn Văn A"
-          email="nguyenvana@gmail.com"
-          avatar="./src/assets/user-avatar.png"
-        ></NavbarStaff>
+        <NavbarStaff heading="Thông tin cá nhân" staff={staff}></NavbarStaff>
         <ProfileForm
           avatar="./src/assets/user-avatar.png"
           username="Username"

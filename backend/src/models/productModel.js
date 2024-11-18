@@ -10,7 +10,7 @@ const productSchema = mongoose.Schema(
             type: String,
             required: [true, 'Barcode is required'],
         },
-        brand_name: {
+        brand: {
             type: String,
             required: [true, 'Brand name is required'],
         },
@@ -26,10 +26,6 @@ const productSchema = mongoose.Schema(
             type: String,
             required: [true, 'Category name is required'],
         },
-        // image: {
-        //     type: String,
-        //     required: [true, 'Image URL is required'],
-        // },
     },
     { timestamps: true },
 )

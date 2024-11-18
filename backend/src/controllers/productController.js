@@ -1,7 +1,6 @@
 import catchAsync from '../utils/catchAsync.js'
 import AppError from '../utils/appError.js'
 import { Product } from '../models/productModel.js'
-import { Brand } from '../models/brandModel.js'
 
 const getAllProducts = catchAsync(async (req, res, next) => {
     const products = await Product.find()
@@ -25,20 +24,13 @@ const getProductById = catchAsync(async (req, res, next) => {
 })
 
 const createProduct = catchAsync(async (req, res, next) => {
-    // const image = req.file.filename
-    // const newProduct = new Product({ ...req.body, image })
-
-    const savedProduct = await Product.create(req.body)
+     const savedProduct = await Product.create(req.body)
     res.json(savedProduct)
 })
 
 const updateProduct = catchAsync(async (req, res, next) => {
-    const image = req.file.filename
     const id = req.params.id
-    const updatedProduct = new Product({
-        ...req.body,
-        image,
-    })
+    const updatedProduct = new Product(req.body)
 
     const result = await Product.findByIdAndUpdate(id, updatedProduct)
     res.json({ message: 'Product updated successfully' })

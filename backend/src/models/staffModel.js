@@ -44,14 +44,14 @@ const staffSchema = mongoose.Schema(
         status: {
             type: String,
             required: [true, 'Status is required'],
-            enum: ['active', 'inactive'],
-            default: 'active',
+            enum: ['Active', 'Inactive'],
+            default: 'Active',
         },
         is_locked: {
             type: Boolean,
             required: [true, 'is_locked is required'],
-            enum: ['true', 'false'],
-            default: 'false',
+            enum: ['True', 'False'],
+            default: 'False',
         },
         passwordResetToken: String,
         passwordResetExpires: Date,

@@ -1,7 +1,7 @@
 import { LuUsers } from "react-icons/lu";
 import { TbDeviceIpadCheck } from "react-icons/tb";
-import { PiMoneyWavy } from "react-icons/pi";
 import { TbDevicesDollar } from "react-icons/tb";
+import { GrMoney } from "react-icons/gr";
 
 const DashboardBoxStaff = ({ employees, bills, income, products }) => {
   return (
@@ -23,7 +23,7 @@ const DashboardBoxStaff = ({ employees, bills, income, products }) => {
         </div>
       </div>
       <div className="rounded-md p-5 flex shadow-lg shadow-gray-200 transition-all duration-500 hover:scale-105 hover:shadow-gray-400 cursor-pointer bg-white">
-        <PiMoneyWavy className="text-6xl text-green-700 text-right w-1/3" />
+        <GrMoney className="text-6xl text-green-700 text-right w-1/3" />
         <div className="w-2/3">
           <h1 className="text-dark-purple text-3xl font-bold">{income}</h1>
           <h4 className="text-[#33343D] mb-3 font-semibold">Tổng doanh thu</h4>

@@ -4,6 +4,7 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}", // Include all your source files
     "node_modules/@material-tailwind/react/**/*.{js,ts,jsx,tsx}", // Include Material Tailwind
+    "./node_modules/react-tailwindcss-datepicker/dist/index.esm.{js,ts}", // Include Datepicker
   ],
   theme: {
     extend: {

@@ -1,12 +1,6 @@
 import { Card, Typography } from "@material-tailwind/react";
 
-const TABLE_HEAD = [
-  "Barcode",
-  "Tên sản phẩm",
-  "Giá bán lẻ",
-  "Loại sản phẩm",
-  "Thao tác",
-];
+const TABLE_HEAD = ["Barcode", "Tên sản phẩm", "Giá bán lẻ", "Thao tác"];
 
 const ProductSearchTransaction = ({ TABLE_ROWS }) => {
   return (
@@ -39,11 +33,6 @@ const ProductSearchTransaction = ({ TABLE_ROWS }) => {
               <td className="p-4 text-center">
                 <Typography className="font-semibold text-green-500">
                   {retail_price}$
-                </Typography>
-              </td>
-              <td className="p-4 text-center">
-                <Typography className="font-semibold text-pink-500">
-                  {category.type}
                 </Typography>
               </td>
               <td className="p-4 text-center">

@@ -91,15 +91,17 @@ const Sidebar = () => {
             </span>
           </li>
         </Link>
-        <li className="flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4 mt-5">
-          <span className="text-2xl text-white">
-            <FaChartLine></FaChartLine>
-          </span>
-          <span className={`${!open && "hidden"} origin-left duration-200`}>
-            Analys
-          </span>
-        </li>
-        <a href="/login">
+        <Link to={"/admin/analys"}>
+          <li className="flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4 mt-5">
+            <span className="text-2xl text-white">
+              <FaChartLine></FaChartLine>
+            </span>
+            <span className={`${!open && "hidden"} origin-left duration-200`}>
+              Analys
+            </span>
+          </li>
+        </Link>
+        <a href="/">
           <li className="flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4 mt-12">
             <span className="text-2xl text-white">
               <FiLogOut></FiLogOut>

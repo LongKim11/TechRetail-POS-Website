@@ -1,4 +1,3 @@
-import mongoose from 'mongoose'
 import app from './app.js'
 import { connectDB } from './src/config/database.js'
 
@@ -11,18 +10,17 @@ const server = app.listen(PORT, () => {
 })
 
 process.on('unhandledRejection', (err) => {
-    console.log('UHANDLED REJECTION ERROR! Shutting down...');
-    console.log(err.name, err.message);
+    console.log('UHANDLED REJECTION ERROR! Shutting down...')
+    console.log(err.name, err.message)
     server.close(() => {
-        process.exit(1);
-    });
-});
+        process.exit(1)
+    })
+})
 
 process.on('uncaughtException', (err) => {
-    console.log('UNCAUGHT EXCEPTION ERROR! Shutting down...');
-    console.log(err.name, err.message);
+    console.log('UNCAUGHT EXCEPTION ERROR! Shutting down...')
+    console.log(err.name, err.message)
     server.close(() => {
-        process.exit(1);
-    });
-});
-
+        process.exit(1)
+    })
+})

@@ -6,7 +6,6 @@ import {
     updateProduct,
     deleteProduct,
 } from '../controllers/productController.js'
-import { uploadProductImg } from '../middlewares/uploadImage/uploads/multer.js'
 import { isAuthenticated } from '../middlewares/auth/auth.js'
 import { login } from '../controllers/authController.js'
 
@@ -16,14 +15,11 @@ const router = express.Router()
 // router.route('/login').post(login)
 // router.use(isAuthenticated)
 
-router
-    .route('/')
-    .get(getAllProducts)
-    .post(uploadProductImg.single('product-form'), createProduct)
+router.route('/').get(getAllProducts).post(createProduct)
 router
     .route('/:id')
     .get(getProductById)
-    .put(uploadProductImg.single('product-form'), updateProduct)
+    .put(updateProduct)
     .delete(deleteProduct)
 
 export default router

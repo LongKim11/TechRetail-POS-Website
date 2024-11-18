@@ -1,8 +1,12 @@
 import express from 'express'
 
-import { uploadAvatar } from '../middlewares/uploadImage/uploads/multer.js'
+import { uploadAvatar } from '../middlewares/uploadImage/multer.js'
 import { isAuthenticated } from '../middlewares/auth/auth.js'
-import { forgotPassword, login, resetPassword } from '../controllers/authController.js'
+import {
+    forgotPassword,
+    login,
+    resetPassword,
+} from '../controllers/authController.js'
 import { createStaff } from '../controllers/staffController.js'
 
 const router = express.Router()

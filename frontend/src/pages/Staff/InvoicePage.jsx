@@ -133,7 +133,7 @@ const InvoicePage = () => {
             </tbody>
           </table>
           <hr className="mb-5 mt-3 border-slate-300"></hr>
-          <div className="mr-16">
+          <div className="mr-11">
             <div className="flex">
               <h3 className="text-end w-5/6 font-semibold">
                 Tổng tiền hóa đơn:

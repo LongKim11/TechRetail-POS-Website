@@ -16,11 +16,12 @@ import ConfirmTransaction from "../pages/Staff/ConfirmTransaction";
 import InvoicePage from "../pages/Staff/InvoicePage";
 import PurchaseHistory from "../pages/Admin/PurchaseHistory";
 import PurchaseHistoryStaff from "../pages/Staff/PurchaseHistoryStaff";
+import AnalysPage from "../pages/Admin/AnalysPage";
 
 const Routers = () => {
   return (
     <Routes>
-      <Route path="/login" element={<LoginPage />} />
+      <Route path="/" element={<LoginPage />} />
 
       <Route path="/admin">
         <Route path="home" element={<Home />} />
@@ -30,6 +31,7 @@ const Routers = () => {
         <Route path="purchase-history" element={<PurchaseHistory />} />
         <Route path="profile" element={<Profile />} />
         <Route path="change-password" element={<ChangePassword />} />
+        <Route path="analys" element={<AnalysPage />} />
       </Route>
 
       <Route path="/staff">

@@ -10,14 +10,13 @@ import YellowLogo from "../assets/logo-yellow-bg.png";
 import { Link } from "react-router-dom";
 import { GrTransaction } from "react-icons/gr";
 
-
 const SidebarStaff = () => {
   const [open, setOpen] = useState(true);
 
   return (
     <div
       className={` ${
-        open ? "w-64" : "w-20 "
+        open ? "w-60" : "w-20 "
       } bg-dark-purple min-h-screen p-5 pt-8 relative duration-300 `}
     >
       <img
@@ -100,7 +99,7 @@ const SidebarStaff = () => {
             Analys
           </span>
         </li>
-        <a href="/login">
+        <a href="/">
           <li className="flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4 mt-12">
             <span className="text-2xl text-white">
               <FiLogOut></FiLogOut>

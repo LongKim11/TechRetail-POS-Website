@@ -91,9 +91,9 @@ const TransactionPage = () => {
       <div className="flex-1 p-7 bg-slate-100">
         <NavbarStaff heading="Trang xử lý mua hàng" staff={staff} />
         <div className="flex gap-x-5 mt-11">
-          <div className="w-2/3 bg-white rounded-lg shadow-md">
+          <div className="w-3/5 bg-white rounded-lg shadow-md">
             <div className="flex justify-between items-center p-3">
-              <h3 className="text-xl font-semibold ml-5">Thêm sản phẩm</h3>
+              {/* <h3 className="text-xl font-semibold ml-5">Thêm sản phẩm</h3> */}
               <div className="flex gap-x-3">
                 <form>
                   <div className="relative">
@@ -118,7 +118,6 @@ const TransactionPage = () => {
                       type="search"
                       className="block w-full p-3 ps-10 text-sm border border-gray-300 rounded-lg  focus:ring-blue-500 focus:outline-none focus:ring-1 focus:border-blue-500 "
                       placeholder="Tên sản phẩm.."
-                      required
                     />
                   </div>
                 </form>
@@ -131,15 +130,17 @@ const TransactionPage = () => {
                       type="search"
                       className="block w-full p-3 ps-10 text-sm border border-gray-300 rounded-lg  focus:ring-blue-500 focus:outline-none focus:ring-1 focus:border-blue-500 "
                       placeholder="Mã barcode.."
-                      required
                     />
                   </div>
                 </form>
               </div>
+              <button className="mr-4 bg-white hover:bg-blue-500 hover:text-white text-blue-500 font-semibold py-2 px-4 rounded-md border border-blue-500 transition-all">
+                Tìm kiếm
+              </button>
             </div>
             <ProductSearchTransaction TABLE_ROWS={TABLE_ROWS} />
           </div>
-          <div className="w-1/3 bg-white rounded-lg shadow-md">
+          <div className="w-2/5 bg-white rounded-lg shadow-md">
             <div className="p-3">
               <h3 className="text-xl font-semibold my-3 text-center">
                 Sản phẩm được mua

@@ -1,5 +1,5 @@
-import Sidebar from "../../components/Sidebar";
-import Navbar from "../../components/Navbar";
+import SidebarStaff from "../../components/SidebarStaff";
+import NavbarStaff from "../../components/NavbarStaff";
 import { useState } from "react";
 import Datepicker from "react-tailwindcss-datepicker";
 import { FaSearch } from "react-icons/fa";
@@ -8,7 +8,7 @@ import { TbDeviceIpadCheck } from "react-icons/tb";
 import { TbDevicesDollar } from "react-icons/tb";
 import { GrMoney } from "react-icons/gr";
 
-const AnalysPage = () => {
+const AnalysPageStaff = () => {
   const staff = {
     fullname: "Nguyễn Văn A",
     email: "nguyenvana@gmail.com",
@@ -60,9 +60,9 @@ const AnalysPage = () => {
 
   return (
     <div className="flex">
-      <Sidebar />
+      <SidebarStaff />
       <div className="flex-1 p-7 bg-slate-100">
-        <Navbar heading="Trang phân tích và thống kê" staff={staff} />
+        <NavbarStaff heading="Trang phân tích và thống kê" staff={staff} />
         <div className="flex mt-7 mb-11 items-center gap-x-20">
           <div className="flex w-1/3 flex-col gap-y-3">
             <div className="flex gap-x-3 items-center">
@@ -83,34 +83,34 @@ const AnalysPage = () => {
           </div>
           <div className="w-2/3">
             <div className="flex gap-x-7 justify-end">
-              <div className="rounded-md p-5 bg-gradient-to-r from-yellow-200 to-yellow-300 flex shadow-lg shadow-gray-200 transition-all duration-500 hover:scale-105 hover:shadow-gray-400 cursor-pointer w-1/3">
-                <div className="w-2/3">
-                  <h4 className="text-[#33343D] mb-1 font-semibold">
+              <div className="rounded-md p-5 flex shadow-lg shadow-gray-200 transition-all duration-500 hover:scale-105 hover:shadow-gray-400 cursor-pointer bg-white w-1/3">
+                <TbDeviceIpadCheck className="text-6xl text-orange-500" />
+                <div className="w-2/3 text-right">
+                  <h1 className="text-dark-purple text-3xl font-bold">123</h1>
+                  <h4 className="text-[#33343D] font-semibold">
                     Tổng đơn hàng
                   </h4>
-                  <h1 className="text-dark-purple text-3xl font-bold">100</h1>
                 </div>
-                <TbDeviceIpadCheck className="text-6xl text-dark-purple ml-5 text-right w-1/3" />
               </div>
-              <div className="rounded-md p-5 bg-gradient-to-r from-green-200 to-emerald-300 flex shadow-lg shadow-gray-200 transition-all duration-500 hover:scale-105 hover:shadow-gray-400 cursor-pointer w-1/3">
-                <div className="w-2/3">
-                  <h4 className="text-[#33343D] mb-1 font-semibold">
+              <div className="rounded-md p-5 flex shadow-lg shadow-gray-200 transition-all duration-500 hover:scale-105 hover:shadow-gray-400 cursor-pointer bg-white w-1/3">
+                <GrMoney className="text-6xl text-green-700" />
+                <div className="w-2/3 text-right">
+                  <h1 className="text-dark-purple text-3xl font-bold">
+                    111111111
+                  </h1>
+                  <h4 className="text-[#33343D] mb-3 font-semibold">
                     Tổng doanh thu
                   </h4>
-                  <h1 className="text-dark-purple text-2xl font-bold">
-                    11111111
-                  </h1>
                 </div>
-                <GrMoney className="text-6xl text-dark-purple ml-5 text-right w-1/3" />
               </div>
-              <div className="rounded-md p-5 bg-gradient-to-r from-purple-200 to-purple-300 flex shadow-lg shadow-gray-200 transition-all duration-500 hover:scale-105 hover:shadow-gray-400 cursor-pointer w-1/3">
-                <div className="w-2/3">
-                  <h4 className="text-[#33343D] mb-1 font-semibold">
+              <div className="rounded-md p-5 flex shadow-lg shadow-gray-200 transition-all duration-500 hover:scale-105 hover:shadow-gray-400 cursor-pointer bg-white w-1/3">
+                <TbDevicesDollar className="text-6xl text-purple-700" />
+                <div className="w-2/3 text-right">
+                  <h1 className="text-dark-purple text-3xl font-bold">200</h1>
+                  <h4 className="text-[#33343D] mb-3 font-semibold">
                     Sản phẩm bán ra
                   </h4>
-                  <h1 className="text-dark-purple text-2xl font-bold">200</h1>
                 </div>
-                <TbDevicesDollar className="text-6xl text-dark-purple ml-5 text-right w-1/3" />
               </div>
             </div>
           </div>
@@ -126,4 +126,4 @@ const AnalysPage = () => {
   );
 };
 
-export default AnalysPage;
+export default AnalysPageStaff;

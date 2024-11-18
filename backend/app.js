@@ -6,7 +6,6 @@ import morgan from 'morgan'
 import authRoute from './src/routes/authRoutes.js'
 import customerRoute from './src/routes/customerRoutes.js'
 import productRoute from './src/routes/productRoutes.js'
-import brandRoute from './src/routes/brandRoutes.js'
 import staffRoute from './src/routes/staffRoutes.js'
 import orderRoute from './src/routes/orderRoutes.js'
 
@@ -28,7 +27,6 @@ app.use(morgan('dev'))
 app.use('/api/v1/auth', authRoute)
 app.use('/api/v1/customers', customerRoute)
 app.use('/api/v1/products', productRoute)
-app.use('/api/v1/brands', brandRoute)
 app.use('/api/v1/staffs', staffRoute)
 app.use('/api/v1/orders', orderRoute)
 

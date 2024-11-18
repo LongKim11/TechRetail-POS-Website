@@ -1,6 +1,5 @@
 import catchAsync from '../utils/catchAsync.js'
 import AppError from '../utils/appError.js'
-
 import { Order } from '../models/orderModel.js'
 
 const getAllOrders = catchAsync(async (req, res, next) => {

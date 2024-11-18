@@ -3,6 +3,9 @@ import NavbarStaff from "../../components/NavbarStaff";
 import { Button } from "@material-tailwind/react";
 import { IoFilter } from "react-icons/io5";
 import ProductTableStaff from "../../components/ProductTableStaff";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { useSnackbar } from "notistack";
 
 const ProductMPageStaff = () => {
   const staff = {
@@ -11,48 +14,15 @@ const ProductMPageStaff = () => {
     username: "Username",
   };
 
-  const products = [
-    {
-      barcode: "P000001",
-      name: "Iphone 13 Pro Max 256GB",
-      import_price: "2000",
-      retail_price: "2500",
-      category: "smartphone",
-      createdAt: "2021-10-10",
-    },
-    {
-      barcode: "P000001",
-      name: "Sạc Smartphone Samsung 25W",
-      import_price: "2000",
-      retail_price: "2500",
-      category: "charging",
-      createdAt: "2021-10-10",
-    },
-    {
-      barcode: "P000001",
-      name: "Xiomi Redmi Note 10 Pro 128GB",
-      import_price: "2000",
-      retail_price: "2500",
-      category: "smartphone",
-      createdAt: "2021-10-10",
-    },
-    {
-      barcode: "P000001",
-      name: "Apple Watch Series 7 44mm",
-      import_price: "2000",
-      retail_price: "2500",
-      category: "watch",
-      createdAt: "2021-10-10",
-    },
-    {
-      barcode: "P000001",
-      name: "Iphone 13 Pro Max 256GB",
-      import_price: "2000",
-      retail_price: "2500",
-      category: "smartphone",
-      createdAt: "2021-10-10",
-    },
-  ];
+  const [products, setProducts] = useState([]);
+  const { enqueueSnackbar } = useSnackbar();
+
+  useEffect(() => {
+    axios.get("http://localhost:8080/api/v1/products").then((res) => {
+      setProducts(res.data.data);
+    });
+  }, []);
+
   return (
     <div className="flex">
       <SidebarStaff />

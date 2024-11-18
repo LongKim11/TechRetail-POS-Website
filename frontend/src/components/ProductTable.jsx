@@ -11,13 +11,16 @@ import {
   DialogFooter,
   Tooltip,
 } from "@material-tailwind/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CgSmartphoneChip } from "react-icons/cg";
 import { FaBarcode } from "react-icons/fa6";
 import { FaSackDollar } from "react-icons/fa6";
 import { IoMdPricetags } from "react-icons/io";
 import { BiCategory } from "react-icons/bi";
 import { MdOutlineDevices } from "react-icons/md";
+import { format } from "date-fns";
+import axios from "axios";
+import { useSnackbar } from "notistack";
 
 const TABLE_HEAD = [
   "Barcode",
@@ -30,10 +33,16 @@ const TABLE_HEAD = [
 ];
 
 const ProductTable = ({ products }) => {
+  const [productsRender, setProductsRender] = useState([]);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const { enqueueSnackbar } = useSnackbar();
+
+  useEffect(() => {
+    setProductsRender(products);
+  }, [products]);
 
   const handleOpenDeleteModal = (product) => {
     setSelectedProduct(product);
@@ -48,6 +57,50 @@ const ProductTable = ({ products }) => {
   const handleOpenDetailModal = (product) => {
     setSelectedProduct(product);
     setOpenDetailModal(!openDetailModal);
+  };
+
+  const handleEditProduct = () => {
+    axios
+      .put(
+        `http://localhost:8080/api/v1/products/${selectedProduct._id}`,
+        selectedProduct
+      )
+      .then(() => {
+        setProductsRender(
+          productsRender.map((product) =>
+            product._id === selectedProduct._id ? selectedProduct : product
+          )
+        );
+        setOpenEditModal(false);
+        enqueueSnackbar("Cập nhật sản phẩm thành công", { variant: "success" });
+      })
+      .catch((error) => {
+        setOpenEditModal(false);
+        enqueueSnackbar("Cập nhật sản phẩm thất bại", { variant: "error" });
+        console.error("Có lỗi xảy ra khi cập nhật sản phẩm!", error);
+      });
+  };
+
+  const handleDeleteProduct = () => {
+    axios
+      .delete(`http://localhost:8080/api/v1/products/${selectedProduct._id}`)
+      .then(() => {
+        setProductsRender(
+          productsRender.filter((item) => item._id !== selectedProduct._id)
+        );
+        setOpenDeleteModal(false);
+        enqueueSnackbar("Xóa sản phẩm thành công", { variant: "success" });
+      })
+      .catch((error) => {
+        console.error("Có lỗi xảy ra khi xóa sản phẩm!", error);
+        setOpenDeleteModal(false);
+        enqueueSnackbar("Xóa sản phẩm thất bại", { variant: "error" });
+      });
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setSelectedProduct({ ...selectedProduct, [name]: value });
   };
 
   return (
@@ -65,7 +118,7 @@ const ProductTable = ({ products }) => {
           </tr>
         </thead>
         <tbody>
-          {products.map((product, index) => {
+          {productsRender.map((product, index) => {
             return (
               <tr key={index} className="hover:bg-slate-50">
                 <td className="p-4 text-center">
@@ -95,7 +148,7 @@ const ProductTable = ({ products }) => {
                 </td>
                 <td className="p-4 text-center">
                   <Typography className="font-semibold text-slate-500">
-                    {product.createdAt}
+                    {format(product.createdAt, "dd-MM-yyyy")}
                   </Typography>
                 </td>
                 <td className="p-4 flex justify-center">
@@ -150,7 +203,7 @@ const ProductTable = ({ products }) => {
         <DialogHeader className="relative m-0 block">
           <Typography variant="h3">Thông tin sản phẩm</Typography>
           <Typography className="mt-1 font-normal text-slate-500">
-            Mã sản phẩm: {selectedProduct?.barcode}
+            Mã sản phẩm: {selectedProduct?._id}
           </Typography>
         </DialogHeader>
         <DialogBody>
@@ -233,7 +286,7 @@ const ProductTable = ({ products }) => {
         <DialogHeader className="relative m-0 block">
           <Typography variant="h3">Chỉnh sửa sản phẩm</Typography>
           <Typography className="mt-1 font-normal text-slate-500">
-            Mã sản phẩm: {selectedProduct?.barcode}
+            Mã sản phẩm: {selectedProduct?._id}
           </Typography>
         </DialogHeader>
         <DialogBody>
@@ -245,6 +298,8 @@ const ProductTable = ({ products }) => {
             <input
               className="p-2 rounded-md w-full mt-2 border border-gray-300 font-normal focus:border-blue-500 focus:outline-none text-slate-700"
               value={selectedProduct?.name}
+              name="name"
+              onChange={handleInputChange}
             ></input>
           </div>
           <div className="mb-6 flex gap-x-5">
@@ -256,6 +311,8 @@ const ProductTable = ({ products }) => {
               <input
                 className="p-2 rounded-md w-full mt-2 border border-gray-300 font-normal focus:border-blue-500 focus:outline-none text-slate-700"
                 value={selectedProduct?.brand}
+                name="brand"
+                onChange={handleInputChange}
               ></input>
             </div>
             <div className="w-full">
@@ -266,6 +323,8 @@ const ProductTable = ({ products }) => {
               <input
                 className="p-2 rounded-md w-full mt-2 border border-gray-300 font-normal focus:border-blue-500 focus:outline-none text-slate-700"
                 value={selectedProduct?.category}
+                name="category"
+                onChange={handleInputChange}
               ></input>
             </div>
           </div>
@@ -277,6 +336,8 @@ const ProductTable = ({ products }) => {
             <input
               className="p-2 rounded-md w-full mt-2 border border-gray-300 font-normal focus:border-blue-500 focus:outline-none text-slate-700"
               value={selectedProduct?.barcode}
+              name="barcode"
+              onChange={handleInputChange}
             ></input>
           </div>
           <div className="mb-6">
@@ -287,6 +348,8 @@ const ProductTable = ({ products }) => {
             <input
               className="p-2 rounded-md w-full mt-2 border border-gray-300 font-normal focus:border-blue-500 focus:outline-none text-slate-700"
               value={selectedProduct?.import_price}
+              name="import_price"
+              onChange={handleInputChange}
             ></input>
           </div>
           <div className="mb-6">
@@ -297,6 +360,8 @@ const ProductTable = ({ products }) => {
             <input
               className="p-2 rounded-md w-full mt-2 border border-gray-300 font-normal focus:border-blue-500 focus:outline-none text-slate-700"
               value={selectedProduct?.retail_price}
+              name="retail_price"
+              onChange={handleInputChange}
             ></input>
           </div>
         </DialogBody>
@@ -304,7 +369,7 @@ const ProductTable = ({ products }) => {
           <Button variant="text" className="mr-1" onClick={handleOpenEditModal}>
             <span>Đóng</span>
           </Button>
-          <Button color="blue" onClick={handleOpenEditModal}>
+          <Button color="blue" onClick={handleEditProduct}>
             <span>Lưu</span>
           </Button>
         </DialogFooter>
@@ -328,7 +393,7 @@ const ProductTable = ({ products }) => {
           >
             <span>Đóng</span>
           </Button>
-          <Button color="red" onClick={handleOpenDeleteModal}>
+          <Button color="red" onClick={handleDeleteProduct}>
             <span>Đồng ý</span>
           </Button>
         </DialogFooter>

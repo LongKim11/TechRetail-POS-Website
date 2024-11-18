@@ -92,49 +92,49 @@ const TransactionPage = () => {
         <NavbarStaff heading="Trang xử lý mua hàng" staff={staff} />
         <div className="flex gap-x-5 mt-11">
           <div className="w-3/5 bg-white rounded-lg shadow-md">
-            <div className="flex justify-between items-center p-3">
-              {/* <h3 className="text-xl font-semibold ml-5">Thêm sản phẩm</h3> */}
-              <div className="flex gap-x-3">
-                <form>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                      <svg
-                        className="w-4 h-4 text-slate-400"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          stroke="currentColor"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                        />
-                      </svg>
-                    </div>
-                    <input
-                      type="search"
-                      className="block w-full p-3 ps-10 text-sm border border-gray-300 rounded-lg  focus:ring-blue-500 focus:outline-none focus:ring-1 focus:border-blue-500 "
-                      placeholder="Tên sản phẩm.."
-                    />
+            <div className="flex gap-x-3 items-center p-3">
+              <form>
+                <div className="relative">
+                  <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                    <svg
+                      className="w-4 h-4 text-slate-400"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                      />
+                    </svg>
                   </div>
-                </form>
-                <form>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                      <FaBarcode className="text-slate-400"></FaBarcode>
-                    </div>
-                    <input
-                      type="search"
-                      className="block w-full p-3 ps-10 text-sm border border-gray-300 rounded-lg  focus:ring-blue-500 focus:outline-none focus:ring-1 focus:border-blue-500 "
-                      placeholder="Mã barcode.."
-                    />
+                  <input
+                    type="search"
+                    className="block w-full px-3 py-2 ps-10 text-sm border border-gray-300 rounded-lg  focus:ring-blue-500 focus:outline-none focus:ring-1 focus:border-blue-500 "
+                    placeholder="Tên sản phẩm.."
+                  />
+                </div>
+              </form>
+              <form>
+                <div className="relative">
+                  <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                    <FaBarcode className="text-slate-400"></FaBarcode>
                   </div>
-                </form>
-              </div>
-              <button className="mr-4 bg-white hover:bg-blue-500 hover:text-white text-blue-500 font-semibold py-2 px-4 rounded-md border border-blue-500 transition-all">
+                  <input
+                    type="search"
+                    className="block w-full px-3 py-2 ps-10 text-sm border border-gray-300 rounded-lg  focus:ring-blue-500 focus:outline-none focus:ring-1 focus:border-blue-500 "
+                    placeholder="Mã barcode.."
+                  />
+                </div>
+              </form>
+              <button
+                className="rounded-md bg-blue-600 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:bg-blue-700"
+                type="button"
+              >
                 Tìm kiếm
               </button>
             </div>

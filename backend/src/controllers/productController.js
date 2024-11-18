@@ -8,9 +8,7 @@ const getAllProducts = catchAsync(async (req, res, next) => {
     res.status(200).json({
         status: 'success',
         results: products.length,
-        data: {
-            products,
-        },
+        data: products,
     })
 })
 
@@ -24,15 +22,13 @@ const getProductById = catchAsync(async (req, res, next) => {
 })
 
 const createProduct = catchAsync(async (req, res, next) => {
-     const savedProduct = await Product.create(req.body)
+    const savedProduct = await Product.create(req.body)
     res.json(savedProduct)
 })
 
 const updateProduct = catchAsync(async (req, res, next) => {
     const id = req.params.id
-    const updatedProduct = new Product(req.body)
-
-    const result = await Product.findByIdAndUpdate(id, updatedProduct)
+    const result = await Product.findByIdAndUpdate(id, req.body)
     res.json({ message: 'Product updated successfully' })
 })
 

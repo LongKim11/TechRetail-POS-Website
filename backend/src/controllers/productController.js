@@ -2,15 +2,51 @@ import catchAsync from '../utils/catchAsync.js'
 import AppError from '../utils/appError.js'
 import { Product } from '../models/productModel.js'
 
-const getAllProducts = catchAsync(async (req, res, next) => {
+const getProducts = catchAsync(async (req, res, next) => {
     const products = await Product.find()
+
+    const { name, barcode } = req.query
+
+    if (name && barcode) {
+        const filteredProducts = products.filter((product) => {
+            return (
+                product.name.toLowerCase().includes(name.toLowerCase()) &&
+                product.barcode.toLowerCase().includes(barcode.toLowerCase())
+            )
+        })
+        return res.status(200).json({
+            status: 'success',
+            results: filteredProducts.length,
+            data: filteredProducts,
+        })
+    }
+
+    if (name) {
+        const filteredProducts = products.filter((product) => {
+            return product.name.toLowerCase().includes(name.toLowerCase())
+        })
+        return res.status(200).json({
+            status: 'success',
+            results: filteredProducts.length,
+            data: filteredProducts,
+        })
+    }
+
+    if (barcode) {
+        const filteredProducts = products.filter((product) => {
+            return product.barcode.toLowerCase().includes(barcode.toLowerCase())
+        })
+        return res.status(200).json({
+            status: 'success',
+            results: filteredProducts.length,
+            data: filteredProducts,
+        })
+    }
 
     res.status(200).json({
         status: 'success',
         results: products.length,
-        data: {
-            products,
-        },
+        data: products,
     })
 })
 
@@ -24,15 +60,13 @@ const getProductById = catchAsync(async (req, res, next) => {
 })
 
 const createProduct = catchAsync(async (req, res, next) => {
-     const savedProduct = await Product.create(req.body)
+    const savedProduct = await Product.create(req.body)
     res.json(savedProduct)
 })
 
 const updateProduct = catchAsync(async (req, res, next) => {
     const id = req.params.id
-    const updatedProduct = new Product(req.body)
-
-    const result = await Product.findByIdAndUpdate(id, updatedProduct)
+    const result = await Product.findByIdAndUpdate(id, req.body)
     res.json({ message: 'Product updated successfully' })
 })
 
@@ -48,7 +82,7 @@ const deleteProduct = catchAsync(async (req, res) => {
 })
 
 export {
-    getAllProducts,
+    getProducts,
     getProductById,
     createProduct,
     updateProduct,

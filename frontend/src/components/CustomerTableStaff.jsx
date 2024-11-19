@@ -10,7 +10,7 @@ const TABLE_HEAD = [
   "Thao tác",
 ];
 
-const CustomerTableStaff = ({ TABLE_ROWS }) => {
+const CustomerTableStaff = ({ customers }) => {
   return (
     <Card className="h-full w-full">
       <table className="w-full min-w-max table-auto">
@@ -26,7 +26,7 @@ const CustomerTableStaff = ({ TABLE_ROWS }) => {
           </tr>
         </thead>
         <tbody>
-          {TABLE_ROWS.map(({ fullname, address, phone, createdAt }, index) => {
+          {customers.map((customer, index) => {
             return (
               <tr key={index} className="hover:bg-slate-50">
                 <td className="p-4 text-center">
@@ -34,7 +34,7 @@ const CustomerTableStaff = ({ TABLE_ROWS }) => {
                     variant="mmedium"
                     className="font-semibold text-blue-700"
                   >
-                    {fullname}
+                    {customer.fullname}
                   </Typography>
                 </td>
                 <td className="p-4 text-center">
@@ -42,7 +42,7 @@ const CustomerTableStaff = ({ TABLE_ROWS }) => {
                     variant="medium"
                     className="font-semibold text-slate-600"
                   >
-                    {address}
+                    {customer.address}
                   </Typography>
                 </td>
                 <td className="p-4 text-center">
@@ -50,7 +50,7 @@ const CustomerTableStaff = ({ TABLE_ROWS }) => {
                     variant="medium"
                     className="font-semibold text-slate-600"
                   >
-                    {phone}
+                    {customer.phone}
                   </Typography>
                 </td>
                 <td className="p-4 text-center">
@@ -58,7 +58,7 @@ const CustomerTableStaff = ({ TABLE_ROWS }) => {
                     variant="medium"
                     className="font-semibold text-slate-600"
                   >
-                    {createdAt}
+                    {customer.createdAt}
                   </Typography>
                 </td>
                 <td className="p-4 flex justify-center">

@@ -48,7 +48,7 @@ const staffSchema = mongoose.Schema(
             default: 'Active',
         },
         is_locked: {
-            type: Boolean,
+            type: String,
             required: [true, 'is_locked is required'],
             enum: ['True', 'False'],
             default: 'False',
@@ -77,10 +77,14 @@ staffSchema.methods.createPasswordResetToken = function () {
         .createHash('sha256')
         .update(resetToken)
         .digest('hex')
-    
+
     this.passwordResetExpires = Date.now() + 10 * 60 * 1000
-    
-    console.log({ resetToken }, this.passwordResetToken, this.passwordResetExpires)
+
+    console.log(
+        { resetToken },
+        this.passwordResetToken,
+        this.passwordResetExpires,
+    )
     return resetToken
 }
 

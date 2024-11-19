@@ -1,10 +1,12 @@
 import SidebarStaff from "../../components/SidebarStaff";
 import NavbarStaff from "../../components/NavbarStaff";
 import { FaBarcode } from "react-icons/fa6";
-import ProductSearchTransaction from "../../components/ProductSearchTransaction";
 import { Button, Typography } from "@material-tailwind/react";
 import { FaArrowRight } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { MdOutlineDelete } from "react-icons/md";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const TransactionPage = () => {
   const staff = {
@@ -12,78 +14,66 @@ const TransactionPage = () => {
     email: "nguyenvana@gmail.com",
     username: "Username",
   };
-  const TABLE_HEAD = ["Tên sản phẩm", "Số lượng", "Đơn giá", "Tổng tiền"];
 
-  const TABLE_ROWS = [
-    {
-      barcode: "P000001",
-      name: "Iphone 13 Pro Max 256GB",
-      retail_price: "2500",
-      category: { name: "phone", type: "smartphone" },
-      createdAt: "2021-10-10",
-    },
-    {
-      barcode: "P000001",
-      name: "Sạc Smartphone Samsung 25W",
-      retail_price: "2500",
-      category: { name: "accessories", type: "charging" },
-      createdAt: "2021-10-10",
-    },
-    {
-      barcode: "P000001",
-      name: "Xiomi Redmi Note 10 Pro 128GB",
-      retail_price: "2500",
-      category: { name: "phone", type: "smartphone" },
-      createdAt: "2021-10-10",
-    },
-    {
-      barcode: "P000001",
-      name: "Apple Watch Series 7 44mm",
-      retail_price: "2500",
-      category: { name: "accessories", type: "watch" },
-      createdAt: "2021-10-10",
-    },
-    {
-      barcode: "P000001",
-      name: "Iphone 13 Pro Max 256GB",
-      retail_price: "2500",
-      category: { name: "phone", type: "smartphone" },
-      createdAt: "2021-10-10",
-    },
-  ];
+  const [searchProductResult, setSearchProductResult] = useState([]);
+  const [searchByName, setSearchByName] = useState("");
+  const [searchByBarcode, setSearchByBarcode] = useState("");
+  const [addedProduct, setAddedProduct] = useState([]);
+  const navigate = useNavigate();
 
-  const PRODUCTS_ROWS = [
-    {
-      name: "Iphone 13 Pro Max",
-      retail_price: "2500",
-      quantity: "1",
-      total_price: "2500",
-    },
-    {
-      name: "Iphone 13 Pro Max",
-      retail_price: "2500",
-      quantity: "1",
-      total_price: "2500",
-    },
-    {
-      name: "Iphone 13 Pro Max",
-      retail_price: "2500",
-      quantity: "1",
-      total_price: "2500",
-    },
-    {
-      name: "Iphone 13 Pro Max",
-      retail_price: "2500",
-      quantity: "1",
-      total_price: "2500",
-    },
-    {
-      name: "Iphone 13 Pro Max",
-      retail_price: "2500",
-      quantity: "1",
-      total_price: "2500",
-    },
-  ];
+  const handleSearch = () => {
+    let query = "";
+    if (searchByName && searchByBarcode) {
+      query = `name=${searchByName}&barcode=${searchByBarcode}`;
+    } else if (searchByName) {
+      query = `name=${searchByName}`;
+    } else if (searchByBarcode) {
+      query = `barcode=${searchByBarcode}`;
+    }
+
+    axios
+      .get(`http://localhost:8080/api/v1/products?${query}`)
+      .then((res) => {
+        setSearchProductResult(res.data.data);
+      })
+      .catch((error) => {
+        console.error("Có lỗi xảy ra khi tìm kiếm sản phẩm!", error);
+      });
+  };
+
+  const handleAddProduct = (product) => {
+    product.quantity = 1;
+    product.subTotal = product.retail_price;
+    console.log(product);
+    setAddedProduct([...addedProduct, product]);
+  };
+
+  const handleRemoveProduct = (index) => {
+    setAddedProduct(addedProduct.filter((product, i) => i !== index));
+  };
+
+  const handleIncreaseQuantity = (index) => {
+    const updatedProduct = [...addedProduct];
+    updatedProduct[index].quantity += 1;
+    updatedProduct[index].subTotal =
+      updatedProduct[index].quantity * updatedProduct[index].retail_price;
+    setAddedProduct(updatedProduct);
+  };
+
+  const handleDecreaseQuantity = (index) => {
+    if (addedProduct[index].quantity === 1) {
+      return;
+    }
+    const updatedProduct = [...addedProduct];
+    updatedProduct[index].quantity -= 1;
+    updatedProduct[index].subTotal =
+      updatedProduct[index].quantity * updatedProduct[index].retail_price;
+    setAddedProduct(updatedProduct);
+  };
+
+  const handleNext = () => {
+    navigate("/staff/confirm-transaction", { state: { addedProduct } });
+  };
 
   return (
     <div className="flex">
@@ -92,53 +82,116 @@ const TransactionPage = () => {
         <NavbarStaff heading="Trang xử lý mua hàng" staff={staff} />
         <div className="flex gap-x-5 mt-11">
           <div className="w-3/5 bg-white rounded-lg shadow-md">
-            <div className="flex justify-between items-center p-3">
-              {/* <h3 className="text-xl font-semibold ml-5">Thêm sản phẩm</h3> */}
-              <div className="flex gap-x-3">
-                <form>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                      <svg
-                        className="w-4 h-4 text-slate-400"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          stroke="currentColor"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                        />
-                      </svg>
-                    </div>
-                    <input
-                      type="search"
-                      className="block w-full p-3 ps-10 text-sm border border-gray-300 rounded-lg  focus:ring-blue-500 focus:outline-none focus:ring-1 focus:border-blue-500 "
-                      placeholder="Tên sản phẩm.."
-                    />
+            <div className="flex gap-x-3 items-center p-3">
+              <form>
+                <div className="relative">
+                  <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                    <FaBarcode className="text-slate-400"></FaBarcode>
                   </div>
-                </form>
-                <form>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                      <FaBarcode className="text-slate-400"></FaBarcode>
-                    </div>
-                    <input
-                      type="search"
-                      className="block w-full p-3 ps-10 text-sm border border-gray-300 rounded-lg  focus:ring-blue-500 focus:outline-none focus:ring-1 focus:border-blue-500 "
-                      placeholder="Mã barcode.."
-                    />
+                  <input
+                    type="search"
+                    className="block w-full px-3 py-2 ps-10 text-sm border border-gray-300 rounded-lg  focus:ring-blue-500 focus:outline-none focus:ring-1 focus:border-blue-500 "
+                    placeholder="Mã barcode.."
+                    name="search-barcode"
+                    value={searchByBarcode}
+                    onChange={(e) => setSearchByBarcode(e.target.value)}
+                  />
+                </div>
+              </form>
+              <form>
+                <div className="relative">
+                  <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                    <svg
+                      className="w-4 h-4 text-slate-400"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                      />
+                    </svg>
                   </div>
-                </form>
-              </div>
-              <button className="mr-4 bg-white hover:bg-blue-500 hover:text-white text-blue-500 font-semibold py-2 px-4 rounded-md border border-blue-500 transition-all">
+                  <input
+                    type="search"
+                    className="block w-full px-3 py-2 ps-10 text-sm border border-gray-300 rounded-lg  focus:ring-blue-500 focus:outline-none focus:ring-1 focus:border-blue-500 "
+                    placeholder="Tên sản phẩm.."
+                    name="search-name"
+                    value={searchByName}
+                    onChange={(e) => setSearchByName(e.target.value)}
+                  />
+                </div>
+              </form>
+              <button
+                className="rounded-md bg-blue-600 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:bg-blue-700"
+                type="button"
+                onClick={handleSearch}
+              >
                 Tìm kiếm
               </button>
             </div>
-            <ProductSearchTransaction TABLE_ROWS={TABLE_ROWS} />
+            <table className="w-full min-w-max table-auto">
+              <thead className="">
+                <tr>
+                  <th className="p-4 bg-gray-100">
+                    <Typography variant="h6" color="black">
+                      Barcode
+                    </Typography>
+                  </th>
+                  <th className="p-4 bg-gray-100">
+                    <Typography variant="h6" color="black">
+                      Tên sản phẩm
+                    </Typography>
+                  </th>
+                  <th className="p-4 bg-gray-100">
+                    <Typography variant="h6" color="black">
+                      Giá bán lẻ
+                    </Typography>
+                  </th>
+                  <th className="p-4 bg-gray-100">
+                    <Typography variant="h6" color="black">
+                      Thao tác
+                    </Typography>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {searchProductResult.map((product, index) => {
+                  return (
+                    <tr key={index} className="hover:bg-slate-50">
+                      <td className="p-4 text-center">
+                        <Typography className="font-semibold text-orange-600">
+                          {product.barcode}
+                        </Typography>
+                      </td>
+                      <td className="p-4 text-center">
+                        <Typography className="font-semibold text-blue-700">
+                          {product.name}
+                        </Typography>
+                      </td>
+                      <td className="p-4 text-center">
+                        <Typography className="font-semibold text-green-500">
+                          {product.retail_price}$
+                        </Typography>
+                      </td>
+                      <td className="p-4 text-center">
+                        <button
+                          className="bg-white hover:bg-green-500 hover:text-white text-green-500 font-semibold py-2 px-4 rounded-md border border-green-500 transition-all"
+                          onClick={() => handleAddProduct(product)}
+                        >
+                          Thêm +
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
           <div className="w-2/5 bg-white rounded-lg shadow-md">
             <div className="p-3">
@@ -150,59 +203,91 @@ const TransactionPage = () => {
             <table className="w-full min-w-max table-auto">
               <thead className="">
                 <tr>
-                  {TABLE_HEAD.map((head) => (
-                    <th key={head} className="p-4">
-                      <Typography variant="h6" color="black">
-                        {head}
-                      </Typography>
-                    </th>
-                  ))}
+                  <th className="p-4">
+                    <Typography variant="h6" color="black">
+                      Tên sản phẩm
+                    </Typography>
+                  </th>
+                  <th className="p-4">
+                    <Typography variant="h6" color="black">
+                      Số lượng
+                    </Typography>
+                  </th>
+                  <th className="p-4">
+                    <Typography variant="h6" color="black">
+                      Đơn giá
+                    </Typography>
+                  </th>
+                  <th className="p-4">
+                    <Typography variant="h6" color="black">
+                      Tổng tiền
+                    </Typography>
+                  </th>
+                  <th className="p-4">
+                    <Typography variant="h6" color="black">
+                      Thao tác
+                    </Typography>
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {PRODUCTS_ROWS.map(
-                  ({ name, retail_price, quantity, total_price }, index) => {
-                    return (
-                      <tr key={index} className="hover:bg-slate-50">
-                        <td className="p-4 text-center">
-                          <Typography className="font-semibold text-slate-500">
-                            {name}
-                          </Typography>
-                        </td>
-                        <td className="p-4 text-center">
-                          <Typography className="font-semibold text-slate-500">
-                            {quantity}
-                          </Typography>
-                        </td>
-                        <td className="p-4 text-center">
-                          <Typography className="font-semibold text-slate-500">
-                            {retail_price}
-                          </Typography>
-                        </td>
-                        <td className="p-4 text-center">
-                          <Typography className="font-semibold text-slate-500">
-                            {total_price}
-                          </Typography>
-                        </td>
-                      </tr>
-                    );
-                  }
-                )}
+                {addedProduct.map((product, index) => {
+                  return (
+                    <tr key={index} className="hover:bg-slate-50">
+                      <td className="p-4 text-center">
+                        <Typography className="font-semibold text-slate-500">
+                          {product.name}
+                        </Typography>
+                      </td>
+                      <td className="p-4 text-center">
+                        <Typography className="font-semibold text-slate-500">
+                          <button
+                            className="text-red-500 text-lg font-bold"
+                            onClick={() => handleDecreaseQuantity(index)}
+                          >
+                            -
+                          </button>{" "}
+                          {product.quantity}{" "}
+                          <button
+                            className="text-green-500 text-lg font-bold"
+                            onClick={() => handleIncreaseQuantity(index)}
+                          >
+                            +
+                          </button>
+                        </Typography>
+                      </td>
+                      <td className="p-4 text-center">
+                        <Typography className="font-semibold text-slate-500">
+                          {product.retail_price}
+                        </Typography>
+                      </td>
+                      <td className="p-4 text-center">
+                        <Typography className="font-semibold text-slate-500">
+                          {product.subTotal}
+                        </Typography>
+                      </td>
+                      <td className="p-4 flex justify-center">
+                        <button onClick={() => handleRemoveProduct(index)}>
+                          <MdOutlineDelete className="text-2xl text-red-600" />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
         </div>
         <div className="flex justify-end mt-11">
-          <Link to={"/staff/confirm-transaction"}>
-            <Button
-              variant="outlined"
-              className="flex items-center gap-3"
-              color="blue"
-            >
-              Tiếp theo
-              <FaArrowRight />
-            </Button>
-          </Link>
+          <Button
+            variant="outlined"
+            className="flex items-center gap-3"
+            color="blue"
+            onClick={handleNext}
+          >
+            Tiếp theo
+            <FaArrowRight />
+          </Button>
         </div>
       </div>
     </div>

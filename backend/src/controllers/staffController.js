@@ -11,9 +11,7 @@ const getAllStaffs = catchAsync(async (req, res, next) => {
     res.status(200).json({
         status: 'success',
         results: staffs.length,
-        data: {
-            staffs,
-        },
+        data: staffs,
     })
 })
 
@@ -33,13 +31,7 @@ const getStaffById = catchAsync(async (req, res, next) => {
 })
 
 const createStaff = catchAsync(async (req, res, next) => {
-    const avatar = req.file.filename
-    const { username, password } = req.body
-    const newStaff = await Staff.create({
-        ...req.body,
-        account: { username, password },
-        avatar,
-    })
+    const newStaff = await Staff.create(req.body)
 
     if (!newStaff) {
         return next(new AppError('Failed to create staff', 400))
@@ -47,9 +39,7 @@ const createStaff = catchAsync(async (req, res, next) => {
 
     res.status(201).json({
         status: 'success',
-        data: {
-            staff: newStaff,
-        },
+        data: newStaff,
     })
 })
 

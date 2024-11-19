@@ -11,68 +11,89 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CgSmartphoneChip } from "react-icons/cg";
 import { FaBarcode } from "react-icons/fa6";
 import { FaSackDollar } from "react-icons/fa6";
 import { IoMdPricetags } from "react-icons/io";
 import { BiCategory } from "react-icons/bi";
 import { MdOutlineDevices } from "react-icons/md";
+import axios from "axios";
+import { useSnackbar } from "notistack";
 
 const ProductManagementPage = () => {
+  const [products, setProducts] = useState([]);
+  const [newProduct, setNewProduct] = useState({
+    name: "",
+    brand: "",
+    category: "",
+    barcode: "",
+    import_price: "",
+    retail_price: "",
+  });
+  const { enqueueSnackbar } = useSnackbar();
+
   const staff = {
     fullname: "Nguyễn Văn A",
     email: "nguyenvana@gmail.com",
     username: "Username",
   };
 
-  const products = [
-    {
-      barcode: "P000001",
-      name: "Iphone 13 Pro Max 256GB",
-      import_price: "2000",
-      retail_price: "2500",
-      category: "smartphone",
-      createdAt: "2021-10-10",
-    },
-    {
-      barcode: "P000001",
-      name: "Sạc Smartphone Samsung 25W",
-      import_price: "2000",
-      retail_price: "2500",
-      category: "charging",
-      createdAt: "2021-10-10",
-    },
-    {
-      barcode: "P000001",
-      name: "Xiomi Redmi Note 10 Pro 128GB",
-      import_price: "2000",
-      retail_price: "2500",
-      category: "smartphone",
-      createdAt: "2021-10-10",
-    },
-    {
-      barcode: "P000001",
-      name: "Apple Watch Series 7 44mm",
-      import_price: "2000",
-      retail_price: "2500",
-      category: "watch",
-      createdAt: "2021-10-10",
-    },
-    {
-      barcode: "P000001",
-      name: "Iphone 13 Pro Max 256GB",
-      import_price: "2000",
-      retail_price: "2500",
-      category: "smartphone",
-      createdAt: "2021-10-10",
-    },
-  ];
+  useEffect(() => {
+    axios.get("http://localhost:8080/api/v1/products").then((res) => {
+      setProducts(res.data.data);
+    });
+  }, []);
 
   const [openAddProductModal, setOpenAddProductModal] = useState(false);
 
   const handleOpenAddProductModal = () => {
     setOpenAddProductModal(!openAddProductModal);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewProduct({ ...newProduct, [name]: value });
+  };
+
+  const handleAddProduct = () => {
+    axios
+      .post("http://localhost:8080/api/v1/products", newProduct)
+      .then((res) => {
+        setProducts([...products, res.data]);
+        setOpenAddProductModal(false);
+        setNewProduct({
+          name: "",
+          brand: "",
+          category: "",
+          barcode: "",
+          import_price: "",
+          retail_price: "",
+        });
+        enqueueSnackbar("Thêm sản phẩm thành công", { variant: "success" });
+      })
+      .catch((error) => {
+        console.error("Có lỗi xảy ra khi thêm sản phẩm!", error);
+        setOpenAddProductModal(false);
+        enqueueSnackbar("Hãy điền đầy đủ thông tin", {
+          variant: "error",
+        });
+      });
+  };
+
+  const handleDeleteProduct = (productId, closeModal) => {
+    axios
+      .delete(`http://localhost:8080/api/v1/products/${productId}`)
+      .then(() => {
+        setProducts(products.filter((product) => product._id !== productId));
+        enqueueSnackbar("Xóa sản phẩm thành công", { variant: "success" });
+        closeModal();
+      })
+      .catch((error) => {
+        console.error("Có lỗi xảy ra khi xóa sản phẩm!", error);
+        enqueueSnackbar("Xóa sản phẩm thất bại", { variant: "error" });
+        closeModal();
+      });
   };
 
   return (
@@ -108,7 +129,11 @@ const ProductManagementPage = () => {
                 <MdOutlineDevices className="text-lg" />
                 <Typography variant="h6">Tên sản phẩm</Typography>
               </div>
-              <input className="p-2 rounded-md w-full mt-2 border border-gray-300 font-normal focus:border-blue-500 focus:outline-none"></input>
+              <input
+                className="p-2 rounded-md w-full mt-2 border border-gray-300 font-normal focus:border-blue-500 focus:outline-none"
+                name="name"
+                onChange={handleInputChange}
+              ></input>
             </div>
             <div className="mb-6 flex gap-x-5">
               <div className="w-full">
@@ -116,14 +141,22 @@ const ProductManagementPage = () => {
                   <CgSmartphoneChip className="text-xl" />
                   <Typography variant="h6">Tên thương hiệu</Typography>
                 </div>
-                <input className="p-2 rounded-md w-full mt-2 border border-gray-300 font-normal focus:border-blue-500 focus:outline-none"></input>
+                <input
+                  className="p-2 rounded-md w-full mt-2 border border-gray-300 font-normal focus:border-blue-500 focus:outline-none"
+                  name="brand"
+                  onChange={handleInputChange}
+                ></input>
               </div>
               <div className="w-full">
                 <div className="flex gap-x-2 items-center">
                   <BiCategory className="text-xl" />
                   <Typography variant="h6">Loại sản phẩm</Typography>
                 </div>
-                <input className="p-2 rounded-md w-full mt-2 border border-gray-300 font-normal focus:border-blue-500 focus:outline-none"></input>
+                <input
+                  className="p-2 rounded-md w-full mt-2 border border-gray-300 font-normal focus:border-blue-500 focus:outline-none"
+                  name="category"
+                  onChange={handleInputChange}
+                ></input>
               </div>
             </div>
             <div className="mb-6">
@@ -131,25 +164,37 @@ const ProductManagementPage = () => {
                 <FaBarcode className="text-xl" />
                 <Typography variant="h6">Mã barcode</Typography>
               </div>
-              <input className="p-2 rounded-md w-full mt-2 border border-gray-300 font-normal focus:border-blue-500 focus:outline-none"></input>
+              <input
+                className="p-2 rounded-md w-full mt-2 border border-gray-300 font-normal focus:border-blue-500 focus:outline-none"
+                name="barcode"
+                onChange={handleInputChange}
+              ></input>
             </div>
             <div className="mb-6">
               <div className="flex gap-x-2 items-center">
                 <FaSackDollar className="text-xl" />
                 <Typography variant="h6">Giá nhập</Typography>
               </div>
-              <input className="p-2 rounded-md w-full mt-2 border border-gray-300 font-normal focus:border-blue-500 focus:outline-none"></input>
+              <input
+                className="p-2 rounded-md w-full mt-2 border border-gray-300 font-normal focus:border-blue-500 focus:outline-none"
+                name="import_price"
+                onChange={handleInputChange}
+              ></input>
             </div>
             <div className="mb-6">
               <div className="flex gap-x-2 items-center">
                 <IoMdPricetags className="text-xl" />
                 <Typography variant="h6">Giá bán lẻ</Typography>
               </div>
-              <input className="p-2 rounded-md w-full mt-2 border border-gray-300 font-normal focus:border-blue-500 focus:outline-none"></input>
+              <input
+                className="p-2 rounded-md w-full mt-2 border border-gray-300 font-normal focus:border-blue-500 focus:outline-none"
+                name="retail_price"
+                onChange={handleInputChange}
+              ></input>
             </div>
           </DialogBody>
           <DialogFooter>
-            <Button color="blue" onClick={handleOpenAddProductModal}>
+            <Button color="blue" onClick={handleAddProduct}>
               <span>Thêm mới</span>
             </Button>
           </DialogFooter>
@@ -189,7 +234,10 @@ const ProductManagementPage = () => {
               </Button>
             </div>
           </div>
-          <ProductTable products={products} />
+          <ProductTable
+            products={products}
+            onDeleteProduct={handleDeleteProduct}
+          />
         </div>
       </div>
     </div>

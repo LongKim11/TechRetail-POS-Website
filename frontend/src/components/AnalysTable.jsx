@@ -13,9 +13,8 @@ import { useState } from "react";
 
 const TABLE_HEAD1 = [
   "Mã đơn",
+  "Tên khách hàng",
   "Tổng tiền",
-  "Tiền khách đưa",
-  "Tiền thừa",
   "Ngày mua",
   "Số lượng",
   "Thao tác",
@@ -90,17 +89,12 @@ const AnalystTable = ({ orders }) => {
                 </td>
                 <td className="p-4 text-center">
                   <Typography className="font-semibold text-slate-600">
+                    {order.customer_name}
+                  </Typography>
+                </td>
+                <td className="p-4 text-center">
+                  <Typography className="font-semibold text-slate-600">
                     {order.totalAmount}
-                  </Typography>
-                </td>
-                <td className="p-4 text-center">
-                  <Typography className="font-semibold text-slate-600">
-                    {order.receivedAmount}
-                  </Typography>
-                </td>
-                <td className="p-4 text-center">
-                  <Typography className="font-semibold text-slate-600">
-                    {order.change}
                   </Typography>
                 </td>
                 <td className="p-4 text-center">

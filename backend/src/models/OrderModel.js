@@ -7,9 +7,9 @@ const itemsSchema = mongoose.Schema(
             required: [true, 'Product ID is required'],
             ref: 'Product',
         },
-        price: {
+        retail_price: {
             type: Schema.Types.Decimal128,
-            required: [true, 'Price is required'],
+            required: [true, 'Retail price is required'],
         },
         quantity: {
             type: Number,

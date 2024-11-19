@@ -1,11 +1,11 @@
 import SidebarStaff from "../../components/SidebarStaff";
 import NavbarStaff from "../../components/NavbarStaff";
 import { FaBarcode } from "react-icons/fa6";
-import ProductSearchTransaction from "../../components/ProductSearchTransaction";
 import { Button, Typography } from "@material-tailwind/react";
 import { FaArrowRight } from "react-icons/fa";
-import { Link } from "react-router-dom";
 import { MdOutlineDelete } from "react-icons/md";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const TransactionPage = () => {
   const staff = {
@@ -13,15 +13,8 @@ const TransactionPage = () => {
     email: "nguyenvana@gmail.com",
     username: "Username",
   };
-  const TABLE_HEAD = [
-    "Tên sản phẩm",
-    "Số lượng",
-    "Đơn giá",
-    "Tổng tiền",
-    "Thao tác",
-  ];
 
-  const TABLE_ROWS = [
+  const searchProductResult = [
     {
       barcode: "P000001",
       name: "Iphone 13 Pro Max 256GB",
@@ -38,7 +31,7 @@ const TransactionPage = () => {
     },
     {
       barcode: "P000001",
-      name: "Xiomi Redmi Note 10 Pro 128GB",
+      name: "Xiaomi Redmi Note 10 Pro 128GB",
       retail_price: "2500",
       category: { name: "phone", type: "smartphone" },
       createdAt: "2021-10-10",
@@ -59,38 +52,42 @@ const TransactionPage = () => {
     },
   ];
 
-  const PRODUCTS_ROWS = [
-    {
-      name: "Iphone 13 Pro Max",
-      retail_price: "2500",
-      quantity: "1",
-      total_price: "2500",
-    },
-    {
-      name: "Iphone 13 Pro Max",
-      retail_price: "2500",
-      quantity: "1",
-      total_price: "2500",
-    },
-    {
-      name: "Iphone 13 Pro Max",
-      retail_price: "2500",
-      quantity: "1",
-      total_price: "2500",
-    },
-    {
-      name: "Iphone 13 Pro Max",
-      retail_price: "2500",
-      quantity: "1",
-      total_price: "2500",
-    },
-    {
-      name: "Iphone 13 Pro Max",
-      retail_price: "2500",
-      quantity: "1",
-      total_price: "2500",
-    },
-  ];
+  const [addedProduct, setAddedProduct] = useState([]);
+  const navigate = useNavigate();
+
+  const handleAddProduct = (product) => {
+    product.quantity = 1;
+    product.subTotal = product.retail_price;
+    console.log(product);
+    setAddedProduct([...addedProduct, product]);
+  };
+
+  const handleRemoveProduct = (index) => {
+    setAddedProduct(addedProduct.filter((product, i) => i !== index));
+  };
+
+  const handleIncreaseQuantity = (index) => {
+    const updatedProduct = [...addedProduct];
+    updatedProduct[index].quantity += 1;
+    updatedProduct[index].subTotal =
+      updatedProduct[index].quantity * updatedProduct[index].retail_price;
+    setAddedProduct(updatedProduct);
+  };
+
+  const handleDecreaseQuantity = (index) => {
+    if (addedProduct[index].quantity === 1) {
+      return;
+    }
+    const updatedProduct = [...addedProduct];
+    updatedProduct[index].quantity -= 1;
+    updatedProduct[index].subTotal =
+      updatedProduct[index].quantity * updatedProduct[index].retail_price;
+    setAddedProduct(updatedProduct);
+  };
+
+  const handleNext = () => {
+    navigate("/staff/confirm-transaction", { state: { addedProduct } });
+  };
 
   return (
     <div className="flex">
@@ -147,7 +144,63 @@ const TransactionPage = () => {
                 Tìm kiếm
               </button>
             </div>
-            <ProductSearchTransaction TABLE_ROWS={TABLE_ROWS} />
+            <table className="w-full min-w-max table-auto">
+              <thead className="">
+                <tr>
+                  <th className="p-4 bg-gray-100">
+                    <Typography variant="h6" color="black">
+                      Barcode
+                    </Typography>
+                  </th>
+                  <th className="p-4 bg-gray-100">
+                    <Typography variant="h6" color="black">
+                      Tên sản phẩm
+                    </Typography>
+                  </th>
+                  <th className="p-4 bg-gray-100">
+                    <Typography variant="h6" color="black">
+                      Giá bán lẻ
+                    </Typography>
+                  </th>
+                  <th className="p-4 bg-gray-100">
+                    <Typography variant="h6" color="black">
+                      Thao tác
+                    </Typography>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {searchProductResult.map((product, index) => {
+                  return (
+                    <tr key={index} className="hover:bg-slate-50">
+                      <td className="p-4 text-center">
+                        <Typography className="font-semibold text-orange-600">
+                          {product.barcode}
+                        </Typography>
+                      </td>
+                      <td className="p-4 text-center">
+                        <Typography className="font-semibold text-blue-700">
+                          {product.name}
+                        </Typography>
+                      </td>
+                      <td className="p-4 text-center">
+                        <Typography className="font-semibold text-green-500">
+                          {product.retail_price}$
+                        </Typography>
+                      </td>
+                      <td className="p-4 text-center">
+                        <button
+                          className="bg-white hover:bg-green-500 hover:text-white text-green-500 font-semibold py-2 px-4 rounded-md border border-green-500 transition-all"
+                          onClick={() => handleAddProduct(product)}
+                        >
+                          Thêm +
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
           <div className="w-2/5 bg-white rounded-lg shadow-md">
             <div className="p-3">
@@ -159,17 +212,35 @@ const TransactionPage = () => {
             <table className="w-full min-w-max table-auto">
               <thead className="">
                 <tr>
-                  {TABLE_HEAD.map((head) => (
-                    <th key={head} className="p-4">
-                      <Typography variant="h6" color="black">
-                        {head}
-                      </Typography>
-                    </th>
-                  ))}
+                  <th className="p-4">
+                    <Typography variant="h6" color="black">
+                      Tên sản phẩm
+                    </Typography>
+                  </th>
+                  <th className="p-4">
+                    <Typography variant="h6" color="black">
+                      Số lượng
+                    </Typography>
+                  </th>
+                  <th className="p-4">
+                    <Typography variant="h6" color="black">
+                      Đơn giá
+                    </Typography>
+                  </th>
+                  <th className="p-4">
+                    <Typography variant="h6" color="black">
+                      Tổng tiền
+                    </Typography>
+                  </th>
+                  <th className="p-4">
+                    <Typography variant="h6" color="black">
+                      Thao tác
+                    </Typography>
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {PRODUCTS_ROWS.map((product, index) => {
+                {addedProduct.map((product, index) => {
                   return (
                     <tr key={index} className="hover:bg-slate-50">
                       <td className="p-4 text-center">
@@ -179,7 +250,19 @@ const TransactionPage = () => {
                       </td>
                       <td className="p-4 text-center">
                         <Typography className="font-semibold text-slate-500">
-                          <span>-</span> {product.quantity} <span>+</span>
+                          <button
+                            className="text-red-500 text-lg font-bold"
+                            onClick={() => handleDecreaseQuantity(index)}
+                          >
+                            -
+                          </button>{" "}
+                          {product.quantity}{" "}
+                          <button
+                            className="text-green-500 text-lg font-bold"
+                            onClick={() => handleIncreaseQuantity(index)}
+                          >
+                            +
+                          </button>
                         </Typography>
                       </td>
                       <td className="p-4 text-center">
@@ -189,13 +272,13 @@ const TransactionPage = () => {
                       </td>
                       <td className="p-4 text-center">
                         <Typography className="font-semibold text-slate-500">
-                          {product.total_price}
+                          {product.subTotal}
                         </Typography>
                       </td>
                       <td className="p-4 flex justify-center">
-                        <a href="#">
+                        <button onClick={() => handleRemoveProduct(index)}>
                           <MdOutlineDelete className="text-2xl text-red-600" />
-                        </a>
+                        </button>
                       </td>
                     </tr>
                   );
@@ -205,16 +288,15 @@ const TransactionPage = () => {
           </div>
         </div>
         <div className="flex justify-end mt-11">
-          <Link to={"/staff/confirm-transaction"}>
-            <Button
-              variant="outlined"
-              className="flex items-center gap-3"
-              color="blue"
-            >
-              Tiếp theo
-              <FaArrowRight />
-            </Button>
-          </Link>
+          <Button
+            variant="outlined"
+            className="flex items-center gap-3"
+            color="blue"
+            onClick={handleNext}
+          >
+            Tiếp theo
+            <FaArrowRight />
+          </Button>
         </div>
       </div>
     </div>

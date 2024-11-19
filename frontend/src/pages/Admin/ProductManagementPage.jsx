@@ -81,6 +81,21 @@ const ProductManagementPage = () => {
       });
   };
 
+  const handleDeleteProduct = (productId, closeModal) => {
+    axios
+      .delete(`http://localhost:8080/api/v1/products/${productId}`)
+      .then(() => {
+        setProducts(products.filter((product) => product._id !== productId));
+        enqueueSnackbar("Xóa sản phẩm thành công", { variant: "success" });
+        closeModal();
+      })
+      .catch((error) => {
+        console.error("Có lỗi xảy ra khi xóa sản phẩm!", error);
+        enqueueSnackbar("Xóa sản phẩm thất bại", { variant: "error" });
+        closeModal();
+      });
+  };
+
   return (
     <div className="flex">
       <Sidebar />
@@ -219,7 +234,10 @@ const ProductManagementPage = () => {
               </Button>
             </div>
           </div>
-          <ProductTable products={products} />
+          <ProductTable
+            products={products}
+            onDeleteProduct={handleDeleteProduct}
+          />
         </div>
       </div>
     </div>

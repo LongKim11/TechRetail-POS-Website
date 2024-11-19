@@ -8,6 +8,8 @@ import { FaSearch } from "react-icons/fa";
 import axios from "axios";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
+import { FaSave } from "react-icons/fa";
+import { useSnackbar } from "notistack";
 
 const ConfirmTransaction = () => {
   const staff = {
@@ -19,6 +21,7 @@ const ConfirmTransaction = () => {
   const location = useLocation();
   const { addedProduct } = location.state || { addedProduct: [] };
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleConfirm = () => {
     navigate("/staff/invoice", {
@@ -41,6 +44,29 @@ const ConfirmTransaction = () => {
     address: "",
   });
   const [isInputDisabled, setIsInputDisabled] = useState(true);
+  const [showSaveButton, setShowSaveButton] = useState(false);
+
+  const handleSaveCustomer = () => {
+    axios
+      .post("http://localhost:8080/api/v1/customers", {
+        phone,
+        fullname: customerInfo.fullname,
+        address: customerInfo.address,
+      })
+      .then(() => {
+        setCustomerInfo({
+          fullname: customerInfo.fullname,
+          address: customerInfo.address,
+        });
+        setIsInputDisabled(true);
+        setShowSaveButton(false);
+        enqueueSnackbar("Thêm khách hàng thành công", { variant: "success" });
+      })
+      .catch((error) => {
+        console.error("Có lỗi xảy ra khi lưu thông tin khách hàng!", error);
+        enqueueSnackbar("Thêm khách hàng thất bại", { variant: "error" });
+      });
+  };
 
   const handleReceivedAmount = (e) => {
     setReceivedAmount(e.target.value);
@@ -57,20 +83,26 @@ const ConfirmTransaction = () => {
       .get(`http://localhost:8080/api/v1/customers?phone=${phone}`)
       .then((res) => {
         if (res.data.data) {
-          const customer = res.data.data;
+          const customer = res.data.data[0];
           setCustomerInfo({
             fullname: customer.fullname,
             address: customer.address,
           });
+          setIsInputDisabled(true);
         } else {
-          setCustomerInfo({ fullname: "", address: "" });
+          setCustomerInfo({
+            fullname: "",
+            address: "",
+          });
           setIsInputDisabled(false);
+          setShowSaveButton(false);
         }
       })
       .catch((error) => {
         console.error("Có lỗi xảy ra khi tìm kiếm khách hàng!", error);
         setCustomerInfo({ fullname: "", address: "" });
         setIsInputDisabled(false);
+        setShowSaveButton(true);
       });
   };
 
@@ -158,6 +190,14 @@ const ConfirmTransaction = () => {
                 >
                   <FaSearch />
                 </button>
+                {showSaveButton && (
+                  <button
+                    className="bg-white px-3 py-2 hover:bg-green-500 hover:text-white text-green-500 font-semibold rounded-lg border border-green-500 transition-all"
+                    onClick={handleSaveCustomer}
+                  >
+                    <FaSave />
+                  </button>
+                )}
               </div>
               <hr></hr>
               <div className="flex my-4 items-center p-2">

@@ -32,7 +32,7 @@ const TABLE_HEAD = [
   "Thao tác",
 ];
 
-const ProductTable = ({ products }) => {
+const ProductTable = ({ products, onDeleteProduct }) => {
   const [productsRender, setProductsRender] = useState([]);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openDetailModal, setOpenDetailModal] = useState(false);
@@ -78,23 +78,6 @@ const ProductTable = ({ products }) => {
         setOpenEditModal(false);
         enqueueSnackbar("Cập nhật sản phẩm thất bại", { variant: "error" });
         console.error("Có lỗi xảy ra khi cập nhật sản phẩm!", error);
-      });
-  };
-
-  const handleDeleteProduct = () => {
-    axios
-      .delete(`http://localhost:8080/api/v1/products/${selectedProduct._id}`)
-      .then(() => {
-        setProductsRender(
-          productsRender.filter((item) => item._id !== selectedProduct._id)
-        );
-        setOpenDeleteModal(false);
-        enqueueSnackbar("Xóa sản phẩm thành công", { variant: "success" });
-      })
-      .catch((error) => {
-        console.error("Có lỗi xảy ra khi xóa sản phẩm!", error);
-        setOpenDeleteModal(false);
-        enqueueSnackbar("Xóa sản phẩm thất bại", { variant: "error" });
       });
   };
 
@@ -387,7 +370,14 @@ const ProductTable = ({ products }) => {
           >
             <span>Đóng</span>
           </Button>
-          <Button color="red" onClick={handleDeleteProduct}>
+          <Button
+            color="red"
+            onClick={() =>
+              onDeleteProduct(selectedProduct._id, () =>
+                setOpenDeleteModal(false)
+              )
+            }
+          >
             <span>Đồng ý</span>
           </Button>
         </DialogFooter>

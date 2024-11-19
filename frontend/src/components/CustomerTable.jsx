@@ -1,6 +1,7 @@
 import { Card, Typography, Tooltip } from "@material-tailwind/react";
 import { RiBillLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
+import { format } from "date-fns";
 
 const TABLE_HEAD = [
   "Họ và tên",
@@ -10,7 +11,7 @@ const TABLE_HEAD = [
   "Thao tác",
 ];
 
-const CustomerTable = ({ TABLE_ROWS }) => {
+const CustomerTable = ({ customers }) => {
   return (
     <Card className="h-full w-full">
       <table className="w-full min-w-max table-auto">
@@ -26,39 +27,27 @@ const CustomerTable = ({ TABLE_ROWS }) => {
           </tr>
         </thead>
         <tbody>
-          {TABLE_ROWS.map(({ fullname, address, phone, createdAt }, index) => {
+          {customers.map((customer, index) => {
             return (
               <tr key={index} className="hover:bg-slate-50">
                 <td className="p-4 text-center">
-                  <Typography
-                    variant="mmedium"
-                    className="font-semibold text-blue-700"
-                  >
-                    {fullname}
+                  <Typography className="font-semibold text-blue-700">
+                    {customer.fullname}
                   </Typography>
                 </td>
                 <td className="p-4 text-center">
-                  <Typography
-                    variant="medium"
-                    className="font-semibold text-slate-600"
-                  >
-                    {address}
+                  <Typography className="font-semibold text-slate-600">
+                    {customer.address}
                   </Typography>
                 </td>
                 <td className="p-4 text-center">
-                  <Typography
-                    variant="medium"
-                    className="font-semibold text-slate-600"
-                  >
-                    {phone}
+                  <Typography className="font-semibold text-slate-600">
+                    {customer.phone}
                   </Typography>
                 </td>
                 <td className="p-4 text-center">
-                  <Typography
-                    variant="medium"
-                    className="font-semibold text-slate-600"
-                  >
-                    {createdAt}
+                  <Typography className="font-semibold text-slate-600">
+                    {format(customer.createdAt, "dd-MM-yyyy")}
                   </Typography>
                 </td>
                 <td className="p-4 flex justify-center">

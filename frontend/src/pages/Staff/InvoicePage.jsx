@@ -70,7 +70,9 @@ const InvoicePage = () => {
           </h1>
           <div className="flex justify-between my-3">
             <h3 className="font-semibold">Họ và tên</h3>
-            <Typography className="font-normal">Nguyễn Văn A</Typography>
+            <Typography className="font-normal">
+              {customerInfo.fullname}
+            </Typography>
           </div>
           <div className="flex justify-between my-3">
             <h3 className="font-semibold">Số điện thoại</h3>
@@ -79,7 +81,7 @@ const InvoicePage = () => {
           <div className="flex justify-between my-3">
             <h3 className="font-semibold">Địa chỉ</h3>
             <Typography className="font-normal">
-              30 Thành Thái, Q10, TPHCM
+              {customerInfo.address}
             </Typography>
           </div>
           <hr className="mb-5 mt-3 border-slate-300"></hr>

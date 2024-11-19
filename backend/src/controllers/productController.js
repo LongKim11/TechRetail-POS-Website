@@ -2,8 +2,46 @@ import catchAsync from '../utils/catchAsync.js'
 import AppError from '../utils/appError.js'
 import { Product } from '../models/productModel.js'
 
-const getAllProducts = catchAsync(async (req, res, next) => {
+const getProducts = catchAsync(async (req, res, next) => {
     const products = await Product.find()
+
+    const { name, barcode } = req.query
+
+    if (name && barcode) {
+        const filteredProducts = products.filter((product) => {
+            return (
+                product.name.toLowerCase().includes(name.toLowerCase()) &&
+                product.barcode.toLowerCase().includes(barcode.toLowerCase())
+            )
+        })
+        return res.status(200).json({
+            status: 'success',
+            results: filteredProducts.length,
+            data: filteredProducts,
+        })
+    }
+
+    if (name) {
+        const filteredProducts = products.filter((product) => {
+            return product.name.toLowerCase().includes(name.toLowerCase())
+        })
+        return res.status(200).json({
+            status: 'success',
+            results: filteredProducts.length,
+            data: filteredProducts,
+        })
+    }
+
+    if (barcode) {
+        const filteredProducts = products.filter((product) => {
+            return product.barcode.toLowerCase().includes(barcode.toLowerCase())
+        })
+        return res.status(200).json({
+            status: 'success',
+            results: filteredProducts.length,
+            data: filteredProducts,
+        })
+    }
 
     res.status(200).json({
         status: 'success',
@@ -44,7 +82,7 @@ const deleteProduct = catchAsync(async (req, res) => {
 })
 
 export {
-    getAllProducts,
+    getProducts,
     getProductById,
     createProduct,
     updateProduct,

@@ -15,10 +15,7 @@ const router = express.Router()
 
 // router.use(isAuthenticated)
 
-router
-    .route('/')
-    .get(getAllStaffs)
-    .post(restrictTo('admin'), uploadAvatar.single('avatar'), createStaff)
+router.route('/').get(getAllStaffs).post(createStaff)
 
 router
     .route('/:id')

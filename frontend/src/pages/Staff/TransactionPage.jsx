@@ -6,6 +6,7 @@ import { FaArrowRight } from "react-icons/fa";
 import { MdOutlineDelete } from "react-icons/md";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const TransactionPage = () => {
   const staff = {
@@ -14,46 +15,31 @@ const TransactionPage = () => {
     username: "Username",
   };
 
-  const searchProductResult = [
-    {
-      barcode: "P000001",
-      name: "Iphone 13 Pro Max 256GB",
-      retail_price: "2500",
-      category: { name: "phone", type: "smartphone" },
-      createdAt: "2021-10-10",
-    },
-    {
-      barcode: "P000001",
-      name: "Sạc Smartphone Samsung 25W",
-      retail_price: "2500",
-      category: { name: "accessories", type: "charging" },
-      createdAt: "2021-10-10",
-    },
-    {
-      barcode: "P000001",
-      name: "Xiaomi Redmi Note 10 Pro 128GB",
-      retail_price: "2500",
-      category: { name: "phone", type: "smartphone" },
-      createdAt: "2021-10-10",
-    },
-    {
-      barcode: "P000001",
-      name: "Apple Watch Series 7 44mm",
-      retail_price: "2500",
-      category: { name: "accessories", type: "watch" },
-      createdAt: "2021-10-10",
-    },
-    {
-      barcode: "P000001",
-      name: "Iphone 13 Pro Max 256GB",
-      retail_price: "2500",
-      category: { name: "phone", type: "smartphone" },
-      createdAt: "2021-10-10",
-    },
-  ];
-
+  const [searchProductResult, setSearchProductResult] = useState([]);
+  const [searchByName, setSearchByName] = useState("");
+  const [searchByBarcode, setSearchByBarcode] = useState("");
   const [addedProduct, setAddedProduct] = useState([]);
   const navigate = useNavigate();
+
+  const handleSearch = () => {
+    let query = "";
+    if (searchByName && searchByBarcode) {
+      query = `name=${searchByName}&barcode=${searchByBarcode}`;
+    } else if (searchByName) {
+      query = `name=${searchByName}`;
+    } else if (searchByBarcode) {
+      query = `barcode=${searchByBarcode}`;
+    }
+
+    axios
+      .get(`http://localhost:8080/api/v1/products?${query}`)
+      .then((res) => {
+        setSearchProductResult(res.data.data);
+      })
+      .catch((error) => {
+        console.error("Có lỗi xảy ra khi tìm kiếm sản phẩm!", error);
+      });
+  };
 
   const handleAddProduct = (product) => {
     product.quantity = 1;
@@ -100,6 +86,21 @@ const TransactionPage = () => {
               <form>
                 <div className="relative">
                   <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                    <FaBarcode className="text-slate-400"></FaBarcode>
+                  </div>
+                  <input
+                    type="search"
+                    className="block w-full px-3 py-2 ps-10 text-sm border border-gray-300 rounded-lg  focus:ring-blue-500 focus:outline-none focus:ring-1 focus:border-blue-500 "
+                    placeholder="Mã barcode.."
+                    name="search-barcode"
+                    value={searchByBarcode}
+                    onChange={(e) => setSearchByBarcode(e.target.value)}
+                  />
+                </div>
+              </form>
+              <form>
+                <div className="relative">
+                  <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                     <svg
                       className="w-4 h-4 text-slate-400"
                       aria-hidden="true"
@@ -121,25 +122,15 @@ const TransactionPage = () => {
                     className="block w-full px-3 py-2 ps-10 text-sm border border-gray-300 rounded-lg  focus:ring-blue-500 focus:outline-none focus:ring-1 focus:border-blue-500 "
                     placeholder="Tên sản phẩm.."
                     name="search-name"
-                  />
-                </div>
-              </form>
-              <form>
-                <div className="relative">
-                  <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                    <FaBarcode className="text-slate-400"></FaBarcode>
-                  </div>
-                  <input
-                    type="search"
-                    className="block w-full px-3 py-2 ps-10 text-sm border border-gray-300 rounded-lg  focus:ring-blue-500 focus:outline-none focus:ring-1 focus:border-blue-500 "
-                    placeholder="Mã barcode.."
-                    name="search-barcode"
+                    value={searchByName}
+                    onChange={(e) => setSearchByName(e.target.value)}
                   />
                 </div>
               </form>
               <button
                 className="rounded-md bg-blue-600 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:bg-blue-700"
                 type="button"
+                onClick={handleSearch}
               >
                 Tìm kiếm
               </button>

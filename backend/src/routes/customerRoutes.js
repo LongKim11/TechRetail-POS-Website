@@ -1,6 +1,6 @@
 import express from 'express'
 import {
-    getAllCustomers,
+    getCustomers,
     getCustomerById,
     createCustomer,
     updateCustomer,
@@ -13,7 +13,7 @@ const router = express.Router()
 // Protect all routes after this middleware
 // router.use(isAuthenticated)
 
-router.route('/').get(getAllCustomers).post(createCustomer)
+router.route('/').get(getCustomers).post(createCustomer)
 router
     .route('/:id')
     .get(getCustomerById)

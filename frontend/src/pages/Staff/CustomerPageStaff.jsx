@@ -3,6 +3,8 @@ import NavbarStaff from "../../components/NavbarStaff";
 import { Button } from "@material-tailwind/react";
 import { IoFilter } from "react-icons/io5";
 import CustomerTableStaff from "../../components/CustomerTableStaff";
+import axios from "axios";
+import { useState, useEffect } from "react";
 
 const CustomersPageStaff = () => {
   const staff = {
@@ -11,38 +13,13 @@ const CustomersPageStaff = () => {
     username: "Username",
   };
 
-  const TABLE_ROWS = [
-    {
-      fullname: "Nguyen Van B",
-      address: "123 Lac Long Quan, TPHCM",
-      phone: "0123456789",
-      createdAt: "20/10/2021",
-    },
-    {
-      fullname: "Nguyen Van B",
-      address: "123 Lac Long Quan, TPHCM",
-      phone: "0123456789",
-      createdAt: "20/10/2021",
-    },
-    {
-      fullname: "Nguyen Van B",
-      address: "123 Lac Long Quan, TPHCM",
-      phone: "0123456789",
-      createdAt: "20/10/2021",
-    },
-    {
-      fullname: "Nguyen Van B",
-      address: "123 Lac Long Quan, TPHCM",
-      phone: "0123456789",
-      createdAt: "20/10/2021",
-    },
-    {
-      fullname: "Nguyen Van B",
-      address: "123 Lac Long Quan, TPHCM",
-      phone: "0123456789",
-      createdAt: "20/10/2021",
-    },
-  ];
+  const [customers, setCustomers] = useState([]);
+
+  useEffect(() => {
+    axios.get("http://localhost:8080/api/v1/customers").then((res) => {
+      setCustomers(res.data.data);
+    });
+  }, []);
 
   return (
     <div className="flex">
@@ -85,7 +62,7 @@ const CustomersPageStaff = () => {
               </Button>
             </div>
           </div>
-          <CustomerTableStaff TABLE_ROWS={TABLE_ROWS} />
+          <CustomerTableStaff customers={customers} />
         </div>
       </div>
     </div>

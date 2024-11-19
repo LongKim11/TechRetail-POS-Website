@@ -3,17 +3,34 @@ import AppError from '../utils/appError.js'
 
 import { Customer } from '../models/customerModel.js'
 
-const getAllCustomers = catchAsync(async (req, res, next) => {
+const getCustomers = catchAsync(async (req, res, next) => {
     const customers = await Customer.find()
+
+    // Filter customers by phone number
+    const { phone } = req.query
+    if (phone) {
+        const customer = customers.filter((customer) => {
+            return customer.phone === phone
+        })
+        if (customer.length === 0) {
+            return next(
+                new AppError('No customer found with that phone number', 404),
+            )
+        }
+
+        return res.status(200).json({
+            status: 'success',
+            data: customer,
+        })
+    }
 
     res.status(200).json({
         status: 'success',
         results: customers.length,
-        data: {
-            customers,
-        },
+        data: customers,
     })
 })
+
 const getCustomerById = catchAsync(async (req, res, next) => {
     const customer = await Customer.findById(req.params.id)
 
@@ -73,7 +90,7 @@ const deleteCustomer = catchAsync(async (req, res, next) => {
 })
 
 export {
-    getAllCustomers,
+    getCustomers,
     getCustomerById,
     createCustomer,
     updateCustomer,

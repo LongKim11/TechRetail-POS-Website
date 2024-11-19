@@ -5,6 +5,7 @@ import ProductSearchTransaction from "../../components/ProductSearchTransaction"
 import { Button, Typography } from "@material-tailwind/react";
 import { FaArrowRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { MdOutlineDelete } from "react-icons/md";
 
 const TransactionPage = () => {
   const staff = {
@@ -12,7 +13,13 @@ const TransactionPage = () => {
     email: "nguyenvana@gmail.com",
     username: "Username",
   };
-  const TABLE_HEAD = ["Tên sản phẩm", "Số lượng", "Đơn giá", "Tổng tiền"];
+  const TABLE_HEAD = [
+    "Tên sản phẩm",
+    "Số lượng",
+    "Đơn giá",
+    "Tổng tiền",
+    "Thao tác",
+  ];
 
   const TABLE_ROWS = [
     {
@@ -116,6 +123,7 @@ const TransactionPage = () => {
                     type="search"
                     className="block w-full px-3 py-2 ps-10 text-sm border border-gray-300 rounded-lg  focus:ring-blue-500 focus:outline-none focus:ring-1 focus:border-blue-500 "
                     placeholder="Tên sản phẩm.."
+                    name="search-name"
                   />
                 </div>
               </form>
@@ -128,6 +136,7 @@ const TransactionPage = () => {
                     type="search"
                     className="block w-full px-3 py-2 ps-10 text-sm border border-gray-300 rounded-lg  focus:ring-blue-500 focus:outline-none focus:ring-1 focus:border-blue-500 "
                     placeholder="Mã barcode.."
+                    name="search-barcode"
                   />
                 </div>
               </form>
@@ -160,34 +169,37 @@ const TransactionPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {PRODUCTS_ROWS.map(
-                  ({ name, retail_price, quantity, total_price }, index) => {
-                    return (
-                      <tr key={index} className="hover:bg-slate-50">
-                        <td className="p-4 text-center">
-                          <Typography className="font-semibold text-slate-500">
-                            {name}
-                          </Typography>
-                        </td>
-                        <td className="p-4 text-center">
-                          <Typography className="font-semibold text-slate-500">
-                            {quantity}
-                          </Typography>
-                        </td>
-                        <td className="p-4 text-center">
-                          <Typography className="font-semibold text-slate-500">
-                            {retail_price}
-                          </Typography>
-                        </td>
-                        <td className="p-4 text-center">
-                          <Typography className="font-semibold text-slate-500">
-                            {total_price}
-                          </Typography>
-                        </td>
-                      </tr>
-                    );
-                  }
-                )}
+                {PRODUCTS_ROWS.map((product, index) => {
+                  return (
+                    <tr key={index} className="hover:bg-slate-50">
+                      <td className="p-4 text-center">
+                        <Typography className="font-semibold text-slate-500">
+                          {product.name}
+                        </Typography>
+                      </td>
+                      <td className="p-4 text-center">
+                        <Typography className="font-semibold text-slate-500">
+                          <span>-</span> {product.quantity} <span>+</span>
+                        </Typography>
+                      </td>
+                      <td className="p-4 text-center">
+                        <Typography className="font-semibold text-slate-500">
+                          {product.retail_price}
+                        </Typography>
+                      </td>
+                      <td className="p-4 text-center">
+                        <Typography className="font-semibold text-slate-500">
+                          {product.total_price}
+                        </Typography>
+                      </td>
+                      <td className="p-4 flex justify-center">
+                        <a href="#">
+                          <MdOutlineDelete className="text-2xl text-red-600" />
+                        </a>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

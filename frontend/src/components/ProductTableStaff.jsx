@@ -14,6 +14,7 @@ import { FaSackDollar } from "react-icons/fa6";
 import { IoMdPricetags } from "react-icons/io";
 import { BiCategory } from "react-icons/bi";
 import { MdOutlineDevices } from "react-icons/md";
+import { format } from "date-fns";
 
 const TABLE_HEAD = [
   "Barcode",
@@ -52,43 +53,28 @@ const ProductTableStaff = ({ products }) => {
             return (
               <tr key={index} className="hover:bg-slate-50">
                 <td className="p-4 text-center">
-                  <Typography
-                    variant="mmedium"
-                    className="font-semibold text-orange-600"
-                  >
+                  <Typography className="font-semibold text-orange-600">
                     {product.barcode}
                   </Typography>
                 </td>
                 <td className="p-4 text-center">
-                  <Typography
-                    variant="medium"
-                    className="font-semibold text-blue-700"
-                  >
+                  <Typography className="font-semibold text-blue-700">
                     {product.name}
                   </Typography>
                 </td>
                 <td className="p-4 text-center">
-                  <Typography
-                    variant="medium"
-                    className="font-semibold text-green-500"
-                  >
+                  <Typography className="font-semibold text-green-500">
                     {product.retail_price}$
                   </Typography>
                 </td>
                 <td className="p-4 text-center">
-                  <Typography
-                    variant="medium"
-                    className="font-semibold text-pink-500"
-                  >
+                  <Typography className="font-semibold text-pink-500">
                     {product.category}
                   </Typography>
                 </td>
                 <td className="p-4 text-center">
-                  <Typography
-                    variant="medium"
-                    className="font-semibold text-slate-500"
-                  >
-                    {product.createdAt}
+                  <Typography className="font-semibold text-slate-500">
+                    {format(product.createdAt, "dd-MM-yyyy")}
                   </Typography>
                 </td>
                 <td className="p-4 flex justify-center">
@@ -99,9 +85,9 @@ const ProductTableStaff = ({ products }) => {
                       unmount: { scale: 0, y: 25 },
                     }}
                   >
-                    <a href="#" onClick={() => handleOpenDetailModal(product)}>
+                    <button onClick={() => handleOpenDetailModal(product)}>
                       <BsInfoCircle className="text-2xl text-green-600" />
-                    </a>
+                    </button>
                   </Tooltip>
                 </td>
               </tr>

@@ -160,12 +160,9 @@ const ProductTable = ({ products }) => {
                         unmount: { scale: 0, y: 25 },
                       }}
                     >
-                      <a
-                        href="#"
-                        onClick={() => handleOpenDetailModal(product)}
-                      >
+                      <button onClick={() => handleOpenDetailModal(product)}>
                         <BsInfoCircle className="text-2xl text-green-600" />
-                      </a>
+                      </button>
                     </Tooltip>
                     <Tooltip
                       content="Chỉnh sửa"
@@ -174,9 +171,9 @@ const ProductTable = ({ products }) => {
                         unmount: { scale: 0, y: 25 },
                       }}
                     >
-                      <a href="#" onClick={() => handleOpenEditModal(product)}>
+                      <button onClick={() => handleOpenEditModal(product)}>
                         <AiOutlineEdit className="text-2xl text-yellow-600" />
-                      </a>
+                      </button>
                     </Tooltip>
                     <Tooltip
                       content="Xóa sản phẩm"
@@ -185,12 +182,9 @@ const ProductTable = ({ products }) => {
                         unmount: { scale: 0, y: 25 },
                       }}
                     >
-                      <a
-                        href="#"
-                        onClick={() => handleOpenDeleteModal(product)}
-                      >
+                      <button onClick={() => handleOpenDeleteModal(product)}>
                         <MdOutlineDelete className="text-2xl text-red-600" />
-                      </a>
+                      </button>
                     </Tooltip>
                   </div>
                 </td>

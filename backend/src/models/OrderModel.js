@@ -7,8 +7,12 @@ const itemsSchema = mongoose.Schema(
             required: [true, 'Product ID is required'],
             ref: 'Product',
         },
+        name: {
+            type: String,
+            required: [true, 'Product name is required'],
+        },
         retail_price: {
-            type: Schema.Types.Decimal128,
+            type: String,
             required: [true, 'Retail price is required'],
         },
         quantity: {
@@ -16,7 +20,7 @@ const itemsSchema = mongoose.Schema(
             required: [true, 'Quantity is required'],
         },
         subTotal: {
-            type: Schema.Types.Decimal128,
+            type: String,
             required: [true, 'SubTotal is required'],
         },
     },
@@ -36,15 +40,15 @@ const orderSchema = mongoose.Schema(
             ref: 'Customer',
         },
         totalAmount: {
-            type: Schema.Types.Decimal128,
+            type: String,
             required: [true, 'Total amount is required'],
         },
         receivedAmount: {
-            type: Schema.Types.Decimal128,
+            type: String,
             required: [true, 'Received amount is required'],
         },
         change: {
-            type: Schema.Types.Decimal128,
+            type: String,
             required: [true, 'Change is required'],
         },
         items: [itemsSchema],

@@ -29,6 +29,22 @@ const getOrderById = catchAsync(async (req, res, next) => {
     })
 })
 
+const getOrdersByCustomerId = catchAsync(async (req, res, next) => {
+    const { id } = req.params
+
+    try {
+        const orders = await Order.find({ customer_id: id })
+        if (!orders) {
+            return res
+                .status(404)
+                .json({ message: 'No orders found for this customer' })
+        }
+        res.status(200).json({ data: orders })
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error })
+    }
+})
+
 const createOrder = catchAsync(async (req, res, next) => {
     const newOrder = await Order.create(req.body)
 
@@ -68,4 +84,11 @@ const deleteOrder = catchAsync(async (req, res, next) => {
     })
 })
 
-export { getAllOrders, getOrderById, createOrder, updateOrder, deleteOrder }
+export {
+    getAllOrders,
+    getOrderById,
+    getOrdersByCustomerId,
+    createOrder,
+    updateOrder,
+    deleteOrder,
+}

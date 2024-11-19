@@ -6,6 +6,7 @@ import {
     updateCustomer,
     deleteCustomer,
 } from '../controllers/customerController.js'
+import { getOrdersByCustomerId } from '../controllers/orderController.js'
 import { isAuthenticated } from '../middlewares/auth/auth.js'
 
 const router = express.Router()
@@ -19,5 +20,5 @@ router
     .get(getCustomerById)
     .put(updateCustomer)
     .delete(deleteCustomer)
-
+router.route('/:id/orders').get(getOrdersByCustomerId)
 export default router

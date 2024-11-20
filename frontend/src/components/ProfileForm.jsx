@@ -172,8 +172,8 @@ const ProfileForm = ({ avatar, username, email, fullname }) => {
           </div>
         </form>
       </div>
-      <div className="w-1/2">
-        <img src={ProfileBG} className="mix-blend-multiply"></img>
+      <div className="w-1/2 ml-20">
+        <img src={ProfileBG} className="mix-blend-multiply w-full"></img>
       </div>
     </div>
   );

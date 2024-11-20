@@ -10,6 +10,7 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 import { useState } from "react";
+import { format } from "date-fns";
 
 const TABLE_HEAD1 = [
   "Mã đơn",
@@ -21,39 +22,6 @@ const TABLE_HEAD1 = [
 ];
 
 const TABLE_HEAD2 = ["Tên sản phẩm", "Số lượng", "Đơn giá", "Tổng tiền"];
-
-const PRODUCTS_ROWS = [
-  {
-    name: "Iphone 13 Pro Max",
-    retail_price: "2500",
-    quantity: "1",
-    total_price: "2500",
-  },
-  {
-    name: "Iphone 13 Pro Max",
-    retail_price: "2500",
-    quantity: "1",
-    total_price: "2500",
-  },
-  {
-    name: "Iphone 13 Pro Max",
-    retail_price: "2500",
-    quantity: "1",
-    total_price: "2500",
-  },
-  {
-    name: "Iphone 13 Pro Max",
-    retail_price: "2500",
-    quantity: "1",
-    total_price: "2500",
-  },
-  {
-    name: "Iphone 13 Pro Max",
-    retail_price: "2500",
-    quantity: "1",
-    total_price: "2500",
-  },
-];
 
 const AnalystTable = ({ orders }) => {
   const [openDetailModal, setOpenDetailModal] = useState(false);
@@ -89,7 +57,7 @@ const AnalystTable = ({ orders }) => {
                 </td>
                 <td className="p-4 text-center">
                   <Typography className="font-semibold text-slate-600">
-                    {order.customer_name}
+                    {order.customer_id.fullname}
                   </Typography>
                 </td>
                 <td className="p-4 text-center">
@@ -99,12 +67,12 @@ const AnalystTable = ({ orders }) => {
                 </td>
                 <td className="p-4 text-center">
                   <Typography className="font-semibold text-slate-600">
-                    {order.createdAt}
+                    {format(order.createdAt, "dd/MM/yyyy")}
                   </Typography>
                 </td>
                 <td className="p-4 text-center">
                   <Typography className="font-semibold text-slate-600">
-                    {order.quantity}
+                    {order.items.reduce((sum, item) => sum + item.quantity, 0)}
                   </Typography>
                 </td>
                 <td className="p-4 flex justify-center">
@@ -125,7 +93,13 @@ const AnalystTable = ({ orders }) => {
           })}
         </tbody>
       </table>
-      <Dialog open={openDetailModal} handler={handleOpenDetailModal} size="sm">
+      <Dialog
+        open={openDetailModal}
+        handler={() => {
+          setOpenDetailModal(!openDetailModal);
+        }}
+        size="sm"
+      >
         <DialogHeader className="relative m-0 block">
           <Typography variant="h3">Thông tin hóa đơn</Typography>
           <Typography className="mt-1 font-normal text-slate-500">
@@ -146,39 +120,42 @@ const AnalystTable = ({ orders }) => {
               </tr>
             </thead>
             <tbody>
-              {PRODUCTS_ROWS.map(
-                ({ name, retail_price, quantity, total_price }, index) => {
-                  return (
-                    <tr key={index} className="hover:bg-slate-50">
-                      <td className="px-2 py-4 text-center">
-                        <Typography className="font-semibold text-slate-500">
-                          {name}
-                        </Typography>
-                      </td>
-                      <td className="px-2 py-4 text-center">
-                        <Typography className="font-semibold text-slate-500">
-                          {quantity}
-                        </Typography>
-                      </td>
-                      <td className="px-2 py-4 text-center">
-                        <Typography className="font-semibold text-slate-500">
-                          {retail_price}
-                        </Typography>
-                      </td>
-                      <td className="px-2 py-4 text-center">
-                        <Typography className="font-semibold text-slate-500">
-                          {total_price}
-                        </Typography>
-                      </td>
-                    </tr>
-                  );
-                }
-              )}
+              {selectedOrder?.items.map((order, index) => {
+                return (
+                  <tr key={index} className="hover:bg-slate-50">
+                    <td className="px-2 py-4 text-center">
+                      <Typography className="font-semibold text-slate-500">
+                        {order.name}
+                      </Typography>
+                    </td>
+                    <td className="px-2 py-4 text-center">
+                      <Typography className="font-semibold text-slate-500">
+                        {order.quantity}
+                      </Typography>
+                    </td>
+                    <td className="px-2 py-4 text-center">
+                      <Typography className="font-semibold text-slate-500">
+                        {order.retail_price}
+                      </Typography>
+                    </td>
+                    <td className="px-2 py-4 text-center">
+                      <Typography className="font-semibold text-slate-500">
+                        {order.subTotal}
+                      </Typography>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </DialogBody>
         <DialogFooter>
-          <Button color="blue" onClick={handleOpenDetailModal}>
+          <Button
+            color="blue"
+            onClick={() => {
+              setOpenDetailModal(!openDetailModal);
+            }}
+          >
             <span>Đóng</span>
           </Button>
         </DialogFooter>

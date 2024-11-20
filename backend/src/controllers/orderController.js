@@ -45,6 +45,49 @@ const getOrdersByCustomerId = catchAsync(async (req, res, next) => {
     }
 })
 
+const getOrderStatistics = catchAsync(async (req, res) => {
+    const { startDate, endDate } = req.query
+    console.log(startDate, endDate)
+    try {
+        const orders = await Order.find({
+            createdAt: {
+                $gte: new Date(startDate),
+                $lte: new Date(endDate),
+            },
+        }).populate('customer_id', 'fullname')
+
+        if (!orders || orders.length === 0) {
+            return res.status(200).json({
+                orders: [],
+                totalAmountOrders: 0,
+                totalQuantityOrders: 0,
+                totalOrders: 0,
+            })
+        }
+
+        const totalAmountOrders = orders.reduce(
+            (result, order) => result + parseFloat(order.totalAmount),
+            0,
+        )
+        const totalQuantityOrders = orders.reduce(
+            (result, order) =>
+                result +
+                order.items.reduce((sum, item) => sum + item.quantity, 0),
+            0,
+        )
+        const totalOrders = orders.length
+
+        res.status(200).json({
+            orders,
+            totalAmountOrders,
+            totalQuantityOrders,
+            totalOrders,
+        })
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error })
+    }
+})
+
 const createOrder = catchAsync(async (req, res, next) => {
     const newOrder = await Order.create(req.body)
 
@@ -91,4 +134,5 @@ export {
     createOrder,
     updateOrder,
     deleteOrder,
+    getOrderStatistics,
 }

@@ -1,6 +1,9 @@
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
 import DashboardBox from "../../components/DashboardBox";
+import ChartAdmin from "../../components/ChartAdmin";
+import { FaArrowRightLong } from "react-icons/fa6";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const staff = {
@@ -20,6 +23,15 @@ const Home = () => {
           income={11000000}
           products={400}
         />
+        <div className="mt-20">
+          <Link to={"/admin/analys"}>
+            <div className="flex items-center gap-x-3 justify-end text-slate-500 cursor-pointer mb-3">
+              <p className="text-sm font-semibold">Đi tới trang thống kê</p>
+              <FaArrowRightLong />
+            </div>
+          </Link>
+          <ChartAdmin />
+        </div>
       </div>
     </div>
   );

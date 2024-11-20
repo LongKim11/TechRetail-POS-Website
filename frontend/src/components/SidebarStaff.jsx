@@ -25,21 +25,23 @@ const SidebarStaff = () => {
              border-2 rounded-full  ${!open && "rotate-180"}`}
         onClick={() => setOpen(!open)}
       />
-      <div className="flex gap-x-4 items-center">
-        <img
-          src={YellowLogo}
-          className={`cursor-pointer duration-500 ${
-            open && "rotate-[360deg]"
-          }  w-[40px] h-[40px]`}
-        />
-        <h1
-          className={`text-yellow-300 origin-left font-medium text-xl duration-300 ${
-            !open && "scale-0"
-          }`}
-        >
-          CaesarPOS
-        </h1>
-      </div>
+      <Link to={"/staff/home"}>
+        <div className="flex gap-x-4 items-center">
+          <img
+            src={YellowLogo}
+            className={`cursor-pointer duration-500 ${
+              open && "rotate-[360deg]"
+            }  w-[40px] h-[40px]`}
+          />
+          <h1
+            className={`text-yellow-300 origin-left font-medium text-xl duration-300 ${
+              !open && "scale-0"
+            }`}
+          >
+            CaesarPOS
+          </h1>
+        </div>
+      </Link>
       <ul className="pt-12">
         <Link to={"/staff/home"}>
           <li className="flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4 mt-5">

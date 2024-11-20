@@ -1,6 +1,7 @@
 import { Card, Typography, Tooltip } from "@material-tailwind/react";
 import { RiBillLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
+import { format } from "date-fns";
 
 const TABLE_HEAD = [
   "Họ và tên",
@@ -58,7 +59,7 @@ const CustomerTableStaff = ({ customers }) => {
                     variant="medium"
                     className="font-semibold text-slate-600"
                   >
-                    {customer.createdAt}
+                    {format(customer.createdAt, "dd-MM-yyyy")}
                   </Typography>
                 </td>
                 <td className="p-4 flex justify-center">
@@ -69,7 +70,14 @@ const CustomerTableStaff = ({ customers }) => {
                       unmount: { scale: 0, y: 25 },
                     }}
                   >
-                    <Link to="/staff/purchase-history">
+                    <Link
+                      to={`/staff/purchase-history/${customer._id}`}
+                      state={{
+                        name: customer.fullname,
+                        phone: customer.phone,
+                        address: customer.address,
+                      }}
+                    >
                       <RiBillLine className="text-2xl text-orange-500" />
                     </Link>
                   </Tooltip>

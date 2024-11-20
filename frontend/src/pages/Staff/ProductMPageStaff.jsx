@@ -5,7 +5,6 @@ import { IoFilter } from "react-icons/io5";
 import ProductTableStaff from "../../components/ProductTableStaff";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useSnackbar } from "notistack";
 
 const ProductMPageStaff = () => {
   const staff = {
@@ -15,7 +14,6 @@ const ProductMPageStaff = () => {
   };
 
   const [products, setProducts] = useState([]);
-  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     axios.get("http://localhost:8080/api/v1/products").then((res) => {

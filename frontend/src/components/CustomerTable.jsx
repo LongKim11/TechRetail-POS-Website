@@ -58,7 +58,14 @@ const CustomerTable = ({ customers }) => {
                       unmount: { scale: 0, y: 25 },
                     }}
                   >
-                    <Link to="/admin/purchase-history">
+                    <Link
+                      to={`/admin/purchase-history/${customer._id}`}
+                      state={{
+                        name: customer.fullname,
+                        phone: customer.phone,
+                        address: customer.address,
+                      }}
+                    >
                       <RiBillLine className="text-2xl text-orange-500" />
                     </Link>
                   </Tooltip>

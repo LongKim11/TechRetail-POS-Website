@@ -1,12 +1,14 @@
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Datepicker from "react-tailwindcss-datepicker";
 import { FaSearch } from "react-icons/fa";
 import AnalystTable from "../../components/AnalysTable";
 import { TbDeviceIpadCheck } from "react-icons/tb";
 import { TbDevicesDollar } from "react-icons/tb";
 import { GrMoney } from "react-icons/gr";
+import axios from "axios";
+import { format } from "date-fns";
 
 const AnalysPage = () => {
   const staff = {
@@ -16,47 +18,56 @@ const AnalysPage = () => {
   };
 
   const [value, setValue] = useState({
-    startDate: null,
-    endDate: null,
+    startDate: format(new Date(), "yyyy-MM-dd"),
+    endDate: format(new Date(), "yyyy-MM-dd"),
   });
 
-  const orders = [
-    {
-      _id: "HD0001",
-      customer_name: "Nguyễn Văn A",
-      totalAmount: 10000,
-      createdAt: "20/10/2021",
-      quantity: 2,
-    },
-    {
-      _id: "HD0001",
-      customer_name: "Nguyễn Văn A",
-      totalAmount: 10000,
-      createdAt: "20/10/2021",
-      quantity: 2,
-    },
-    {
-      _id: "HD0001",
-      customer_name: "Nguyễn Văn A",
-      totalAmount: 10000,
-      createdAt: "20/10/2021",
-      quantity: 2,
-    },
-    {
-      _id: "HD0001",
-      customer_name: "Nguyễn Văn A",
-      totalAmount: 10000,
-      createdAt: "20/10/2021",
-      quantity: 2,
-    },
-    {
-      _id: "HD0001",
-      customer_name: "Nguyễn Văn A",
-      totalAmount: 10000,
-      createdAt: "20/10/2021",
-      quantity: 2,
-    },
-  ];
+  const [orders, setOrders] = useState([]);
+  const [totalOrders, setTotalOrders] = useState(0);
+  const [totalAmountOrders, setTotalAmountOrders] = useState(0);
+  const [totalQuantityOrders, setTotalQuantityOrders] = useState(0);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8080/api/v1/orders/statistics", {
+        params: {
+          startDate: value.startDate,
+          endDate: value.endDate,
+        },
+      })
+      .then((res) => {
+        if (res.data.length === 0) {
+          return;
+        }
+        console.log(res.data);
+        setOrders(res.data.orders);
+        setTotalOrders(res.data.totalOrders);
+        setTotalAmountOrders(res.data.totalAmountOrders);
+        setTotalQuantityOrders(res.data.totalQuantityOrders);
+      })
+      .catch((error) => {
+        console.error("Có lỗi xảy ra khi lấy dữ liệu thống kê!", error);
+      });
+  }, []);
+
+  const handleSearch = () => {
+    axios
+      .get("http://localhost:8080/api/v1/orders/statistics", {
+        params: {
+          startDate: format(value.startDate, "yyyy-MM-dd"),
+          endDate: format(value.endDate, "yyyy-MM-dd"),
+        },
+      })
+      .then((res) => {
+        setOrders(res.data.orders);
+        setTotalOrders(res.data.totalOrders);
+        setTotalAmountOrders(res.data.totalAmountOrders);
+        setTotalQuantityOrders(res.data.totalQuantityOrders);
+      })
+      .catch((error) => {
+        console.error("Có lỗi xảy ra khi lấy dữ liệu thống kê!", error);
+      });
+  };
 
   return (
     <div className="flex">
@@ -69,7 +80,10 @@ const AnalysPage = () => {
               <h3 className="font-semibold text-xl text-center">
                 Chọn thời điểm
               </h3>
-              <button className="bg-white px-3 py-2 hover:bg-blue-500 hover:text-white text-blue-500 font-semibold rounded-lg border border-blue-500 transition-all">
+              <button
+                className="bg-white px-3 py-2 hover:bg-blue-500 hover:text-white text-blue-500 font-semibold rounded-lg border border-blue-500 transition-all"
+                onClick={handleSearch}
+              >
                 <FaSearch />
               </button>
             </div>
@@ -88,27 +102,31 @@ const AnalysPage = () => {
                   <h4 className="text-[#33343D] mb-1 font-semibold">
                     Tổng đơn hàng
                   </h4>
-                  <h1 className="text-dark-purple text-3xl font-bold">100</h1>
+                  <h1 className="text-dark-purple text-3xl font-bold">
+                    {totalOrders}
+                  </h1>
                 </div>
                 <TbDeviceIpadCheck className="text-6xl text-dark-purple ml-5 text-right w-1/3" />
               </div>
-              <div className="rounded-md p-5 bg-gradient-to-r from-green-200 to-emerald-300 flex shadow-lg shadow-gray-200 transition-all duration-500 hover:scale-105 hover:shadow-gray-400 cursor-pointer w-1/3">
+              <div className="rounded-md p-5 bg-gradient-to-r from-green-300 to-emerald-400 flex shadow-lg shadow-gray-200 transition-all duration-500 hover:scale-105 hover:shadow-gray-400 cursor-pointer w-1/3">
                 <div className="w-2/3">
                   <h4 className="text-[#33343D] mb-1 font-semibold">
                     Tổng doanh thu
                   </h4>
                   <h1 className="text-dark-purple text-2xl font-bold">
-                    11111111
+                    {totalAmountOrders}
                   </h1>
                 </div>
                 <GrMoney className="text-6xl text-dark-purple ml-5 text-right w-1/3" />
               </div>
-              <div className="rounded-md p-5 bg-gradient-to-r from-purple-200 to-purple-300 flex shadow-lg shadow-gray-200 transition-all duration-500 hover:scale-105 hover:shadow-gray-400 cursor-pointer w-1/3">
+              <div className="rounded-md p-5 bg-gradient-to-r from-pink-200 to-pink-300 flex shadow-lg shadow-gray-200 transition-all duration-500 hover:scale-105 hover:shadow-gray-400 cursor-pointer w-1/3">
                 <div className="w-2/3">
                   <h4 className="text-[#33343D] mb-1 font-semibold">
                     Sản phẩm bán ra
                   </h4>
-                  <h1 className="text-dark-purple text-2xl font-bold">200</h1>
+                  <h1 className="text-dark-purple text-2xl font-bold">
+                    {totalQuantityOrders}
+                  </h1>
                 </div>
                 <TbDevicesDollar className="text-6xl text-dark-purple ml-5 text-right w-1/3" />
               </div>

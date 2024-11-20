@@ -10,6 +10,7 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 import { useState } from "react";
+import { format } from "date-fns";
 
 const TABLE_HEAD1 = [
   "Mã đơn",
@@ -22,39 +23,6 @@ const TABLE_HEAD1 = [
 ];
 
 const TABLE_HEAD2 = ["Tên sản phẩm", "Số lượng", "Đơn giá", "Tổng tiền"];
-
-const PRODUCTS_ROWS = [
-  {
-    name: "Iphone 13 Pro Max",
-    retail_price: "2500",
-    quantity: "1",
-    total_price: "2500",
-  },
-  {
-    name: "Iphone 13 Pro Max",
-    retail_price: "2500",
-    quantity: "1",
-    total_price: "2500",
-  },
-  {
-    name: "Iphone 13 Pro Max",
-    retail_price: "2500",
-    quantity: "1",
-    total_price: "2500",
-  },
-  {
-    name: "Iphone 13 Pro Max",
-    retail_price: "2500",
-    quantity: "1",
-    total_price: "2500",
-  },
-  {
-    name: "Iphone 13 Pro Max",
-    retail_price: "2500",
-    quantity: "1",
-    total_price: "2500",
-  },
-];
 
 const PurchaseHistoryTable = ({ orders }) => {
   const [openDetailModal, setOpenDetailModal] = useState(false);
@@ -105,12 +73,12 @@ const PurchaseHistoryTable = ({ orders }) => {
                 </td>
                 <td className="p-4 text-center">
                   <Typography className="font-semibold text-slate-600">
-                    {order.createdAt}
+                    {format(order.createdAt, "dd-MM-yyyy")}
                   </Typography>
                 </td>
                 <td className="p-4 text-center">
                   <Typography className="font-semibold text-slate-600">
-                    {order.quantity}
+                    {order.items.length}
                   </Typography>
                 </td>
                 <td className="p-4 flex justify-center">
@@ -121,9 +89,9 @@ const PurchaseHistoryTable = ({ orders }) => {
                       unmount: { scale: 0, y: 25 },
                     }}
                   >
-                    <a href="#" onClick={() => handleOpenDetailModal(order)}>
+                    <button onClick={() => handleOpenDetailModal(order)}>
                       <BsInfoCircle className="text-2xl text-blue-500" />
-                    </a>
+                    </button>
                   </Tooltip>
                 </td>
               </tr>
@@ -131,7 +99,11 @@ const PurchaseHistoryTable = ({ orders }) => {
           })}
         </tbody>
       </table>
-      <Dialog open={openDetailModal} handler={handleOpenDetailModal} size="sm">
+      <Dialog
+        open={openDetailModal}
+        handler={() => setOpenDetailModal(!openDetailModal)}
+        size="md"
+      >
         <DialogHeader className="relative m-0 block">
           <Typography variant="h3">Thông tin hóa đơn</Typography>
           <Typography className="mt-1 font-normal text-slate-500">
@@ -152,39 +124,40 @@ const PurchaseHistoryTable = ({ orders }) => {
               </tr>
             </thead>
             <tbody>
-              {PRODUCTS_ROWS.map(
-                ({ name, retail_price, quantity, total_price }, index) => {
-                  return (
-                    <tr key={index} className="hover:bg-slate-50">
-                      <td className="px-2 py-4 text-center">
-                        <Typography className="font-semibold text-slate-500">
-                          {name}
-                        </Typography>
-                      </td>
-                      <td className="px-2 py-4 text-center">
-                        <Typography className="font-semibold text-slate-500">
-                          {quantity}
-                        </Typography>
-                      </td>
-                      <td className="px-2 py-4 text-center">
-                        <Typography className="font-semibold text-slate-500">
-                          {retail_price}
-                        </Typography>
-                      </td>
-                      <td className="px-2 py-4 text-center">
-                        <Typography className="font-semibold text-slate-500">
-                          {total_price}
-                        </Typography>
-                      </td>
-                    </tr>
-                  );
-                }
-              )}
+              {selectedOrder?.items.map((item, index) => {
+                return (
+                  <tr key={index} className="hover:bg-slate-50">
+                    <td className="px-2 py-4 text-center">
+                      <Typography className="font-semibold text-slate-500">
+                        {item.name}
+                      </Typography>
+                    </td>
+                    <td className="px-2 py-4 text-center">
+                      <Typography className="font-semibold text-slate-500">
+                        {item.quantity}
+                      </Typography>
+                    </td>
+                    <td className="px-2 py-4 text-center">
+                      <Typography className="font-semibold text-slate-500">
+                        {item.retail_price}
+                      </Typography>
+                    </td>
+                    <td className="px-2 py-4 text-center">
+                      <Typography className="font-semibold text-slate-500">
+                        {item.subTotal}
+                      </Typography>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </DialogBody>
         <DialogFooter>
-          <Button color="blue" onClick={handleOpenDetailModal}>
+          <Button
+            color="blue"
+            onClick={() => setOpenDetailModal(!openDetailModal)}
+          >
             <span>Đóng</span>
           </Button>
         </DialogFooter>

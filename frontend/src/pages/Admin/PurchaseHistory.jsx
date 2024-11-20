@@ -1,6 +1,9 @@
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
+import { useParams, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
 import PurchaseHistoryTable from "../../components/PurchaseHistoryTable";
+import axios from "axios";
 
 const PurchaseHistory = () => {
   const staff = {
@@ -9,48 +12,21 @@ const PurchaseHistory = () => {
     username: "Username",
   };
 
-  const orders = [
-    {
-      _id: "HD0001",
-      totalAmount: 10000,
-      receivedAmount: 12000,
-      change: 2000,
-      createdAt: "20/10/2021",
-      quantity: 2,
-    },
-    {
-      _id: "HD0001",
-      totalAmount: 10000,
-      receivedAmount: 12000,
-      change: 2000,
-      createdAt: "20/10/2021",
-      quantity: 2,
-    },
-    {
-      _id: "HD0001",
-      totalAmount: 10000,
-      receivedAmount: 12000,
-      change: 2000,
-      createdAt: "20/10/2021",
-      quantity: 2,
-    },
-    {
-      _id: "HD0001",
-      totalAmount: 10000,
-      receivedAmount: 12000,
-      change: 2000,
-      createdAt: "20/10/2021",
-      quantity: 2,
-    },
-    {
-      _id: "HD0001",
-      totalAmount: 10000,
-      receivedAmount: 12000,
-      change: 2000,
-      createdAt: "20/10/2021",
-      quantity: 2,
-    },
-  ];
+  const [orders, setOrders] = useState([]);
+  const { customerId } = useParams();
+  const location = useLocation();
+  const { name, phone, address } = location.state || {};
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:8080/api/v1/customers/${customerId}/orders`)
+      .then((res) => {
+        setOrders(res.data.data);
+      })
+      .catch((error) => {
+        console.error("Có lỗi xảy ra khi lấy dữ liệu đơn hàng!", error);
+      });
+  }, [customerId]);
 
   return (
     <div className="flex">
@@ -60,15 +36,15 @@ const PurchaseHistory = () => {
         <div className="my-7 text-slate-700">
           <div className="flex gap-x-3 items-center mb-3">
             <span className="font-semibold text-black">Họ và tên:</span>
-            <span className="font-semibold">Trần Thị B</span>
+            <span className="font-semibold">{name}</span>
           </div>
           <div className="flex gap-x-3 items-center mb-3">
             <span className="font-semibold text-black">Số điện thoại:</span>
-            <span className="font-semibold">0123456789</span>
+            <span className="font-semibold">{phone}</span>
           </div>
           <div className="flex gap-x-3 items-center">
             <span className="font-semibold text-black">Địa chỉ:</span>
-            <span className="font-semibold">50 Thành Thái, Q10, TPHCM</span>
+            <span className="font-semibold">{address}</span>
           </div>
         </div>
         <div className="w-full bg-white rounded-xl mt-7 border border-slate-200">

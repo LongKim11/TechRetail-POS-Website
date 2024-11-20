@@ -29,7 +29,10 @@ const Routers = () => {
         <Route path="staffs" element={<StaffManagementPage />} />
         <Route path="products" element={<ProductManagementPage />} />
         <Route path="customers" element={<CustomersPage />} />
-        <Route path="purchase-history" element={<PurchaseHistory />} />
+        <Route
+          path="purchase-history/:customerId"
+          element={<PurchaseHistory />}
+        />
         <Route path="profile" element={<Profile />} />
         <Route path="change-password" element={<ChangePassword />} />
         <Route path="analys" element={<AnalysPage />} />
@@ -43,6 +46,10 @@ const Routers = () => {
         <Route path="products" element={<ProductMPageStaff />} />
         <Route path="customers" element={<CustomersPageStaff />} />
         <Route path="purchase-history" element={<PurchaseHistoryStaff />} />
+        <Route
+          path="purchase-history/:customerId"
+          element={<PurchaseHistory />}
+        />
         <Route path="profile" element={<ProfileStaff />} />
         <Route path="change-password" element={<ChangePasswordStaff />} />
         <Route path="analys" element={<AnalysPageStaff />} />

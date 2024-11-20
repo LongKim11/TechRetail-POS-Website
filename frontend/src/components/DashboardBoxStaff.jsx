@@ -3,13 +3,13 @@ import { TbDeviceIpadCheck } from "react-icons/tb";
 import { TbDevicesDollar } from "react-icons/tb";
 import { GrMoney } from "react-icons/gr";
 
-const DashboardBoxStaff = ({ employees, bills, income, products }) => {
+const DashboardBoxStaff = ({ customers, bills, income, products }) => {
   return (
     <div className="mt-5 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-7">
       <div className="rounded-md p-5 flex shadow-lg shadow-gray-200 transition-all duration-500 hover:scale-105 hover:shadow-gray-400 cursor-pointer bg-white">
         <LuUsers className="text-6xl text-blue-700 w-1/3" />
         <div className="w-2/3">
-          <h1 className="text-dark-purple text-3xl font-bold">{employees}</h1>
+          <h1 className="text-dark-purple text-3xl font-bold">{customers}</h1>
           <h4 className="text-[#33343D] mb-3 font-semibold">
             Số lượng khách hàng
           </h4>

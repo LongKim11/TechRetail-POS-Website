@@ -6,99 +6,88 @@ import {
 } from "@material-tailwind/react";
 import Chart from "react-apexcharts";
 
-const chartConfig = {
-  zoom: {
-    enabled: false,
-  },
-  type: "line",
-  height: 400,
-  series: [
-    {
-      name: "Sales",
-      data: [100, 200, 300, 600, 900, 1200, 800, 850, 500],
+const ChartAdmin = ({ totalAmountByMonth, months }) => {
+  const chartConfig = {
+    zoom: {
+      enabled: false,
     },
-  ],
-  options: {
-    chart: {
-      toolbar: {
-        show: true,
+    type: "line",
+    height: 400,
+    series: [
+      {
+        name: "Sales",
+        data: totalAmountByMonth,
       },
-    },
-    title: {
-      show: "",
-    },
-    dataLabels: {
-      enabled: true,
-    },
-    colors: ["#22c55e"],
-    stroke: {
-      lineCap: "round",
-      curve: "smooth",
-    },
-    markers: {
-      size: 0,
-    },
-    xaxis: {
-      axisTicks: {
-        show: false,
-      },
-      axisBorder: {
-        show: false,
-      },
-      labels: {
-        style: {
-          colors: "#616161",
-          fontSize: "12px",
-          fontFamily: "inherit",
-          fontWeight: 400,
-        },
-      },
-      categories: [
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ],
-    },
-    yaxis: {
-      labels: {
-        style: {
-          colors: "#616161",
-          fontSize: "12px",
-          fontFamily: "inherit",
-          fontWeight: 400,
-        },
-      },
-    },
-    grid: {
-      show: true,
-      borderColor: "#dddddd",
-      strokeDashArray: 5,
-      xaxis: {
-        lines: {
+    ],
+    options: {
+      chart: {
+        toolbar: {
           show: true,
         },
       },
-      padding: {
-        top: 5,
-        right: 20,
+      title: {
+        show: "",
+      },
+      dataLabels: {
+        enabled: true,
+      },
+      colors: ["#22c55e"],
+      stroke: {
+        lineCap: "round",
+        curve: "smooth",
+      },
+      markers: {
+        size: 0,
+      },
+      xaxis: {
+        axisTicks: {
+          show: false,
+        },
+        axisBorder: {
+          show: false,
+        },
+        labels: {
+          style: {
+            colors: "#616161",
+            fontSize: "12px",
+            fontFamily: "inherit",
+            fontWeight: 400,
+          },
+        },
+        categories: months,
+      },
+      yaxis: {
+        labels: {
+          style: {
+            colors: "#616161",
+            fontSize: "12px",
+            fontFamily: "inherit",
+            fontWeight: 400,
+          },
+        },
+      },
+      grid: {
+        show: true,
+        borderColor: "#dddddd",
+        strokeDashArray: 5,
+        xaxis: {
+          lines: {
+            show: true,
+          },
+        },
+        padding: {
+          top: 5,
+          right: 20,
+        },
+      },
+      fill: {
+        opacity: 0.8,
+      },
+      tooltip: {
+        theme: "dark",
       },
     },
-    fill: {
-      opacity: 0.8,
-    },
-    tooltip: {
-      theme: "dark",
-    },
-  },
-};
-
-const ChartAdmin = () => {
+  };
   return (
     <Card>
       <CardHeader floated={false} shadow={false} color="transparent">
@@ -110,7 +99,7 @@ const ChartAdmin = () => {
           color="gray"
           className="max-w-sm font-normal"
         >
-          Trong 12 tháng gần nhất
+          Tính từ thời điểm hiện tại so với năm ngoái
         </Typography>
       </CardHeader>
       <CardBody className="px-2 pb-0">

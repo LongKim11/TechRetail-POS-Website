@@ -6,106 +6,96 @@ import {
 } from "@material-tailwind/react";
 import Chart from "react-apexcharts";
 
-const chartConfig = {
-  zoom: {
-    enabled: false,
-  },
-  type: "bar",
-  height: 400,
-  series: [
-    {
-      name: "Products",
-      data: [100, 200, 300, 600, 900, 1200, 800, 850, 500],
+const ChartStaff = ({ totalProductByMonth, months }) => {
+  const chartConfig = {
+    zoom: {
+      enabled: false,
     },
-  ],
-  options: {
-    chart: {
-      toolbar: {
-        show: true,
+    type: "bar",
+    height: 400,
+    series: [
+      {
+        name: "Products",
+        data: totalProductByMonth,
       },
-    },
-    plotOptions: {
-      bar: {
-        horizontal: false,
-        columnWidth: "55%",
-        endingShape: "rounded",
-      },
-    },
-    title: {
-      show: "",
-    },
-    dataLabels: {
-      enabled: true,
-    },
-    colors: ["#035efc"],
-    stroke: {
-      lineCap: "round",
-      curve: "smooth",
-    },
-    markers: {
-      size: 0,
-    },
-    xaxis: {
-      axisTicks: {
-        show: false,
-      },
-      axisBorder: {
-        show: false,
-      },
-      labels: {
-        style: {
-          colors: "#616161",
-          fontSize: "12px",
-          fontFamily: "inherit",
-          fontWeight: 400,
-        },
-      },
-      categories: [
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ],
-    },
-    yaxis: {
-      labels: {
-        style: {
-          colors: "#616161",
-          fontSize: "12px",
-          fontFamily: "inherit",
-          fontWeight: 400,
-        },
-      },
-    },
-    grid: {
-      show: true,
-      borderColor: "#dddddd",
-      strokeDashArray: 5,
-      xaxis: {
-        lines: {
+    ],
+    options: {
+      chart: {
+        toolbar: {
           show: true,
         },
       },
-      padding: {
-        top: 5,
-        right: 20,
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: "55%",
+          endingShape: "rounded",
+        },
+      },
+      title: {
+        show: "",
+      },
+      dataLabels: {
+        enabled: true,
+      },
+      colors: ["#035efc"],
+      stroke: {
+        lineCap: "round",
+        curve: "smooth",
+      },
+      markers: {
+        size: 0,
+      },
+      xaxis: {
+        axisTicks: {
+          show: false,
+        },
+        axisBorder: {
+          show: false,
+        },
+        labels: {
+          style: {
+            colors: "#616161",
+            fontSize: "12px",
+            fontFamily: "inherit",
+            fontWeight: 400,
+          },
+        },
+        categories: months,
+      },
+      yaxis: {
+        labels: {
+          style: {
+            colors: "#616161",
+            fontSize: "12px",
+            fontFamily: "inherit",
+            fontWeight: 400,
+          },
+        },
+      },
+      grid: {
+        show: true,
+        borderColor: "#dddddd",
+        strokeDashArray: 5,
+        xaxis: {
+          lines: {
+            show: true,
+          },
+        },
+        padding: {
+          top: 5,
+          right: 20,
+        },
+      },
+      fill: {
+        opacity: 0.8,
+      },
+      tooltip: {
+        theme: "dark",
       },
     },
-    fill: {
-      opacity: 0.8,
-    },
-    tooltip: {
-      theme: "dark",
-    },
-  },
-};
+  };
 
-const ChartStaff = () => {
   return (
     <Card>
       <CardHeader floated={false} shadow={false} color="transparent">

@@ -1,6 +1,8 @@
 import catchAsync from '../utils/catchAsync.js'
 import AppError from '../utils/appError.js'
 import { Order } from '../models/orderModel.js'
+import { Staff } from '../models/staffModel.js'
+import { Customer } from '../models/customerModel.js'
 
 const getAllOrders = catchAsync(async (req, res, next) => {
     const orders = await Order.find()
@@ -88,6 +90,97 @@ const getOrderStatistics = catchAsync(async (req, res) => {
     }
 })
 
+const getTotalAmountLast12Months = catchAsync(async (req, res) => {
+    const now = new Date()
+    const startYear = now.getFullYear() - 1
+    const startMonth = now.getMonth() + 1
+    const startDate = now.getDate()
+    const begin = new Date(`${startYear}-${startMonth}-${startDate}`)
+
+    const orders = await Order.find({
+        createdAt: {
+            $gte: begin,
+            $lte: now,
+        },
+    })
+
+    const totalAmountByMonth = Array(13).fill(0)
+    const months = []
+
+    for (let i = 0; i <= 12; i++) {
+        const date = new Date(
+            begin.getFullYear(),
+            begin.getMonth() + i,
+            begin.getDate(),
+        )
+        const month = date.getMonth() + 1
+        const year = date.getFullYear().toString().slice(-2)
+        months.push(`${month}/${year}`)
+    }
+
+    orders.forEach((order) => {
+        const month = order.createdAt.getMonth()
+        const year = order.createdAt.getFullYear()
+        const index =
+            (year - begin.getFullYear()) * 12 + month - begin.getMonth()
+        if (index >= 0 && index <= 12) {
+            totalAmountByMonth[index] += parseFloat(order.totalAmount)
+        }
+    })
+
+    res.status(200).json({
+        totalAmountByMonth,
+        months,
+    })
+})
+
+const getTotalProductLast12Months = catchAsync(async (req, res) => {
+    const now = new Date()
+    const startYear = now.getFullYear() - 1
+    const startMonth = now.getMonth() + 1
+    const startDate = now.getDate()
+    const begin = new Date(`${startYear}-${startMonth}-${startDate}`)
+
+    const orders = await Order.find({
+        createdAt: {
+            $gte: begin,
+            $lte: now,
+        },
+    })
+
+    const totalProductByMonth = Array(13).fill(0)
+    const months = []
+
+    for (let i = 0; i <= 12; i++) {
+        const date = new Date(
+            begin.getFullYear(),
+            begin.getMonth() + i,
+            begin.getDate(),
+        )
+        const month = date.getMonth() + 1
+        const year = date.getFullYear().toString().slice(-2)
+        months.push(`${month}/${year}`)
+    }
+
+    orders.forEach((order) => {
+        const month = order.createdAt.getMonth()
+        const year = order.createdAt.getFullYear()
+        const index =
+            (year - begin.getFullYear()) * 12 + month - begin.getMonth()
+        if (index >= 0 && index <= 12) {
+            totalProductByMonth[index] += order.items.reduce(
+                (sum, item) => sum + item.quantity,
+                0,
+            )
+        }
+    })
+
+    res.status(200).json({
+        totalProductByMonth,
+        months,
+    })
+})
+
 const createOrder = catchAsync(async (req, res, next) => {
     const newOrder = await Order.create(req.body)
 
@@ -97,6 +190,35 @@ const createOrder = catchAsync(async (req, res, next) => {
             order: newOrder,
         },
     })
+})
+
+const getOverallStatistics = catchAsync(async (req, res) => {
+    try {
+        const totalStaff = await Staff.countDocuments()
+        const totalOrders = await Order.countDocuments()
+        const totalCustomers = await Customer.countDocuments()
+        const orders = await Order.find()
+        const totalAmount = orders.reduce(
+            (result, order) => result + parseFloat(order.totalAmount),
+            0,
+        )
+        const totalProductsSold = orders.reduce((result, order) => {
+            order.items.forEach((item) => {
+                result += item.quantity
+            })
+            return result
+        }, 0)
+
+        res.status(200).json({
+            totalCustomers,
+            totalStaff,
+            totalOrders,
+            totalAmount,
+            totalProductsSold,
+        })
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error })
+    }
 })
 
 const updateOrder = catchAsync(async (req, res, next) => {
@@ -135,4 +257,7 @@ export {
     updateOrder,
     deleteOrder,
     getOrderStatistics,
+    getTotalAmountLast12Months,
+    getOverallStatistics,
+    getTotalProductLast12Months,
 }

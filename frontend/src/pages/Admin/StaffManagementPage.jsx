@@ -14,6 +14,7 @@ import {
 import { useState } from "react";
 import { FaRegUser } from "react-icons/fa";
 import { MdMailOutline } from "react-icons/md";
+import { FaRegAddressCard } from "react-icons/fa6";
 
 const StaffManagementPage = () => {
   const staff = {
@@ -144,6 +145,16 @@ const StaffManagementPage = () => {
               <Typography variant="h6">Địa chỉ email</Typography>
             </div>
             <input className="p-2 rounded-md w-full mt-2 border border-gray-300 font-normal focus:border-blue-500 focus:outline-none"></input>
+          </div>
+          <div className="mb-6">
+            <div className="flex gap-x-2 items-center">
+              <FaRegAddressCard className="text-xl" />
+              <Typography variant="h6">Ảnh đại diện</Typography>
+            </div>
+            <input
+              type="file"
+              className="mt-2 font-semibold file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200"
+            ></input>
           </div>
         </DialogBody>
         <DialogFooter>

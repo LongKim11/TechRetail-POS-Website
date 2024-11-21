@@ -20,6 +20,8 @@ import { BiCategory } from "react-icons/bi";
 import { MdOutlineDevices } from "react-icons/md";
 import axios from "axios";
 import { useSnackbar } from "notistack";
+import { IconButton } from "@material-tailwind/react";
+import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 
 const ProductManagementPage = () => {
   const [products, setProducts] = useState([]);
@@ -39,11 +41,40 @@ const ProductManagementPage = () => {
     username: "Username",
   };
 
+  const [active, setActive] = useState(1);
+  const [maxPage, setMaxPage] = useState(0);
+  const [totalLength, setTotalLength] = useState(0);
+
+  const dataPerPage = 5;
+  const lastIndex = active * dataPerPage;
+  const firtIndex = lastIndex - dataPerPage;
+  const currentProducts = products.slice(firtIndex, lastIndex);
+
+  const next = () => {
+    if (active === maxPage) return;
+    setActive(active + 1);
+  };
+
+  const prev = () => {
+    if (active === 1) return;
+    setActive(active - 1);
+  };
+
   useEffect(() => {
     axios.get("http://localhost:8080/api/v1/products").then((res) => {
       setProducts(res.data.data);
+      setTotalLength(res.data.results);
+      setMaxPage(Math.ceil(res.data.results / dataPerPage));
     });
   }, []);
+
+  useEffect(() => {
+    setMaxPage(Math.ceil(totalLength / dataPerPage));
+  }, [totalLength]);
+
+  useEffect(() => {
+    setTotalLength(products.length);
+  }, [products]);
 
   const [openAddProductModal, setOpenAddProductModal] = useState(false);
 
@@ -60,7 +91,7 @@ const ProductManagementPage = () => {
     axios
       .post("http://localhost:8080/api/v1/products", newProduct)
       .then((res) => {
-        setProducts([...products, res.data]);
+        setProducts([res.data, ...products]);
         setOpenAddProductModal(false);
         setNewProduct({
           name: "",
@@ -235,9 +266,31 @@ const ProductManagementPage = () => {
             </div>
           </div>
           <ProductTable
-            products={products}
+            products={currentProducts}
             onDeleteProduct={handleDeleteProduct}
           />
+        </div>
+        <div className="flex items-center gap-8 justify-center mt-11">
+          <IconButton
+            size="sm"
+            onClick={prev}
+            disabled={active === 1}
+            className="bg-blue-600"
+          >
+            <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" />
+          </IconButton>
+          <Typography color="gray" className="font-normal">
+            Page <strong className="text-gray-900">{active}</strong> of{" "}
+            <strong className="text-gray-900">{maxPage}</strong>
+          </Typography>
+          <IconButton
+            size="sm"
+            className="bg-blue-600"
+            onClick={next}
+            disabled={active === 10}
+          >
+            <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
+          </IconButton>
         </div>
       </div>
     </div>

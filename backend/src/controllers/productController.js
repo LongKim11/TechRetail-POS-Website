@@ -3,7 +3,7 @@ import AppError from '../utils/appError.js'
 import { Product } from '../models/productModel.js'
 
 const getProducts = catchAsync(async (req, res, next) => {
-    const products = await Product.find()
+    const products = await Product.find().sort({ createdAt: -1 })
 
     const { name, barcode } = req.query
 

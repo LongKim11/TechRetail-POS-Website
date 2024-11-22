@@ -52,7 +52,7 @@ const HomeStaff = () => {
           income={overallStatistics.totalAmount}
           products={overallStatistics.totalProductsSold}
         />
-        <div className="mt-20">
+        <div className="mt-6">
           <div className="flex items-center gap-x-3 justify-end text-slate-500 cursor-pointer mb-3">
             <Link to={"/staff/analys"}>
               {" "}

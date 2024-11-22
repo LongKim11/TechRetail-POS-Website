@@ -39,7 +39,6 @@ const AnalysPage = () => {
         if (res.data.length === 0) {
           return;
         }
-        console.log(res.data);
         setOrders(res.data.orders);
         setTotalOrders(res.data.totalOrders);
         setTotalAmountOrders(res.data.totalAmountOrders);
@@ -74,7 +73,7 @@ const AnalysPage = () => {
       <Sidebar />
       <div className="flex-1 p-7 bg-slate-100">
         <Navbar heading="Trang phân tích và thống kê" staff={staff} />
-        <div className="flex mt-7 mb-11 items-center gap-x-20">
+        <div className="flex mt-7 mb-11 items-center gap-x-10">
           <div className="flex w-1/3 flex-col gap-y-3">
             <div className="flex gap-x-3 items-center">
               <h3 className="font-semibold text-xl text-center">

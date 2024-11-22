@@ -184,7 +184,7 @@ const ProductTable = ({ products, onDeleteProduct }) => {
           </Typography>
         </DialogHeader>
         <DialogBody>
-          <div className="mb-6">
+          <div className="mb-3">
             <div className="flex gap-x-2 items-center">
               <MdOutlineDevices className="text-lg" />
               <Typography variant="h6">Tên sản phẩm</Typography>
@@ -195,7 +195,7 @@ const ProductTable = ({ products, onDeleteProduct }) => {
               disabled
             ></input>
           </div>
-          <div className="mb-6 flex gap-x-5">
+          <div className="mb-3 flex gap-x-5">
             <div className="w-full">
               <div className="flex gap-x-2 items-center">
                 <CgSmartphoneChip className="text-xl" />
@@ -219,7 +219,7 @@ const ProductTable = ({ products, onDeleteProduct }) => {
               ></input>
             </div>
           </div>
-          <div className="mb-6">
+          <div className="mb-3">
             <div className="flex gap-x-2 items-center">
               <FaBarcode className="text-xl" />
               <Typography variant="h6">Mã barcode</Typography>
@@ -230,7 +230,7 @@ const ProductTable = ({ products, onDeleteProduct }) => {
               disabled
             ></input>
           </div>
-          <div className="mb-6">
+          <div className="mb-3">
             <div className="flex gap-x-2 items-center">
               <FaSackDollar className="text-xl" />
               <Typography variant="h6">Giá nhập</Typography>
@@ -241,7 +241,7 @@ const ProductTable = ({ products, onDeleteProduct }) => {
               disabled
             ></input>
           </div>
-          <div className="mb-6">
+          <div className="mb-3">
             <div className="flex gap-x-2 items-center">
               <IoMdPricetags className="text-xl" />
               <Typography variant="h6">Giá bán lẻ</Typography>
@@ -267,7 +267,7 @@ const ProductTable = ({ products, onDeleteProduct }) => {
           </Typography>
         </DialogHeader>
         <DialogBody>
-          <div className="mb-6">
+          <div className="mb-3">
             <div className="flex gap-x-2 items-center">
               <MdOutlineDevices className="text-lg" />
               <Typography variant="h6">Tên sản phẩm</Typography>
@@ -279,7 +279,7 @@ const ProductTable = ({ products, onDeleteProduct }) => {
               onChange={handleInputChange}
             ></input>
           </div>
-          <div className="mb-6 flex gap-x-5">
+          <div className="mb-3 flex gap-x-5">
             <div className="w-full">
               <div className="flex gap-x-2 items-center">
                 <CgSmartphoneChip className="text-xl" />
@@ -305,7 +305,7 @@ const ProductTable = ({ products, onDeleteProduct }) => {
               ></input>
             </div>
           </div>
-          <div className="mb-6">
+          <div className="mb-3">
             <div className="flex gap-x-2 items-center">
               <FaBarcode className="text-xl" />
               <Typography variant="h6">Mã barcode</Typography>
@@ -317,7 +317,7 @@ const ProductTable = ({ products, onDeleteProduct }) => {
               onChange={handleInputChange}
             ></input>
           </div>
-          <div className="mb-6">
+          <div className="mb-3">
             <div className="flex gap-x-2 items-center">
               <FaSackDollar className="text-xl" />
               <Typography variant="h6">Giá nhập</Typography>
@@ -329,7 +329,7 @@ const ProductTable = ({ products, onDeleteProduct }) => {
               onChange={handleInputChange}
             ></input>
           </div>
-          <div className="mb-6">
+          <div className="mb-3">
             <div className="flex gap-x-2 items-center">
               <IoMdPricetags className="text-xl" />
               <Typography variant="h6">Giá bán lẻ</Typography>

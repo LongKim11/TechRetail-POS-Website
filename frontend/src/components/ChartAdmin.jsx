@@ -8,11 +8,8 @@ import Chart from "react-apexcharts";
 
 const ChartAdmin = ({ totalAmountByMonth, months }) => {
   const chartConfig = {
-    zoom: {
-      enabled: false,
-    },
     type: "line",
-    height: 400,
+    height: 300,
     series: [
       {
         name: "Sales",
@@ -23,6 +20,9 @@ const ChartAdmin = ({ totalAmountByMonth, months }) => {
       chart: {
         toolbar: {
           show: true,
+        },
+        zoom: {
+          enabled: false,
         },
       },
       title: {

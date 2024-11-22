@@ -86,7 +86,7 @@ const ProductMPageStaff = () => {
           </div>
           <ProductTableStaff products={currentProducts} />
         </div>
-        <div className="flex items-center gap-8 justify-center mt-11">
+        <div className="flex items-center gap-8 fixed bottom-4 left-[50%]">
           <IconButton
             size="sm"
             onClick={prev}

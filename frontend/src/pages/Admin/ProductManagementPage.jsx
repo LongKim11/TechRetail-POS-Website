@@ -45,6 +45,8 @@ const ProductManagementPage = () => {
   const [maxPage, setMaxPage] = useState(0);
   const [totalLength, setTotalLength] = useState(0);
 
+  const [openAddProductModal, setOpenAddProductModal] = useState(false);
+
   const dataPerPage = 5;
   const lastIndex = active * dataPerPage;
   const firtIndex = lastIndex - dataPerPage;
@@ -75,8 +77,6 @@ const ProductManagementPage = () => {
   useEffect(() => {
     setTotalLength(products.length);
   }, [products]);
-
-  const [openAddProductModal, setOpenAddProductModal] = useState(false);
 
   const handleOpenAddProductModal = () => {
     setOpenAddProductModal(!openAddProductModal);
@@ -155,7 +155,7 @@ const ProductManagementPage = () => {
             </Typography>
           </DialogHeader>
           <DialogBody>
-            <div className="mb-6">
+            <div className="mb-3">
               <div className="flex gap-x-2 items-center">
                 <MdOutlineDevices className="text-lg" />
                 <Typography variant="h6">Tên sản phẩm</Typography>
@@ -166,7 +166,7 @@ const ProductManagementPage = () => {
                 onChange={handleInputChange}
               ></input>
             </div>
-            <div className="mb-6 flex gap-x-5">
+            <div className="mb-3 flex gap-x-5">
               <div className="w-full">
                 <div className="flex gap-x-2 items-center">
                   <CgSmartphoneChip className="text-xl" />
@@ -190,7 +190,7 @@ const ProductManagementPage = () => {
                 ></input>
               </div>
             </div>
-            <div className="mb-6">
+            <div className="mb-3">
               <div className="flex gap-x-2 items-center">
                 <FaBarcode className="text-xl" />
                 <Typography variant="h6">Mã barcode</Typography>
@@ -201,7 +201,7 @@ const ProductManagementPage = () => {
                 onChange={handleInputChange}
               ></input>
             </div>
-            <div className="mb-6">
+            <div className="mb-3">
               <div className="flex gap-x-2 items-center">
                 <FaSackDollar className="text-xl" />
                 <Typography variant="h6">Giá nhập</Typography>
@@ -212,7 +212,7 @@ const ProductManagementPage = () => {
                 onChange={handleInputChange}
               ></input>
             </div>
-            <div className="mb-6">
+            <div className="mb-3">
               <div className="flex gap-x-2 items-center">
                 <IoMdPricetags className="text-xl" />
                 <Typography variant="h6">Giá bán lẻ</Typography>
@@ -270,7 +270,7 @@ const ProductManagementPage = () => {
             onDeleteProduct={handleDeleteProduct}
           />
         </div>
-        <div className="flex items-center gap-8 justify-center mt-11">
+        <div className="flex items-center gap-8 fixed bottom-4 left-[50%]">
           <IconButton
             size="sm"
             onClick={prev}

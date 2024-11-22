@@ -12,7 +12,7 @@ const ChartStaff = ({ totalProductByMonth, months }) => {
       enabled: false,
     },
     type: "bar",
-    height: 400,
+    height: 300,
     series: [
       {
         name: "Products",

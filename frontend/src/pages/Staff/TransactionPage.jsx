@@ -44,7 +44,6 @@ const TransactionPage = () => {
   const handleAddProduct = (product) => {
     product.quantity = 1;
     product.subTotal = product.retail_price;
-    console.log(product);
     setAddedProduct([...addedProduct, product]);
   };
 

@@ -23,6 +23,21 @@ const ConfirmTransaction = () => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
+  const [receivedAmount, setReceivedAmount] = useState(0);
+  const [change, setChange] = useState(0);
+  const [phone, setPhone] = useState(0);
+  const [customerInfo, setCustomerInfo] = useState({
+    fullname: "",
+    address: "",
+  });
+  const [isInputDisabled, setIsInputDisabled] = useState(true);
+  const [showSaveButton, setShowSaveButton] = useState(false);
+
+  const totalAmount = addedProduct.reduce(
+    (total, product) => total + parseFloat(product.subTotal),
+    0
+  );
+
   const handleConfirm = () => {
     navigate("/staff/invoice", {
       state: {
@@ -35,16 +50,6 @@ const ConfirmTransaction = () => {
       },
     });
   };
-
-  const [receivedAmount, setReceivedAmount] = useState(0);
-  const [change, setChange] = useState(0);
-  const [phone, setPhone] = useState(0);
-  const [customerInfo, setCustomerInfo] = useState({
-    fullname: "",
-    address: "",
-  });
-  const [isInputDisabled, setIsInputDisabled] = useState(true);
-  const [showSaveButton, setShowSaveButton] = useState(false);
 
   const handleSaveCustomer = () => {
     axios
@@ -72,11 +77,6 @@ const ConfirmTransaction = () => {
     setReceivedAmount(e.target.value);
     setChange(parseFloat(e.target.value) - totalAmount);
   };
-
-  const totalAmount = addedProduct.reduce(
-    (total, product) => total + parseFloat(product.subTotal),
-    0
-  );
 
   const handleSearchCustomer = () => {
     axios

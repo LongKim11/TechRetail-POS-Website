@@ -153,7 +153,7 @@ const StaffTable = ({ staffs }) => {
           </Typography>
         </DialogHeader>
         <DialogBody>
-          <div className="mb-6">
+          <div className="mb-3">
             <div className="flex gap-x-2 items-center">
               <FaRegUser className="text-lg" />
               <Typography variant="h6">Họ và tên</Typography>
@@ -164,7 +164,7 @@ const StaffTable = ({ staffs }) => {
               disabled
             ></input>
           </div>
-          <div className="mb-6">
+          <div className="mb-3">
             <div className="flex gap-x-2 items-center">
               <MdWorkOutline className="text-lg" />
               <Typography variant="h6">Tên đăng nhập</Typography>
@@ -175,7 +175,7 @@ const StaffTable = ({ staffs }) => {
               disabled
             ></input>
           </div>
-          <div className="flex gap-x-6 justify-between mb-6">
+          <div className="flex gap-x-6 justify-between mb-3">
             <div className="w-1/2">
               <div className="flex gap-x-2 items-center">
                 <MdOutlineSignalWifiStatusbarNull className="text-lg" />
@@ -199,7 +199,7 @@ const StaffTable = ({ staffs }) => {
               ></input>
             </div>
           </div>
-          <div className="mb-6">
+          <div className="mb-3">
             <div className="flex gap-x-2 items-center">
               <MdMailOutline className="text-xl" />
               <Typography variant="h6">Địa chỉ email</Typography>
@@ -210,7 +210,7 @@ const StaffTable = ({ staffs }) => {
               disabled
             ></input>
           </div>
-          <div className="mb-6">
+          <div className="mb-3">
             <div className="flex gap-x-2 items-center">
               <MdOutlineDateRange className="text-xl" />
               <Typography variant="h6">Ngày tạo</Typography>

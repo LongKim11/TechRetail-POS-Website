@@ -39,7 +39,6 @@ const AnalysPage = () => {
         if (res.data.length === 0) {
           return;
         }
-        console.log(res.data);
         setOrders(res.data.orders);
         setTotalOrders(res.data.totalOrders);
         setTotalAmountOrders(res.data.totalAmountOrders);

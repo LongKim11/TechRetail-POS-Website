@@ -45,6 +45,8 @@ const ProductManagementPage = () => {
   const [maxPage, setMaxPage] = useState(0);
   const [totalLength, setTotalLength] = useState(0);
 
+  const [openAddProductModal, setOpenAddProductModal] = useState(false);
+
   const dataPerPage = 5;
   const lastIndex = active * dataPerPage;
   const firtIndex = lastIndex - dataPerPage;
@@ -75,8 +77,6 @@ const ProductManagementPage = () => {
   useEffect(() => {
     setTotalLength(products.length);
   }, [products]);
-
-  const [openAddProductModal, setOpenAddProductModal] = useState(false);
 
   const handleOpenAddProductModal = () => {
     setOpenAddProductModal(!openAddProductModal);

@@ -13,9 +13,10 @@ const getCustomers = catchAsync(async (req, res, next) => {
             return customer.phone === phone
         })
         if (customer.length === 0) {
-            return next(
-                new AppError('No customer found with that phone number', 404),
-            )
+            return res.status(200).json({
+                status: 'success',
+                msg: 'No customer found with that phone number',
+            })
         }
 
         return res.status(200).json({

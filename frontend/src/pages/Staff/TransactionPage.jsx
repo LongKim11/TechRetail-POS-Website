@@ -81,7 +81,7 @@ const TransactionPage = () => {
       <div className="flex-1 p-7 bg-slate-100">
         <NavbarStaff heading="Trang xử lý mua hàng" staff={staff} />
         <div className="flex gap-x-5 mt-11">
-          <div className="w-3/5 bg-white rounded-lg shadow-md">
+          <div className="w-1/2 bg-white rounded-lg shadow-md">
             <div className="flex gap-x-3 items-center p-3">
               <form>
                 <div className="relative">
@@ -193,7 +193,7 @@ const TransactionPage = () => {
               </tbody>
             </table>
           </div>
-          <div className="w-2/5 bg-white rounded-lg shadow-md">
+          <div className="w-1/2 bg-white rounded-lg shadow-md">
             <div className="p-3">
               <h3 className="text-xl font-semibold my-3 text-center">
                 Sản phẩm được mua

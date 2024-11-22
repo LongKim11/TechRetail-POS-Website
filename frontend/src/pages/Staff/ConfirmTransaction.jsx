@@ -6,7 +6,7 @@ import { useLocation } from "react-router-dom";
 import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import axios from "axios";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { FaSave } from "react-icons/fa";
 import { useSnackbar } from "notistack";
@@ -38,7 +38,7 @@ const ConfirmTransaction = () => {
 
   const [receivedAmount, setReceivedAmount] = useState(0);
   const [change, setChange] = useState(0);
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState(0);
   const [customerInfo, setCustomerInfo] = useState({
     fullname: "",
     address: "",
@@ -84,18 +84,20 @@ const ConfirmTransaction = () => {
       .then((res) => {
         if (res.data.data) {
           const customer = res.data.data[0];
+
           setCustomerInfo({
             fullname: customer.fullname,
             address: customer.address,
           });
           setIsInputDisabled(true);
+          setShowSaveButton(false);
         } else {
           setCustomerInfo({
             fullname: "",
             address: "",
           });
           setIsInputDisabled(false);
-          setShowSaveButton(false);
+          setShowSaveButton(true);
         }
       })
       .catch((error) => {
@@ -135,7 +137,7 @@ const ConfirmTransaction = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr className="hover:bg-slate-50">
+                <tr className="">
                   <td className="p-4 text-center ">
                     <Typography className="font-semibold text-blue-700">
                       Tiền cần thanh toán
@@ -147,7 +149,7 @@ const ConfirmTransaction = () => {
                     </Typography>
                   </td>
                 </tr>
-                <tr className="hover:bg-slate-50">
+                <tr className="">
                   <td className="p-4 text-center ">
                     <Typography className="font-semibold text-blue-700">
                       Tiền nhận được
@@ -163,7 +165,7 @@ const ConfirmTransaction = () => {
                     ></input>
                   </td>
                 </tr>
-                <tr className="hover:bg-slate-50">
+                <tr className="">
                   <td className="p-4 text-center ">
                     <Typography className="font-semibold text-blue-700">
                       Tiền thừa
@@ -265,7 +267,7 @@ const ConfirmTransaction = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr className="hover:bg-slate-50">
+                <tr className="">
                   <td className="p-4 text-center ">
                     <Typography className="font-semibold text-blue-700">
                       Nhân viên xử lý giao dịch
@@ -277,7 +279,7 @@ const ConfirmTransaction = () => {
                     </Typography>
                   </td>
                 </tr>
-                <tr className="hover:bg-slate-50">
+                <tr className="">
                   <td className="p-4 text-center ">
                     <Typography className="font-semibold text-blue-700">
                       Phương thức thanh toán
@@ -289,7 +291,7 @@ const ConfirmTransaction = () => {
                     </Typography>
                   </td>
                 </tr>
-                <tr className="hover:bg-slate-50">
+                <tr className="">
                   <td className="p-4 text-center ">
                     <Typography className="font-semibold text-blue-700">
                       Ngày thực hiện giao dịch

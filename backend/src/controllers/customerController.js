@@ -84,7 +84,7 @@ const deleteCustomer = catchAsync(async (req, res, next) => {
         return next(new AppError('No customer found with that ID', 404))
     }
 
-    res.status(204).json({
+    res.status(200).json({
         status: 'success',
         data: customer,
     })

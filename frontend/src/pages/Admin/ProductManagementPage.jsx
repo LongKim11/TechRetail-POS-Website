@@ -287,7 +287,7 @@ const ProductManagementPage = () => {
             size="sm"
             className="bg-blue-600"
             onClick={next}
-            disabled={active === 10}
+            disabled={active === maxPage}
           >
             <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
           </IconButton>

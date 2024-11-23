@@ -7,6 +7,9 @@ import { MdOutlineDelete } from "react-icons/md";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { IconButton } from "@material-tailwind/react";
+import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
+import { useSnackbar } from "notistack";
 
 const TransactionPage = () => {
   const staff = {
@@ -19,7 +22,28 @@ const TransactionPage = () => {
   const [searchByName, setSearchByName] = useState("");
   const [searchByBarcode, setSearchByBarcode] = useState("");
   const [addedProduct, setAddedProduct] = useState([]);
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const [active, setActive] = useState(1);
+  const [maxPage, setMaxPage] = useState(0);
+
   const navigate = useNavigate();
+
+  const dataPerPage = 5;
+  const lastIndex = active * dataPerPage;
+  const firtIndex = lastIndex - dataPerPage;
+  const currentProducts = searchProductResult.slice(firtIndex, lastIndex);
+
+  const next = () => {
+    if (active === maxPage) return;
+    setActive(active + 1);
+  };
+
+  const prev = () => {
+    if (active === 1) return;
+    setActive(active - 1);
+  };
 
   const handleSearch = () => {
     let query = "";
@@ -35,6 +59,8 @@ const TransactionPage = () => {
       .get(`http://localhost:8080/api/v1/products?${query}`)
       .then((res) => {
         setSearchProductResult(res.data.data);
+        setMaxPage(Math.ceil(res.data.results / dataPerPage));
+        setActive(1);
       })
       .catch((error) => {
         console.error("Có lỗi xảy ra khi tìm kiếm sản phẩm!", error);
@@ -71,6 +97,12 @@ const TransactionPage = () => {
   };
 
   const handleNext = () => {
+    if (addedProduct.length === 0) {
+      enqueueSnackbar("Không có sản phẩm nào trong giỏ hàng", {
+        variant: "error",
+      });
+      return;
+    }
     navigate("/staff/confirm-transaction", { state: { addedProduct } });
   };
 
@@ -160,7 +192,7 @@ const TransactionPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {searchProductResult.map((product, index) => {
+                {currentProducts.map((product, index) => {
                   return (
                     <tr key={index} className="hover:bg-slate-50">
                       <td className="p-4 text-center">
@@ -241,14 +273,14 @@ const TransactionPage = () => {
                       <td className="p-4 text-center">
                         <Typography className="font-semibold text-slate-500">
                           <button
-                            className="text-red-500 text-lg font-bold"
+                            className="text-red-500 text-xl font-bold"
                             onClick={() => handleDecreaseQuantity(index)}
                           >
                             -
                           </button>{" "}
                           {product.quantity}{" "}
                           <button
-                            className="text-green-500 text-lg font-bold"
+                            className="text-green-500 text-xl font-bold"
                             onClick={() => handleIncreaseQuantity(index)}
                           >
                             +
@@ -277,7 +309,8 @@ const TransactionPage = () => {
             </table>
           </div>
         </div>
-        <div className="flex justify-end mt-11">
+
+        <div className="flex mt-11 fixed bottom-4 right-5">
           <Button
             variant="outlined"
             className="flex items-center gap-3"
@@ -287,6 +320,28 @@ const TransactionPage = () => {
             Tiếp theo
             <FaArrowRight />
           </Button>
+        </div>
+        <div className="flex items-center gap-8 fixed bottom-4 left-[15%]">
+          <IconButton
+            size="sm"
+            onClick={prev}
+            disabled={active === 1}
+            className="bg-blue-600"
+          >
+            <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" />
+          </IconButton>
+          <Typography color="gray" className="font-normal">
+            Page <strong className="text-gray-900">{active}</strong> of{" "}
+            <strong className="text-gray-900">{maxPage}</strong>
+          </Typography>
+          <IconButton
+            size="sm"
+            className="bg-blue-600"
+            onClick={next}
+            disabled={active === maxPage}
+          >
+            <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
+          </IconButton>
         </div>
       </div>
     </div>

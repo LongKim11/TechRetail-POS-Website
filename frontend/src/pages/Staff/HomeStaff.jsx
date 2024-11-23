@@ -6,6 +6,17 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import {
+  Typography,
+  Button,
+  Dialog,
+  Card,
+  CardBody,
+  CardFooter,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+} from "@material-tailwind/react";
 
 const HomeStaff = () => {
   const staff = {
@@ -23,6 +34,12 @@ const HomeStaff = () => {
     totalAmount: 0,
     totalProductsSold: 0,
   });
+
+  const [openCPModal, setOpenCPModal] = useState(false);
+  const [openLoginViaEmailModal, setOpenLoginViaEmailModal] = useState(false);
+  const handleOpenCPModal = () => setOpenCPModal((cur) => !cur);
+  const handleOpenLoginViaEmailModal = () =>
+    setOpenLoginViaEmailModal((cur) => !cur);
 
   useEffect(() => {
     Promise.all([
@@ -68,6 +85,72 @@ const HomeStaff = () => {
             months={months}
           />
         </div>
+        <Dialog
+          size="sm"
+          open={openCPModal}
+          className="bg-transparent shadow-none"
+        >
+          <Card className="mx-auto w-full max-w-[28rem]">
+            <CardBody className="flex flex-col gap-4">
+              <Typography variant="h4" color="blue-gray">
+                Đổi mật khẩu mới
+              </Typography>
+              <Typography
+                className="font-normal text-slate-400"
+                variant="paragraph"
+              >
+                Mật khẩu cần ít nhất 6 kí tự.
+              </Typography>
+              <Typography className="" variant="h6">
+                Mật khẩu cũ
+              </Typography>
+              <input
+                type="password"
+                className="border border-slate-300 rounded-lg p-2 w-full focus:outline-none focus:border-blue-500"
+              ></input>
+              <Typography className="" variant="h6">
+                Mật khẩu mới
+              </Typography>
+              <input
+                type="password"
+                className="border border-slate-300 rounded-lg p-2 w-full focus:outline-none focus:border-blue-500"
+              ></input>
+              <Typography className="" variant="h6">
+                Nhập lại mật khẩu mới
+              </Typography>
+              <input
+                type="password"
+                className="border border-slate-300 rounded-lg p-2 w-full focus:outline-none focus:border-blue-500"
+              ></input>
+            </CardBody>
+            <CardFooter className="pt-0">
+              <Button variant="gradient" onClick={handleOpenCPModal} fullWidth>
+                Đổi mật khẩu
+              </Button>
+            </CardFooter>
+          </Card>
+        </Dialog>
+        <Dialog open={openLoginViaEmailModal} size="sm">
+          <DialogHeader>Xác thực tài khoản</DialogHeader>
+          <DialogBody>
+            <Typography
+              className="font-normal text-slate-500"
+              variant="paragraph"
+            >
+              Vui lòng đăng nhập thông qua liên kết được gửi đến email để xác
+              thực tài khoản.
+            </Typography>
+          </DialogBody>
+          <DialogFooter>
+            <Button
+              variant="gradient"
+              color="blue"
+              className="focus:outline-none"
+            >
+              <a href="/">Thoát</a>
+            </Button>
+          </DialogFooter>
+        </Dialog>
       </div>
     </div>
   );

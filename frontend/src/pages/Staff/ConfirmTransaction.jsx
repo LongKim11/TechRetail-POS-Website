@@ -39,6 +39,16 @@ const ConfirmTransaction = () => {
   );
 
   const handleConfirm = () => {
+    if (
+      receivedAmount == 0 ||
+      phone == 0 ||
+      customerInfo.fullname == "" ||
+      customerInfo.address == ""
+    ) {
+      enqueueSnackbar("Vui lòng nhập đầy đủ thông tin", { variant: "error" });
+      return;
+    }
+
     navigate("/staff/invoice", {
       state: {
         addedProduct,
@@ -307,7 +317,7 @@ const ConfirmTransaction = () => {
             </table>
           </div>
         </div>
-        <div className="flex justify-end mt-11">
+        <div className="flex justify-end mt-11 fixed bottom-4 right-5">
           <Button
             variant="outlined"
             className="flex items-center gap-3"

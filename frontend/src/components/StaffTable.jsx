@@ -20,6 +20,7 @@ import { MdMailOutline } from "react-icons/md";
 import { MdOutlineDateRange } from "react-icons/md";
 import { MdOutlineSignalWifiStatusbarNull } from "react-icons/md";
 import { MdWorkOutline } from "react-icons/md";
+import { IoMdUnlock } from "react-icons/io";
 
 const TABLE_HEAD = [
   "Họ và tên",
@@ -33,6 +34,7 @@ const TABLE_HEAD = [
 const StaffTable = ({ staffs }) => {
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [openLockModal, setOpenLockModal] = useState(false);
+  const [openUnlockModal, setOpenUnlockModal] = useState(false);
   const [selectedStaff, setSelectedStaff] = useState(null);
 
   const handleOpenDetailModal = (staff) => {
@@ -42,6 +44,10 @@ const StaffTable = ({ staffs }) => {
   const handleOpenLockModal = (staff) => {
     setSelectedStaff(staff);
     setOpenLockModal(!openLockModal);
+  };
+  const handleOpenUnlockModal = (staff) => {
+    setSelectedStaff(staff);
+    setOpenUnlockModal(!openUnlockModal);
   };
 
   return (
@@ -126,18 +132,34 @@ const StaffTable = ({ staffs }) => {
                         <BsInfoCircle className="text-2xl text-green-600" />
                       </a>
                     </Tooltip>
-
-                    <Tooltip
-                      content="Khóa tài khoản"
-                      animate={{
-                        mount: { scale: 1, y: 0 },
-                        unmount: { scale: 0, y: 25 },
-                      }}
-                    >
-                      <a href="#" onClick={() => handleOpenLockModal(staff)}>
-                        <MdLockPerson className="text-2xl text-red-600" />
-                      </a>
-                    </Tooltip>
+                    {staff.is_locked == "false" ? (
+                      <Tooltip
+                        content="Khóa tài khoản"
+                        animate={{
+                          mount: { scale: 1, y: 0 },
+                          unmount: { scale: 0, y: 25 },
+                        }}
+                      >
+                        <a href="#" onClick={() => handleOpenLockModal(staff)}>
+                          <MdLockPerson className="text-2xl text-red-600" />
+                        </a>
+                      </Tooltip>
+                    ) : (
+                      <Tooltip
+                        content="Mở khóa tài khoản"
+                        animate={{
+                          mount: { scale: 1, y: 0 },
+                          unmount: { scale: 0, y: 25 },
+                        }}
+                      >
+                        <a
+                          href="#"
+                          onClick={() => handleOpenUnlockModal(staff)}
+                        >
+                          <IoMdUnlock className="text-2xl text-blue-600" />
+                        </a>
+                      </Tooltip>
+                    )}
                   </div>
                 </td>
               </tr>
@@ -243,6 +265,29 @@ const StaffTable = ({ staffs }) => {
             <span>Đóng</span>
           </Button>
           <Button color="red" onClick={handleOpenLockModal}>
+            <span>Đồng ý</span>
+          </Button>
+        </DialogFooter>
+      </Dialog>
+      <Dialog open={openUnlockModal} handler={handleOpenUnlockModal} size="sm">
+        <DialogHeader className="relative m-0 block">
+          <Typography variant="h3">Mở khóa tài khoản</Typography>
+        </DialogHeader>
+        <DialogBody>
+          <p className="font-normal text-slate-500">
+            Bạn có chắc chắn muốn mở khóa tài khoản của nhân viên{" "}
+            <span className="font-bold">{selectedStaff?.name}</span> này không?
+          </p>
+        </DialogBody>
+        <DialogFooter>
+          <Button
+            variant="text"
+            onClick={handleOpenUnlockModal}
+            className="mr-1"
+          >
+            <span>Đóng</span>
+          </Button>
+          <Button color="red" onClick={handleOpenUnlockModal}>
             <span>Đồng ý</span>
           </Button>
         </DialogFooter>

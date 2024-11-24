@@ -8,10 +8,22 @@ import { FaChartLine } from "react-icons/fa6";
 import { FiLogOut } from "react-icons/fi";
 import Control from "../assets/control.png";
 import YellowLogo from "../assets/logo-yellow-bg.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useSendLogoutMutation } from "../features/auth/authApiSlice";
 
 const Sidebar = () => {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(true);
+
+  const [logout, { isLoading }] = useSendLogoutMutation();
+
+  const handleLogout = async () => {
+    const { message } = await logout().unwrap();
+    if (message)
+      navigate("/", {
+        state: { message: "You have been logged out successfully" },
+      });
+  };
 
   return (
     <div

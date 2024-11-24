@@ -5,11 +5,15 @@ import { Button, Typography } from "@material-tailwind/react";
 import { FaArrowRight } from "react-icons/fa";
 import { MdOutlineDelete } from "react-icons/md";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { IconButton } from "@material-tailwind/react";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { useSnackbar } from "notistack";
+import { useCookies } from "react-cookie";
+import { useGetStaffByIdQuery } from "../../features/staff/staffSlice";
+import { setCredentials } from "../../features/auth/authSlice";
+import { jwtDecode } from "jwt-decode";
 
 const TransactionPage = () => {
   const staff = {
@@ -22,7 +26,31 @@ const TransactionPage = () => {
   const [searchByName, setSearchByName] = useState("");
   const [searchByBarcode, setSearchByBarcode] = useState("");
   const [addedProduct, setAddedProduct] = useState([]);
+  // const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+  // let staff = {};
+  // if (!cookies.jwt) return <Navigate to="/" />;
 
+  // setCredentials({ token: cookies.jwt });
+  // const decoded = jwtDecode(cookies.jwt);
+  // const { id } = decoded;
+  // const { data, isLoading, isSuccess, isError, error } = useGetStaffByIdQuery(
+  //   id,
+  //   "Staff"
+  // );
+  // if (isLoading) return <p>Loading...</p>;
+  // if (isError) {
+  //   if (error.status === 401) {
+  //     removeCookie("jwt");
+  //     return <Navigate to="/" />;
+  //   } else {
+  //     return <p>{error.data.message}</p>;
+  //   }
+  // }
+  // staff = {
+  //   fullname: data.staff.fullname,
+  //   email: data.staff.email,
+  //   username: data.staff.account.username,
+  // };
   const { enqueueSnackbar } = useSnackbar();
 
   const [active, setActive] = useState(1);

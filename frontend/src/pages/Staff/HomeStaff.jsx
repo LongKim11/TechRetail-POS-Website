@@ -80,9 +80,15 @@ const HomeStaff = () => {
 
   const [openCPModal, setOpenCPModal] = useState(false);
   const [openLoginViaEmailModal, setOpenLoginViaEmailModal] = useState(false);
+  const [openLockedAccountModal, setOpenLockedAccountModal] = useState(false);
+
   const handleOpenCPModal = () => setOpenCPModal((cur) => !cur);
+
   const handleOpenLoginViaEmailModal = () =>
     setOpenLoginViaEmailModal((cur) => !cur);
+
+  const handleOpenLockedAccountModal = () =>
+    setOpenLockedAccountModal((cur) => !cur);
 
   useEffect(() => {
     Promise.all([
@@ -182,6 +188,26 @@ const HomeStaff = () => {
             >
               Vui lòng đăng nhập thông qua liên kết được gửi đến email để xác
               thực tài khoản.
+            </Typography>
+          </DialogBody>
+          <DialogFooter>
+            <Button
+              variant="gradient"
+              color="blue"
+              className="focus:outline-none"
+            >
+              <a href="/">Thoát</a>
+            </Button>
+          </DialogFooter>
+        </Dialog>
+        <Dialog open={openLockedAccountModal} size="sm">
+          <DialogHeader>Khóa tài khoản</DialogHeader>
+          <DialogBody>
+            <Typography
+              className="font-normal text-slate-500"
+              variant="paragraph"
+            >
+              Tài khoản của bạn đã bị khóa vui lòng liên hệ với quản trị viên.
             </Typography>
           </DialogBody>
           <DialogFooter>

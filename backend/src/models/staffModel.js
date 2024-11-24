@@ -9,13 +9,11 @@ const accountSchema = mongoose.Schema(
         username: {
             type: String,
             required: [true, 'Username is required'],
-            minlength: [6, 'Username must be at least 6 characters long'],
             unique: true,
         },
         password: {
             type: String,
             required: [true, 'Password is required'],
-            minlength: [8, 'Password must be at least 8 characters long'],
             select: false,
         },
     },
@@ -53,6 +51,7 @@ const staffSchema = mongoose.Schema(
             enum: ['True', 'False'],
             default: 'False',
         },
+        loginToken: String,
         passwordResetToken: String,
         passwordResetExpires: Date,
     },
@@ -67,7 +66,7 @@ staffSchema.pre('save', function (next) {
 })
 
 staffSchema.methods.comparePassword = async (enteredPassword, userPassword) => {
-    console.log(enteredPassword, userPassword)
+    // console.log(enteredPassword, userPassword)
     return await bcrypt.compare(enteredPassword, userPassword)
 }
 
@@ -90,7 +89,7 @@ staffSchema.methods.createPasswordResetToken = function () {
 
 staffSchema.methods.jwtToken = function () {
     const user = this
-    return jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    return jwt.sign({ id: user._id, role: 'staff' }, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRES_IN,
     })
 }

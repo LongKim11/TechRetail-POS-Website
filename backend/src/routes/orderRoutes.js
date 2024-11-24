@@ -10,8 +10,11 @@ import {
     getOverallStatistics,
     getTotalProductLast12Months,
 } from '../controllers/orderController.js'
+import { verifyJWT } from '../middlewares/auth/auth.js'
 
 const router = express.Router()
+
+// router.use(verifyJWT)
 
 router.route('/').get(getAllOrders).post(createOrder)
 router.route('/statistics').get(getOrderStatistics)

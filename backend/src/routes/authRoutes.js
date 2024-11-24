@@ -5,6 +5,8 @@ import { isAuthenticated } from '../middlewares/auth/auth.js'
 import {
     forgotPassword,
     login,
+    logout,
+    refresh,
     resetPassword,
 } from '../controllers/authController.js'
 import { createStaff } from '../controllers/staffController.js'
@@ -12,6 +14,10 @@ import { createStaff } from '../controllers/staffController.js'
 const router = express.Router()
 
 router.post('/login', login)
+
+router.route('/logout').post(logout)
+
+router.route('/refresh').get(refresh)
 
 router.route('/forgotPassword').post(forgotPassword)
 

@@ -10,9 +10,7 @@ const getAllOrders = catchAsync(async (req, res, next) => {
     res.status(200).json({
         status: 'success',
         results: orders.length,
-        data: {
-            orders,
-        },
+        data: orders,
     })
 })
 
@@ -25,9 +23,7 @@ const getOrderById = catchAsync(async (req, res, next) => {
 
     res.status(200).json({
         status: 'success',
-        data: {
-            order,
-        },
+        data: order,
     })
 })
 
@@ -186,9 +182,7 @@ const createOrder = catchAsync(async (req, res, next) => {
 
     res.status(201).json({
         status: 'success',
-        data: {
-            order: newOrder,
-        },
+        data: newOrder,
     })
 })
 
@@ -230,9 +224,7 @@ const updateOrder = catchAsync(async (req, res, next) => {
 
     res.status(200).json({
         status: 'success',
-        data: {
-            order: editOrder,
-        },
+        data: editOrder,
     })
 })
 

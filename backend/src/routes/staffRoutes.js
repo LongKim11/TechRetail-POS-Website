@@ -1,6 +1,6 @@
 import express from 'express'
 import {
-    getAllStaffs,
+    getStaffs,
     getStaffById,
     createStaff,
     updateStaff,
@@ -8,14 +8,14 @@ import {
 } from '../controllers/staffController.js'
 
 import { uploadAvatar } from '../middlewares/uploadImage/multer.js'
-import { isAuthenticated } from '../middlewares/auth/auth.js'
+import { verifyJWT } from '../middlewares/auth/auth.js'
 import { restrictTo } from '../controllers/authController.js'
 
 const router = express.Router()
 
-// router.use(isAuthenticated)
+// router.use(verifyJWT)
 
-router.route('/').get(getAllStaffs).post(createStaff)
+router.route('/').get(getStaffs).post(createStaff)
 
 router
     .route('/:id')

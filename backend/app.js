@@ -11,6 +11,7 @@ import orderRoute from './src/routes/orderRoutes.js'
 
 import AppError from './src/utils/appError.js'
 import globalErrorHandler from './src/controllers/errorController.js'
+import cookieParser from 'cookie-parser'
 
 configDotenv({ path: './config.env' })
 
@@ -19,7 +20,13 @@ const app = express()
 // Middleware
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
-app.use(cors())
+app.use(cookieParser())
+app.use(
+    cors({
+        origin: 'http://localhost:5173',
+        credentials: true,
+    }),
+)
 app.use(express.static('public'))
 app.use(morgan('dev'))
 

@@ -17,6 +17,22 @@ const login = catchAsync(async (req, res, next) => {
     // 2) Check if this is admin login
     if (username === 'admin' && password === '123') {
         req.role = 'admin'
+
+        const refreshToken = jwt.sign(
+            { id: 'admin', role: 'admin' },
+            process.env.JWT_REFRESH_SECRET,
+            {
+                expiresIn: process.env.JWT_REFRESH_EXPIRES_IN,
+            },
+        )
+
+        res.cookie('jwt', refreshToken, {
+            // httpOnly: true,
+            // secure: true,
+            // sameSite: 'none',
+            maxAge: 1000 * 60 * 60 * 24 * 30,
+        })
+
         return res.status(200).json({
             status: 'success',
             token: jwt.sign(
@@ -40,18 +56,91 @@ const login = catchAsync(async (req, res, next) => {
         return next(new AppError('Incorrect username or password', 401))
     }
 
+    // 4) if the account has loginToken but dont use token in query, dont login
+    if (staff.loginToken && !req.query.token) {
+        return next(new AppError('You need to use login token to login', 401))
+    }
+
+    // 5) if the account has loginToken and use token in query, but the token is wrong, dont login
+    if (staff.loginToken && req.query.token !== staff.loginToken) {
+        return next(new AppError('Login token is wrong', 401))
+    }
+
+    staff.loginToken = undefined
+    await staff.save({ validateBeforeSave: false })
+
     const token = staff.jwtToken()
     staff.account.password = undefined
     req.role = 'staff'
 
+    const refreshToken = jwt.sign(
+        { id: staff._id, role: 'staff' },
+        process.env.JWT_REFRESH_SECRET,
+        {
+            expiresIn: process.env.JWT_REFRESH_EXPIRES_IN,
+        },
+    )
+
+    res.cookie('jwt', refreshToken, {
+        // httpOnly: true,
+        // secure: true,
+        // sameSite: 'none',
+        maxAge: 1000 * 60 * 60 * 24 * 30,
+    })
+
     res.status(200).json({
         status: 'success',
-        data: {
-            staff,
-        },
         token,
     })
 })
+
+const logout = (req, res) => {
+    const cookies = req.cookies
+    if (!cookies?.jwt) return res.sendStatus(204) //No content
+    res.clearCookie('jwt')
+    res.json({ message: 'Cookie cleared' })
+}
+
+const refresh = (req, res) => {
+    const cookies = req.cookies
+    if (!cookies?.jwt) return res.status(401).json({ message: 'Unauthorized' })
+
+    const refreshToken = cookies.jwt
+    jwt.verify(
+        refreshToken,
+        process.env.JWT_REFRESH_SECRET,
+        catchAsync(async (err, decoded) => {
+            if (err) return res.status(403).json({ message: 'Forbidden' })
+
+            if (decoded.id === 'admin') {
+                const token = jwt.sign(
+                    { id: 'admin', role: 'admin' },
+                    process.env.JWT_SECRET,
+                    {
+                        expiresIn: process.env.JWT_EXPIRES_IN,
+                    },
+                )
+                return res.json({ token })
+            }
+
+            const foundStaff = await Staff.findOne({
+                _id: decoded.id,
+            }).exec()
+
+            if (!foundStaff)
+                return res.status(401).json({ message: 'Unauthorized' })
+
+            const token = jwt.sign(
+                { id: foundStaff._id, role: 'staff' },
+                process.env.JWT_SECRET,
+                {
+                    expiresIn: process.env.JWT_EXPIRES_IN,
+                },
+            )
+            res.json({ token })
+        }),
+    )
+}
 
 const restrictTo = (...roles) => {
     return (req, res, next) => {
@@ -83,7 +172,7 @@ const forgotPassword = catchAsync(async (req, res, next) => {
     const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\nIf you didn't forget your password, please ignore this email!`
 
     try {
-        await sendEmail({
+        sendEmail({
             email: staff.email,
             subject: 'Your password reset token (valid for 10 min)',
             message,
@@ -183,4 +272,13 @@ const updateMe = catchAsync(async (req, res, next) => {
     })
 })
 
-export { login, restrictTo, forgotPassword, resetPassword, updatePassword, updateMe }
+export {
+    login,
+    logout,
+    refresh,
+    restrictTo,
+    forgotPassword,
+    resetPassword,
+    updatePassword,
+    updateMe,
+}

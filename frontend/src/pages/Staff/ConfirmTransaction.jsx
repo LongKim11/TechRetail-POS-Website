@@ -6,10 +6,14 @@ import { useLocation } from "react-router-dom";
 import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import axios from "axios";
-import { format, set } from "date-fns";
+import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { FaSave } from "react-icons/fa";
 import { useSnackbar } from "notistack";
+import { useCookies } from "react-cookie";
+import { setCredentials } from "../../features/auth/authSlice";
+import { jwtDecode } from "jwt-decode";
+import { useGetStaffByIdQuery } from "../../features/staff/staffSlice";
 
 const ConfirmTransaction = () => {
   const staff = {
@@ -22,6 +26,32 @@ const ConfirmTransaction = () => {
   const { addedProduct } = location.state || { addedProduct: [] };
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
+
+  // const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+  // let staff = {};
+  // if (!cookies.jwt) return <Navigate to="/" />;
+
+  // setCredentials({ token: cookies.jwt });
+  // const decoded = jwtDecode(cookies.jwt);
+  // const { id } = decoded;
+  // const { data, isLoading, isSuccess, isError, error } = useGetStaffByIdQuery(
+  //   id,
+  //   "Staff"
+  // );
+  // if (isLoading) return <p>Loading...</p>;
+  // if (isError) {
+  //   if (error.status === 401) {
+  //     removeCookie("jwt");
+  //     return <Navigate to="/" />;
+  //   } else {
+  //     return <p>{error.data.message}</p>;
+  //   }
+  // }
+  // staff = {
+  //   fullname: data.staff.fullname,
+  //   email: data.staff.email,
+  //   username: data.staff.account.username,
+  // };
 
   const [receivedAmount, setReceivedAmount] = useState(0);
   const [change, setChange] = useState(0);

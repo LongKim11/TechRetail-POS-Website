@@ -7,12 +7,12 @@ import {
     deleteCustomer,
 } from '../controllers/customerController.js'
 import { getOrdersByCustomerId } from '../controllers/orderController.js'
-import { isAuthenticated } from '../middlewares/auth/auth.js'
+import { verifyJWT } from '../middlewares/auth/auth.js'
 
 const router = express.Router()
 
 // Protect all routes after this middleware
-// router.use(isAuthenticated)
+// router.use(verifyJWT)
 
 router.route('/').get(getCustomers).post(createCustomer)
 router

@@ -11,10 +11,16 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import { FaRegUser } from "react-icons/fa";
 import { MdMailOutline } from "react-icons/md";
 import { FaRegAddressCard } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { useCookies } from "react-cookie";
+import { setCredentials } from "../../features/auth/authSlice";
+import { useGetStaffsQuery } from "../../features/staff/staffSlice";
 
 const StaffManagementPage = () => {
   const staff = {
@@ -65,6 +71,68 @@ const StaffManagementPage = () => {
 
   const handleOpenAddStaffModal = () =>
     setOpenAddStaffModal(!openAddStaffModal);
+
+  // const navigate = useNavigate();
+  // const [fullname, setFullname] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [staff, setStaff] = useState({
+  //   fullname: "",
+  //   email: "",
+  //   username: "",
+  // });
+  // const [staffs, setStaffs] = useState([]);
+  // const [openAddStaffModal, setOpenAddStaffModal] = useState(false);
+
+  // const dispatch = useDispatch();
+  // const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+
+  // if (!cookies.jwt) {
+  //   console.log("No cookie found");
+  //   navigate("/");
+  // }
+  // dispatch(setCredentials({ token: cookies.jwt }));
+  // const { data, isLoading, isFetching, isError, isSuccess } =
+  //   useGetStaffsQuery("LIST");
+
+  // useEffect(() => {
+  //   if (data) {
+  //     const list = Object.values(data.entities)
+  //     console.log(list)
+  //     setStaffs(list);
+
+  //   }
+  // }, [data]);
+
+  // if (isLoading) return <div>Loading...</div>;
+  // if (isError) return <div>Error fetching data</div>;
+
+  // const handleOpenAddStaffModal = () => {
+  //   const newStaff = {
+  //     fullname,
+  //     email,
+  //   };
+
+  //   const addStaff = async () => {
+  //     try {
+  //       const res = await axios.post(
+  //         `http://localhost:8080/api/v1/staffs`,
+  //         newStaff,
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${auth.token}`,
+  //           },
+  //         }
+  //       );
+  //       const result = res.data.data.staff;
+  //       setStaffs([...staffs, result]);
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   };
+
+  //   addStaff();
+  //   setOpenAddStaffModal(!openAddStaffModal);
+  // };
 
   return (
     <div className="flex">

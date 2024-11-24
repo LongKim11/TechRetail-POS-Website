@@ -7,14 +7,51 @@ import { format } from "date-fns";
 import { IoIosPrint } from "react-icons/io";
 import { GrTransaction } from "react-icons/gr";
 import { Link } from "react-router-dom";
-
+// import { useCookies } from "react-cookie";
+// import { setCredentials } from "../../features/auth/authSlice";
+// import { jwtDecode } from "jwt-decode";
+// import { useGetStaffByIdQuery } from "../../features/staff/staffSlice";
 const InvoicePage = () => {
   const staff = {
     fullname: "Nguyễn Văn A",
     email: "nguyenvana@gmail.com",
     username: "Username",
   };
+  // const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+  // let staff = {};
 
+  // if (!cookies.jwt) {
+  //   return <Navigate to="/" />;
+  // }
+
+  // try {
+  //   setCredentials({ token: cookies.jwt });
+  //   const decoded = jwtDecode(cookies.jwt);
+  //   const { id } = decoded;
+
+  //   const { data, isLoading, isError, error } = useGetStaffByIdQuery(
+  //     id,
+  //     "Staff"
+  //   );
+
+  //   if (isLoading) return;
+
+  //   if (isError) {
+  //     if (error.status === 401) {
+  //       removeCookie("jwt");
+  //       return <Navigate to="/" />;
+  //     }
+  //   } else {
+  //     staff = {
+  //       fullname: data.staff.fullname,
+  //       username: data.staff.account.username,
+  //       email: data.staff.email,
+  //     };
+  //   }
+  // } catch (err) {
+  //   removeCookie("jwt");
+  //   return <Navigate to="/" />;
+  // }
   const location = useLocation();
 
   const {

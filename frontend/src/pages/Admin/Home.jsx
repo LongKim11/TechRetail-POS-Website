@@ -6,8 +6,33 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
-
+// import { useGetAdminInfoQuery } from "../../features/admin/adminSlice";
+// import { useDispatch } from "react-redux";
+// import { useCookies } from "react-cookie";
+// import { setCredentials } from "../../features/auth/authSlice";
+// import { useNavigate } from "react-router-dom";
 const Home = () => {
+  // const navigate = useNavigate();
+  // const dispatch = useDispatch();
+  // const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+
+  // if (!cookies.jwt) {
+  //   console.log("No cookie found");
+  //   navigate("/");
+  // }
+  // dispatch(setCredentials({ token: cookies.jwt }));
+  // const { data, isLoading, isFetching, isError, isSuccess } =
+  //   useGetAdminInfoQuery("LIST");
+
+  // if (isLoading) return <div>Loading...</div>;
+  // if (isError) return <div>Error fetching data</div>;
+
+  // let admin = {
+  //   fullname: data.fullname,
+  //   email: data.email,
+  //   username: data.account.username,
+  // };
+
   const staff = {
     fullname: "Nguyễn Văn A",
     email: "nguyenvana@gmail.com",

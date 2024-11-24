@@ -7,8 +7,48 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { IconButton, Typography } from "@material-tailwind/react";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
-
+// import { useCookies } from "react-cookie";
+// import { useGetStaffByIdQuery } from "../../features/staff/staffSlice";
+// import { setCredentials } from "../../features/auth/authSlice";
+// import { Navigate } from "react-router-dom";
+// import { jwtDecode } from "jwt-decode";
 const ProductMPageStaff = () => {
+  // const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+  // let staff = {};
+
+  // if (!cookies.jwt) {
+  //   return <Navigate to="/" />;
+  // }
+
+  // try {
+  //   setCredentials({ token: cookies.jwt });
+  //   const decoded = jwtDecode(cookies.jwt);
+  //   const { id } = decoded;
+
+  //   const { data, isLoading, isError, error } = useGetStaffByIdQuery(
+  //     id,
+  //     "Staff"
+  //   );
+
+  //   if (isLoading) return;
+
+  //   if (isError) {
+  //     if (error.status === 401) {
+  //       removeCookie("jwt");
+  //       return <Navigate to="/" />;
+  //     }
+  //   } else {
+  //     staff = {
+  //       fullname: data.staff.fullname,
+  //       username: data.staff.account.username,
+  //       email: data.staff.email,
+  //     };
+  //   }
+  // } catch (err) {
+  //   removeCookie("jwt");
+  //   return <Navigate to="/" />;
+  // }
+
   const staff = {
     fullname: "Nguyễn Văn A",
     email: "nguyenvana@gmail.com",

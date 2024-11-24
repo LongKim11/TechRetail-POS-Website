@@ -41,21 +41,19 @@ const getCustomerById = catchAsync(async (req, res, next) => {
 
     res.status(200).json({
         status: 'success',
-        data: {
-            customer,
-        },
+        data: customer,
     })
 })
+
 const createCustomer = catchAsync(async (req, res, next) => {
     const newCustomer = await Customer.create(req.body)
 
     res.status(201).json({
         status: 'success',
-        data: {
-            customer: newCustomer,
-        },
+        data: newCustomer,
     })
 })
+
 const updateCustomer = catchAsync(async (req, res, next) => {
     const editCustomer = await Customer.findByIdAndUpdate(
         req.params.id,
@@ -72,9 +70,7 @@ const updateCustomer = catchAsync(async (req, res, next) => {
 
     res.status(200).json({
         status: 'success',
-        data: {
-            customer: editCustomer,
-        },
+        data: editCustomer,
     })
 })
 const deleteCustomer = catchAsync(async (req, res, next) => {

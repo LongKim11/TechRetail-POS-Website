@@ -32,9 +32,7 @@ const Home = () => {
         username: admin.username,
       });
     }
-  }, [cookies.jwt]);
 
-  useEffect(() => {
     Promise.all([
       axios.get(
         "http://localhost:8080/api/v1/orders/total-amount-last-12-months",

@@ -63,8 +63,8 @@ const NavbarStaff = ({ heading, staff }) => {
               </Typography>
             </MenuItem>
             <hr className="my-2 border-blue-gray-50" />
-            <a href="/">
-              <MenuItem className="flex items-center gap-3 hover:bg-gray-200 hover:outline-none">
+            <a href="/" className="hover:outline-none">
+              <MenuItem className="flex items-center gap-3 hover:bg-gray-200">
                 <FaSignOutAlt className="text-xl text-red-600" />
                 <Typography
                   variant="small"

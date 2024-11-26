@@ -3,7 +3,6 @@ import { FaLock } from "react-icons/fa";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { jwtDecode } from "jwt-decode";
-import { useDispatch } from "react-redux";
 import { useLoginMutation } from "../features/auth/authApiSlice";
 import { setCredentials } from "../features/auth/authSlice";
 import { useCookies } from "react-cookie";
@@ -17,7 +16,6 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const [login, { isLoading }] = useLoginMutation();
 
@@ -39,7 +37,6 @@ const LoginPage = () => {
 
     try {
       const { token } = await login({ username, password }).unwrap();
-      dispatch(setCredentials({ token }));
       setUsername("");
       setPassword("");
       const role = jwtDecode(token).role;

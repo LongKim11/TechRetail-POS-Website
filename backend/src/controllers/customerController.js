@@ -7,7 +7,7 @@ const getCustomers = catchAsync(async (req, res, next) => {
     const customers = await Customer.find()
 
     // Filter customers by phone number
-    const { phone } = req.query
+    const { phone, fullname } = req.query
     if (phone) {
         const customer = customers.filter((customer) => {
             return customer.phone === phone
@@ -22,6 +22,18 @@ const getCustomers = catchAsync(async (req, res, next) => {
         return res.status(200).json({
             status: 'success',
             data: customer,
+        })
+    }
+
+    if (fullname) {
+        const customers = await Customer.find({
+            fullname: { $regex: fullname, $options: 'i' },
+        }).sort({ createdAt: -1 })
+
+        return res.status(200).json({
+            status: 'success',
+            results: customers.length,
+            data: customers,
         })
     }
 

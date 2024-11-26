@@ -25,9 +25,6 @@ const PurchaseHistory = () => {
         username: admin.username,
       });
     }
-  }, [cookies.jwt]);
-
-  useEffect(() => {
     axios
       .get(`http://localhost:8080/api/v1/customers/${customerId}/orders`, {
         headers: {

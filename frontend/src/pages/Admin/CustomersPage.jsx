@@ -15,6 +15,24 @@ const CustomersPage = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   const [admin, setAdmin] = useState({ fullname: "", email: "", username: "" });
 
+  const [searchName, setSearchName] = useState("");
+
+  const handleSearchNameChange = (e) => {
+    setSearchName(e.target.value);
+  };
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:8080/api/v1/customers?fullname=${searchName}`, {
+        headers: {
+          Authorization: `Bearer ${cookies.jwt}`,
+        },
+      })
+      .then((res) => {
+        setCustomers(res.data.data);
+      });
+  }, [searchName, cookies.jwt]);
+
   useEffect(() => {
     if (cookies.jwt) {
       const admin = jwtDecode(cookies.jwt);
@@ -24,9 +42,6 @@ const CustomersPage = () => {
         username: admin.username,
       });
     }
-  }, [cookies.jwt]);
-
-  useEffect(() => {
     axios
       .get("http://localhost:8080/api/v1/customers", {
         headers: {
@@ -81,6 +96,8 @@ const CustomersPage = () => {
                   className="block w-full p-3 ps-10 text-sm border border-gray-300 rounded-lg  focus:ring-blue-500 focus:outline-none focus:ring-1 focus:border-blue-500 "
                   placeholder="Tìm khách hàng.."
                   required
+                  value={searchName}
+                  onChange={handleSearchNameChange}
                 />
               </div>
             </form>

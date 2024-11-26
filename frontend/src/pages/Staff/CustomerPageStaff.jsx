@@ -13,6 +13,23 @@ const CustomersPageStaff = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   const [staff, setStaff] = useState({ fullname: "", email: "", username: "" });
   const [customers, setCustomers] = useState([]);
+  const [searchName, setSearchName] = useState("");
+
+  const handleSearchNameChange = (e) => {
+    setSearchName(e.target.value);
+  };
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:8080/api/v1/customers?fullname=${searchName}`, {
+        headers: {
+          Authorization: `Bearer ${cookies.jwt}`,
+        },
+      })
+      .then((res) => {
+        setCustomers(res.data.data);
+      });
+  }, [searchName, cookies.jwt]);
 
   useEffect(() => {
     if (cookies.jwt) {
@@ -23,9 +40,7 @@ const CustomersPageStaff = () => {
         username: staff.username,
       });
     }
-  }, [cookies.jwt]);
 
-  useEffect(() => {
     axios
       .get("http://localhost:8080/api/v1/customers", {
         headers: {
@@ -35,7 +50,7 @@ const CustomersPageStaff = () => {
       .then((res) => {
         setCustomers(res.data.data);
       });
-  }, []);
+  }, [cookies.jwt]);
 
   if (!cookies.jwt) {
     console.log("You are not authenticated");
@@ -80,6 +95,8 @@ const CustomersPageStaff = () => {
                   className="block w-full p-3 ps-10 text-sm border border-gray-300 rounded-lg  focus:ring-blue-500 focus:outline-none focus:ring-1 focus:border-blue-500 "
                   placeholder="Tìm khách hàng.."
                   required
+                  value={searchName}
+                  onChange={handleSearchNameChange}
                 />
               </div>
             </form>

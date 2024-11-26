@@ -48,17 +48,7 @@ const HomeStaff = () => {
         username: staff.username,
       });
     }
-  }, [cookies.jwt]);
 
-  const handleOpenCPModal = () => setOpenCPModal((cur) => !cur);
-
-  const handleOpenLoginViaEmailModal = () =>
-    setOpenLoginViaEmailModal((cur) => !cur);
-
-  const handleOpenLockedAccountModal = () =>
-    setOpenLockedAccountModal((cur) => !cur);
-
-  useEffect(() => {
     Promise.all([
       axios.get(
         "http://localhost:8080/api/v1/orders/total-product-last-12-months",
@@ -82,7 +72,15 @@ const HomeStaff = () => {
       .catch((error) => {
         console.error("Có lỗi xảy ra khi lấy dữ liệu thống kê!", error);
       });
-  }, []);
+  }, [cookies.jwt]);
+
+  const handleOpenCPModal = () => setOpenCPModal((cur) => !cur);
+
+  const handleOpenLoginViaEmailModal = () =>
+    setOpenLoginViaEmailModal((cur) => !cur);
+
+  const handleOpenLockedAccountModal = () =>
+    setOpenLockedAccountModal((cur) => !cur);
 
   if (!cookies.jwt) {
     console.log("You are not authenticated");

@@ -6,6 +6,20 @@ import { Staff } from '../models/staffModel.js'
 import sendEmail from '../utils/email.js'
 
 const getStaffs = catchAsync(async (req, res, next) => {
+    const { fullname } = req.query
+    if (fullname) {
+        const staffs = await Staff.find({
+            'account.username': { $ne: 'admin' },
+            fullname: { $regex: fullname, $options: 'i' },
+        }).sort({ createdAt: -1 })
+
+        return res.status(200).json({
+            status: 'success',
+            results: staffs.length,
+            data: staffs,
+        })
+    }
+
     const staffs = await Staff.find({
         'account.username': { $ne: 'admin' },
     }).sort({ createdAt: -1 })

@@ -5,11 +5,13 @@ import { IoFilter } from "react-icons/io5";
 import ProductTableStaff from "../../components/ProductTableStaff";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { FaBarcode } from "react-icons/fa6";
 import { IconButton, Typography } from "@material-tailwind/react";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { useCookies } from "react-cookie";
 import { jwtDecode } from "jwt-decode";
 import { Navigate } from "react-router-dom";
+
 const ProductMPageStaff = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   const [staff, setStaff] = useState({ fullname: "", email: "", username: "" });
@@ -17,6 +19,9 @@ const ProductMPageStaff = () => {
   const [products, setProducts] = useState([]);
   const [active, setActive] = useState(1);
   const [maxPage, setMaxPage] = useState(0);
+
+  const [searchName, setSearchName] = useState("");
+  const [searchBarcode, setSearchBarcode] = useState("");
 
   useEffect(() => {
     if (cookies.jwt) {
@@ -27,7 +32,35 @@ const ProductMPageStaff = () => {
         username: staff.username,
       });
     }
+
+    axios
+      .get("http://localhost:8080/api/v1/products", {
+        headers: {
+          Authorization: `Bearer ${cookies.jwt}`,
+        },
+      })
+      .then((res) => {
+        setProducts(res.data.data);
+        setMaxPage(Math.ceil(res.data.results / dataPerPage));
+      });
   }, [cookies.jwt]);
+
+  useEffect(() => {
+    axios
+      .get(
+        `http://localhost:8080/api/v1/products?name=${searchName}&barcode=${searchBarcode}`,
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.jwt}`,
+          },
+        }
+      )
+      .then((res) => {
+        setProducts(res.data.data);
+        setMaxPage(Math.ceil(res.data.results / dataPerPage));
+        setActive(1);
+      });
+  }, [searchName, searchBarcode, cookies.jwt]);
 
   const dataPerPage = 5;
   const lastIndex = active * dataPerPage;
@@ -44,18 +77,13 @@ const ProductMPageStaff = () => {
     setActive(active - 1);
   };
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:8080/api/v1/products", {
-        headers: {
-          Authorization: `Bearer ${cookies.jwt}`,
-        },
-      })
-      .then((res) => {
-        setProducts(res.data.data);
-        setMaxPage(Math.ceil(res.data.results / dataPerPage));
-      });
-  }, [cookies.jwt]);
+  const handleSearchNameChange = (e) => {
+    setSearchName(e.target.value);
+  };
+
+  const handleSearchBarcodeChange = (e) => {
+    setSearchBarcode(e.target.value);
+  };
 
   if (!cookies.jwt) {
     console.log("You are not authenticated");
@@ -78,33 +106,50 @@ const ProductMPageStaff = () => {
         </div>
         <div className="w-full bg-white rounded-xl mt-7 border border-slate-200">
           <div className="flex justify-between items-center p-5">
-            <form>
-              <div className="relative">
-                <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                  <svg
-                    className="w-4 h-4 text-slate-400"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                    />
-                  </svg>
+            <div className="flex gap-x-3">
+              <form>
+                <div className="relative">
+                  <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                    <svg
+                      className="w-4 h-4 text-slate-400"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                      />
+                    </svg>
+                  </div>
+                  <input
+                    type="search"
+                    className="block w-full p-3 ps-10 text-sm border border-gray-300 rounded-lg  focus:ring-blue-500 focus:outline-none focus:ring-1 focus:border-blue-500"
+                    placeholder="Tìm sản phẩm.."
+                    value={searchName}
+                    onChange={handleSearchNameChange}
+                  />
                 </div>
-                <input
-                  type="search"
-                  className="block w-full p-3 ps-10 text-sm border border-gray-300 rounded-lg  focus:ring-blue-500 focus:outline-none focus:ring-1 focus:border-blue-500 "
-                  placeholder="Tìm sản phẩm.."
-                  required
-                />
-              </div>
-            </form>
+              </form>
+              <form>
+                <div className="relative">
+                  <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                    <FaBarcode className="text-slate-400"></FaBarcode>
+                  </div>
+                  <input
+                    type="search"
+                    className="block w-full p-3 ps-10 text-sm border border-gray-300 rounded-lg  focus:ring-blue-500 focus:outline-none focus:ring-1 focus:border-blue-500"
+                    placeholder="Mã barcode.."
+                    value={searchBarcode}
+                    onChange={handleSearchBarcodeChange}
+                  />
+                </div>
+              </form>
+            </div>
             <div>
               <Button variant="text" size="sm">
                 <IoFilter className="text-lg"></IoFilter>

@@ -41,6 +41,9 @@ const ProductManagementPage = () => {
   });
   const { enqueueSnackbar } = useSnackbar();
 
+  const [searchName, setSearchName] = useState("");
+  const [searchBarcode, setSearchBarcode] = useState("");
+
   const [active, setActive] = useState(1);
   const [maxPage, setMaxPage] = useState(0);
   const [totalLength, setTotalLength] = useState(0);
@@ -56,6 +59,18 @@ const ProductManagementPage = () => {
         username: admin.username,
       });
     }
+
+    axios
+      .get("http://localhost:8080/api/v1/products", {
+        headers: {
+          Authorization: `Bearer ${cookies.jwt}`,
+        },
+      })
+      .then((res) => {
+        setProducts(res.data.data);
+        setTotalLength(res.data.results);
+        setMaxPage(Math.ceil(res.data.results / dataPerPage));
+      });
   }, [cookies.jwt]);
 
   const dataPerPage = 5;
@@ -75,17 +90,21 @@ const ProductManagementPage = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/v1/products", {
-        headers: {
-          Authorization: `Bearer ${cookies.jwt}`,
-        },
-      })
+      .get(
+        `http://localhost:8080/api/v1/products?name=${searchName}&barcode=${searchBarcode}`,
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.jwt}`,
+          },
+        }
+      )
       .then((res) => {
         setProducts(res.data.data);
         setTotalLength(res.data.results);
         setMaxPage(Math.ceil(res.data.results / dataPerPage));
+        setActive(1);
       });
-  }, [cookies.jwt]);
+  }, [searchName, searchBarcode, cookies.jwt]);
 
   useEffect(() => {
     setMaxPage(Math.ceil(totalLength / dataPerPage));
@@ -102,6 +121,14 @@ const ProductManagementPage = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewProduct({ ...newProduct, [name]: value });
+  };
+
+  const handleSearchNameChange = (e) => {
+    setSearchName(e.target.value);
+  };
+
+  const handleSearchBarcodeChange = (e) => {
+    setSearchBarcode(e.target.value);
   };
 
   const handleAddProduct = () => {
@@ -268,33 +295,50 @@ const ProductManagementPage = () => {
         </Dialog>
         <div className="w-full bg-white rounded-xl mt-7 border border-slate-200">
           <div className="flex justify-between items-center p-5">
-            <form>
-              <div className="relative">
-                <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                  <svg
-                    className="w-4 h-4 text-slate-400"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                    />
-                  </svg>
+            <div className="flex gap-x-3">
+              <form>
+                <div className="relative">
+                  <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                    <svg
+                      className="w-4 h-4 text-slate-400"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                      />
+                    </svg>
+                  </div>
+                  <input
+                    type="search"
+                    className="block w-full p-3 ps-10 text-sm border border-gray-300 rounded-lg  focus:ring-blue-500 focus:outline-none focus:ring-1 focus:border-blue-500"
+                    placeholder="Tìm sản phẩm.."
+                    value={searchName}
+                    onChange={handleSearchNameChange}
+                  />
                 </div>
-                <input
-                  type="search"
-                  className="block w-full p-3 ps-10 text-sm border border-gray-300 rounded-lg  focus:ring-blue-500 focus:outline-none focus:ring-1 focus:border-blue-500 "
-                  placeholder="Tìm sản phẩm.."
-                  required
-                />
-              </div>
-            </form>
+              </form>
+              <form>
+                <div className="relative">
+                  <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                    <FaBarcode className="text-slate-400"></FaBarcode>
+                  </div>
+                  <input
+                    type="search"
+                    className="block w-full p-3 ps-10 text-sm border border-gray-300 rounded-lg  focus:ring-blue-500 focus:outline-none focus:ring-1 focus:border-blue-500"
+                    placeholder="Mã barcode.."
+                    value={searchBarcode}
+                    onChange={handleSearchBarcodeChange}
+                  />
+                </div>
+              </form>
+            </div>
             <div>
               <Button variant="text" size="sm">
                 <IoFilter className="text-lg"></IoFilter>

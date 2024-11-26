@@ -23,6 +23,7 @@ import { jwtDecode } from "jwt-decode";
 const StaffManagementPage = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   const [admin, setAdmin] = useState({ fullname: "", email: "", username: "" });
+  const [searchName, setSearchName] = useState("");
 
   const [openAddStaffModal, setOpenAddStaffModal] = useState(false);
   const [fullname, setFullname] = useState("");
@@ -50,12 +51,28 @@ const StaffManagementPage = () => {
         const entries = res.data;
         const list = Object.values(entries.data);
         setStaffs(list);
-        setLoading(false);
       })
       .catch((error) => {
         console.error("Có lỗi xảy ra khi lấy dữ liệu thống kê!", error);
       });
   }, [cookies.jwt]);
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:8080/api/v1/staffs?fullname=${searchName}`, {
+        headers: {
+          Authorization: `Bearer ${cookies.jwt}`,
+        },
+      })
+      .then((res) => {
+        const entries = res.data;
+        const list = Object.values(entries.data);
+        setStaffs(list);
+      })
+      .catch((error) => {
+        console.error("Có lỗi xảy ra khi lấy dữ liệu thống kê!", error);
+      });
+  }, [searchName, cookies.jwt]);
 
   if (!cookies.jwt) {
     console.log("You are not authenticated");
@@ -67,6 +84,10 @@ const StaffManagementPage = () => {
       return <Navigate to="/" />;
     }
   }
+
+  const handleSearchNameChange = (e) => {
+    setSearchName(e.target.value);
+  };
 
   const handleFullnameChange = (e) => {
     setFullname(e.target.value);
@@ -150,6 +171,8 @@ const StaffManagementPage = () => {
                   className="block w-full p-3 ps-10 text-sm border border-gray-300 rounded-lg  focus:ring-blue-500 focus:outline-none focus:ring-1 focus:border-blue-500 "
                   placeholder="Tìm nhân viên.."
                   required
+                  onChange={handleSearchNameChange}
+                  value={searchName}
                 />
               </div>
             </form>

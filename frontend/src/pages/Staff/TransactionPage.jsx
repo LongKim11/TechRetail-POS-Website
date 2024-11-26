@@ -55,7 +55,7 @@ const TransactionPage = () => {
     setActive(active - 1);
   };
 
-  const handleSearch = () => {
+  useEffect(() => {
     let query = "";
     if (searchByName && searchByBarcode) {
       query = `name=${searchByName}&barcode=${searchByBarcode}`;
@@ -80,7 +80,7 @@ const TransactionPage = () => {
       .catch((error) => {
         console.error("Có lỗi xảy ra khi tìm kiếm sản phẩm!", error);
       });
-  };
+  }, [searchByName, searchByBarcode, cookies.jwt]);
 
   const handleAddProduct = (product) => {
     product.quantity = 1;
@@ -184,13 +184,6 @@ const TransactionPage = () => {
                   />
                 </div>
               </form>
-              <button
-                className="rounded-md bg-blue-600 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:bg-blue-700"
-                type="button"
-                onClick={handleSearch}
-              >
-                Tìm kiếm
-              </button>
             </div>
             <table className="w-full min-w-max table-auto">
               <thead className="">

@@ -140,7 +140,7 @@ const AnalysPageStaff = () => {
                     {totalAmountOrders}
                   </h1>
                   <h4 className="text-[#33343D] font-semibold">
-                    Tổng đơn hàng
+                    Tổng doanh thu
                   </h4>
                 </div>
               </div>

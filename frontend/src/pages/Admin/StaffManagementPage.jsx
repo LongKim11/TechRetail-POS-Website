@@ -11,134 +11,108 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { FaRegUser } from "react-icons/fa";
 import { MdMailOutline } from "react-icons/md";
-import { FaRegAddressCard } from "react-icons/fa6";
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import axios from "axios";
-import { useDispatch } from "react-redux";
 import { useCookies } from "react-cookie";
-import { setCredentials } from "../../features/auth/authSlice";
-import { useGetStaffsQuery } from "../../features/staff/staffSlice";
+import { useSnackbar } from "notistack";
+import { jwtDecode } from "jwt-decode";
 
 const StaffManagementPage = () => {
-  const staff = {
-    fullname: "Nguyễn Văn A",
-    email: "nguyenvana@gmail.com",
-    username: "Username",
-  };
-
-  const staffs = [
-    {
-      img: "./src/assets/user-avatar.png",
-      name: "John Michael",
-      createdAt: "2021-10-10",
-      status: "Active",
-      is_locked: "false",
-    },
-    {
-      img: "./src/assets/user-avatar.png",
-      name: "Alexa Liras",
-      createdAt: "2021-10-10",
-      status: "Inactive",
-      is_locked: "true",
-    },
-    {
-      img: "./src/assets/user-avatar.png",
-      name: "Laurent Perrier",
-      createdAt: "2021-10-10",
-      status: "Active",
-      is_locked: "false",
-    },
-    {
-      img: "./src/assets/user-avatar.png",
-      name: "Michael Levi",
-      createdAt: "2021-10-10",
-      status: "Inactive",
-      is_locked: "true",
-    },
-    {
-      img: "./src/assets/user-avatar.png",
-      name: "Michael Levi",
-      createdAt: "2021-10-10",
-      status: "Active",
-      is_locked: "true",
-    },
-  ];
+  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+  const [admin, setAdmin] = useState({ fullname: "", email: "", username: "" });
 
   const [openAddStaffModal, setOpenAddStaffModal] = useState(false);
+  const [fullname, setFullname] = useState("");
+  const [email, setEmail] = useState("");
+  const [staffs, setStaffs] = useState([]);
+  const { enqueueSnackbar } = useSnackbar();
 
-  const handleOpenAddStaffModal = () =>
+  useEffect(() => {
+    if (cookies.jwt) {
+      const admin = jwtDecode(cookies.jwt);
+      setAdmin({
+        fullname: admin.fullname,
+        email: admin.email,
+        username: admin.username,
+      });
+    }
+
+    axios
+      .get("http://localhost:8080/api/v1/staffs", {
+        headers: {
+          Authorization: `Bearer ${cookies.jwt}`,
+        },
+      })
+      .then((res) => {
+        const entries = res.data;
+        const list = Object.values(entries.data);
+        setStaffs(list);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Có lỗi xảy ra khi lấy dữ liệu thống kê!", error);
+      });
+  }, [cookies.jwt]);
+
+  if (!cookies.jwt) {
+    console.log("You are not authenticated");
+    return <Navigate to="/" />;
+  } else if (cookies.jwt) {
+    if (jwtDecode(cookies.jwt).role !== "admin") {
+      console.log("You are not authorized to access this resource");
+      removeCookie("jwt");
+      return <Navigate to="/" />;
+    }
+  }
+
+  const handleFullnameChange = (e) => {
+    setFullname(e.target.value);
+  };
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handleOpenAddStaffModal = () => {
     setOpenAddStaffModal(!openAddStaffModal);
+  };
 
-  // const navigate = useNavigate();
-  // const [fullname, setFullname] = useState("");
-  // const [email, setEmail] = useState("");
-  // const [staff, setStaff] = useState({
-  //   fullname: "",
-  //   email: "",
-  //   username: "",
-  // });
-  // const [staffs, setStaffs] = useState([]);
-  // const [openAddStaffModal, setOpenAddStaffModal] = useState(false);
+  const handleAddNewStaff = () => {
+    const newStaff = {
+      fullname,
+      email,
+    };
 
-  // const dispatch = useDispatch();
-  // const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+    if (!newStaff.fullname || !newStaff.email) {
+      enqueueSnackbar("Vui lòng điền đầy đủ thông tin", { variant: "error" });
+      setOpenAddStaffModal(!openAddStaffModal);
+    }
 
-  // if (!cookies.jwt) {
-  //   console.log("No cookie found");
-  //   navigate("/");
-  // }
-  // dispatch(setCredentials({ token: cookies.jwt }));
-  // const { data, isLoading, isFetching, isError, isSuccess } =
-  //   useGetStaffsQuery("LIST");
-
-  // useEffect(() => {
-  //   if (data) {
-  //     const list = Object.values(data.entities)
-  //     console.log(list)
-  //     setStaffs(list);
-
-  //   }
-  // }, [data]);
-
-  // if (isLoading) return <div>Loading...</div>;
-  // if (isError) return <div>Error fetching data</div>;
-
-  // const handleOpenAddStaffModal = () => {
-  //   const newStaff = {
-  //     fullname,
-  //     email,
-  //   };
-
-  //   const addStaff = async () => {
-  //     try {
-  //       const res = await axios.post(
-  //         `http://localhost:8080/api/v1/staffs`,
-  //         newStaff,
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${auth.token}`,
-  //           },
-  //         }
-  //       );
-  //       const result = res.data.data.staff;
-  //       setStaffs([...staffs, result]);
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   };
-
-  //   addStaff();
-  //   setOpenAddStaffModal(!openAddStaffModal);
-  // };
+    axios
+      .post(`http://localhost:8080/api/v1/staffs`, newStaff, {
+        headers: {
+          Authorization: `Bearer ${cookies.jwt}`,
+        },
+      })
+      .then((res) => {
+        const result = res.data.data;
+        setStaffs([result, ...staffs]);
+        enqueueSnackbar("Thêm nhân viên thành công", { variant: "success" });
+        setOpenAddStaffModal(!openAddStaffModal);
+      })
+      .catch((err) => {
+        console.log(err);
+        enqueueSnackbar("Thêm nhân viên thất bại!", { variant: "error" });
+      });
+  };
 
   return (
     <div className="flex">
       <Sidebar />
       <div className="flex-1 p-7 bg-slate-100">
-        <Navbar heading="Quản lý nhân viên" staff={staff} />
+        <Navbar heading="Quản lý nhân viên" staff={admin} />
         <div className="flex justify-between mt-11 items-center">
           <h1 className="text-2xl font-semibold">Danh sách</h1>
           <Button
@@ -205,16 +179,22 @@ const StaffManagementPage = () => {
               <FaRegUser className="text-lg" />
               <Typography variant="h6">Họ và tên</Typography>
             </div>
-            <input className="p-2 rounded-md w-full mt-2 border border-gray-300 font-normal focus:border-blue-500 focus:outline-none"></input>
+            <input
+              className="p-2 rounded-md w-full mt-2 border border-gray-300 font-normal focus:border-blue-500 focus:outline-none"
+              onChange={handleFullnameChange}
+            ></input>
           </div>
           <div className="mb-6">
             <div className="flex gap-x-2 items-center">
               <MdMailOutline className="text-xl" />
               <Typography variant="h6">Địa chỉ email</Typography>
             </div>
-            <input className="p-2 rounded-md w-full mt-2 border border-gray-300 font-normal focus:border-blue-500 focus:outline-none"></input>
+            <input
+              className="p-2 rounded-md w-full mt-2 border border-gray-300 font-normal focus:border-blue-500 focus:outline-none"
+              onChange={handleEmailChange}
+            ></input>
           </div>
-          <div className="mb-6">
+          {/* <div className="mb-6">
             <div className="flex gap-x-2 items-center">
               <FaRegAddressCard className="text-xl" />
               <Typography variant="h6">Ảnh đại diện</Typography>
@@ -223,10 +203,10 @@ const StaffManagementPage = () => {
               type="file"
               className="mt-2 font-semibold file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200"
             ></input>
-          </div>
+          </div> */}
         </DialogBody>
         <DialogFooter>
-          <Button color="blue" onClick={handleOpenAddStaffModal}>
+          <Button color="blue" onClick={handleAddNewStaff}>
             <span>Thêm mới</span>
           </Button>
         </DialogFooter>

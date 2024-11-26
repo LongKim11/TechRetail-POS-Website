@@ -2,8 +2,8 @@ import SidebarStaff from "../../components/SidebarStaff";
 import NavbarStaff from "../../components/NavbarStaff";
 import { Button, Typography } from "@material-tailwind/react";
 import { FaArrowRight } from "react-icons/fa";
-import { useLocation } from "react-router-dom";
-import { useState } from "react";
+import { Navigate, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import axios from "axios";
 import { format } from "date-fns";
@@ -11,95 +11,121 @@ import { useNavigate } from "react-router-dom";
 import { FaSave } from "react-icons/fa";
 import { useSnackbar } from "notistack";
 import { useCookies } from "react-cookie";
-import { setCredentials } from "../../features/auth/authSlice";
 import { jwtDecode } from "jwt-decode";
-import { useGetStaffByIdQuery } from "../../features/staff/staffSlice";
 
 const ConfirmTransaction = () => {
-  const staff = {
-    fullname: "Nguyễn Văn A",
-    email: "nguyenvana@gmail.com",
-    username: "Username",
-  };
+  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+  const [staff, setStaff] = useState({ fullname: "", email: "", username: "" });
 
   const location = useLocation();
   const { addedProduct } = location.state || { addedProduct: [] };
+  console.log(addedProduct);
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-
-  // const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
-  // let staff = {};
-  // if (!cookies.jwt) return <Navigate to="/" />;
-
-  // setCredentials({ token: cookies.jwt });
-  // const decoded = jwtDecode(cookies.jwt);
-  // const { id } = decoded;
-  // const { data, isLoading, isSuccess, isError, error } = useGetStaffByIdQuery(
-  //   id,
-  //   "Staff"
-  // );
-  // if (isLoading) return <p>Loading...</p>;
-  // if (isError) {
-  //   if (error.status === 401) {
-  //     removeCookie("jwt");
-  //     return <Navigate to="/" />;
-  //   } else {
-  //     return <p>{error.data.message}</p>;
-  //   }
-  // }
-  // staff = {
-  //   fullname: data.staff.fullname,
-  //   email: data.staff.email,
-  //   username: data.staff.account.username,
-  // };
 
   const [receivedAmount, setReceivedAmount] = useState(0);
   const [change, setChange] = useState(0);
   const [phone, setPhone] = useState(0);
   const [customerInfo, setCustomerInfo] = useState({
+    id: "",
     fullname: "",
     address: "",
   });
   const [isInputDisabled, setIsInputDisabled] = useState(true);
   const [showSaveButton, setShowSaveButton] = useState(false);
 
+  useEffect(() => {
+    if (cookies.jwt) {
+      const staff = jwtDecode(cookies.jwt);
+      setStaff({
+        fullname: staff.fullname,
+        email: staff.email,
+        username: staff.username,
+      });
+    }
+  }, [cookies.jwt]);
+
   const totalAmount = addedProduct.reduce(
     (total, product) => total + parseFloat(product.subTotal),
     0
   );
-
   const handleConfirm = () => {
     if (
       receivedAmount == 0 ||
       phone == 0 ||
+      customerInfo.id == "" ||
       customerInfo.fullname == "" ||
       customerInfo.address == ""
     ) {
       enqueueSnackbar("Vui lòng nhập đầy đủ thông tin", { variant: "error" });
-      return;
-    }
+    } else {
+      const item = addedProduct.map((product) => {
+        return {
+          product_id: product._id,
+          name: product.name,
+          retail_price: product.retail_price,
+          quantity: product.quantity,
+          subTotal: product.subTotal,
+        };
+      });
+      console.log(item);
+      axios
+        .post(
+          "http://localhost:8080/api/v1/orders",
+          {
+            staff_id: jwtDecode(cookies.jwt).id,
+            customer_id: customerInfo.id,
+            totalAmount: totalAmount,
+            receivedAmount: receivedAmount,
+            change: change,
+            items: item,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${cookies.jwt}`,
+            },
+          }
+        )
+        .then(() => {
+          enqueueSnackbar("Giao dịch thành công", { variant: "success" });
+        })
+        .catch((error) => {
+          console.error("Có lỗi xảy ra khi thêm hóa đơn!", error);
+          enqueueSnackbar("Giao dịch thất bại", { variant: "error" });
+        });
 
-    navigate("/staff/invoice", {
-      state: {
-        addedProduct,
-        totalAmount,
-        receivedAmount,
-        change,
-        phone,
-        customerInfo,
-      },
-    });
+      navigate("/staff/invoice", {
+        state: {
+          addedProduct,
+          totalAmount,
+          receivedAmount,
+          change,
+          phone,
+          customerInfo,
+        },
+      });
+    }
   };
 
   const handleSaveCustomer = () => {
     axios
-      .post("http://localhost:8080/api/v1/customers", {
-        phone,
-        fullname: customerInfo.fullname,
-        address: customerInfo.address,
-      })
-      .then(() => {
+      .post(
+        "http://localhost:8080/api/v1/customers",
+        {
+          phone,
+          fullname: customerInfo.fullname,
+          address: customerInfo.address,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.jwt}`,
+          },
+        }
+      )
+      .then((res) => {
+        const newCustomer = res.data.data;
         setCustomerInfo({
+          id: newCustomer._id,
           fullname: customerInfo.fullname,
           address: customerInfo.address,
         });
@@ -115,17 +141,26 @@ const ConfirmTransaction = () => {
 
   const handleReceivedAmount = (e) => {
     setReceivedAmount(e.target.value);
-    setChange(parseFloat(e.target.value) - totalAmount);
+    if (e.target.value < totalAmount) {
+      setChange(0);
+    } else {
+      setChange(parseFloat(e.target.value) - totalAmount);
+    }
   };
 
   const handleSearchCustomer = () => {
     axios
-      .get(`http://localhost:8080/api/v1/customers?phone=${phone}`)
+      .get(`http://localhost:8080/api/v1/customers?phone=${phone}`, {
+        headers: {
+          Authorization: `Bearer ${cookies.jwt}`,
+        },
+      })
       .then((res) => {
         if (res.data.data) {
           const customer = res.data.data[0];
 
           setCustomerInfo({
+            id: customer._id,
             fullname: customer.fullname,
             address: customer.address,
           });
@@ -133,6 +168,7 @@ const ConfirmTransaction = () => {
           setShowSaveButton(false);
         } else {
           setCustomerInfo({
+            id: "",
             fullname: "",
             address: "",
           });
@@ -147,6 +183,17 @@ const ConfirmTransaction = () => {
         setShowSaveButton(true);
       });
   };
+
+  if (!cookies.jwt) {
+    console.log("You are not authenticated");
+    return <Navigate to="/" />;
+  } else if (cookies.jwt) {
+    if (jwtDecode(cookies.jwt).role !== "staff") {
+      console.log("You are not authorized to access this resource");
+      removeCookie("jwt");
+      return <Navigate to="/" />;
+    }
+  }
 
   return (
     <div className="flex">
@@ -315,7 +362,7 @@ const ConfirmTransaction = () => {
                   </td>
                   <td className="p-4 text-center">
                     <Typography className="font-semibold text-slate-500">
-                      Nguyễn Văn A
+                      {staff.fullname}
                     </Typography>
                   </td>
                 </tr>

@@ -12,7 +12,7 @@ import { login } from '../controllers/authController.js'
 const router = express.Router()
 
 // Protect all routes after this middleware
-// router.use(verifyJWT)
+router.use(verifyJWT)
 
 router.route('/').get(getProducts).post(createProduct)
 router

@@ -64,7 +64,7 @@ const NavbarStaff = ({ heading, staff }) => {
             </MenuItem>
             <hr className="my-2 border-blue-gray-50" />
             <a href="/">
-              <MenuItem className="flex items-center gap-3 hover:bg-gray-200">
+              <MenuItem className="flex items-center gap-3 hover:bg-gray-200 hover:outline-none">
                 <FaSignOutAlt className="text-xl text-red-600" />
                 <Typography
                   variant="small"

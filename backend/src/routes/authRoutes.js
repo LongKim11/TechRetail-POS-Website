@@ -8,6 +8,7 @@ import {
     logout,
     refresh,
     resetPassword,
+    updatePassword,
 } from '../controllers/authController.js'
 import { createStaff } from '../controllers/staffController.js'
 
@@ -24,5 +25,8 @@ router.route('/forgotPassword').post(forgotPassword)
 router.route('/resetPassword/:token').patch(resetPassword)
 
 router.post('/signup', uploadAvatar.single('avatar'), createStaff)
+
+// router.route('/updatePassword').patch(isAuthenticated, updatePassword)
+router.route('/updatePassword/:id').patch(updatePassword)
 
 export default router

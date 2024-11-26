@@ -11,20 +11,54 @@ import { GrUpdate } from "react-icons/gr";
 import { useState } from "react";
 import { PiNumpad } from "react-icons/pi";
 import ProfileBG from "../assets/profile-bg.jpg";
+import { useSnackbar } from "notistack";
+import { useUpdatePasswordMutation } from "../features/admin/adminSlice";
+import { useCookies } from "react-cookie";
+import { jwtDecode } from "jwt-decode";
 
-const ProfileForm = ({ avatar, username, email, fullname }) => {
+const ProfileForm = ({ userInfo }) => {
   const [openCPModal, setOpenCPModal] = useState(false);
   const [openCAModal, setOpenCAModal] = useState(false);
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const { enqueueSnackbar } = useSnackbar();
+  const [updatePassword, { isLoading }] = useUpdatePasswordMutation();
+  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+
+  const handleOldPasswordChange = (e) => setOldPassword(e.target.value);
+  const handleNewPasswordChange = (e) => setNewPassword(e.target.value);
+  const handleConfirmPasswordChange = (e) => setConfirmPassword(e.target.value);
 
   const handleOpenCPModal = () => setOpenCPModal((cur) => !cur);
   const handleOpenCAModal = () => setOpenCAModal((cur) => !cur);
+  const handleChangePassword = () => {
+    const token = cookies.jwt;
+    const id = jwtDecode(token).id;
+    updatePassword({
+      id,
+      oldPassword,
+      newPassword,
+      confirmPassword,
+    })
+      .unwrap()
+      .then((res) => {
+        enqueueSnackbar("Đổi mật khẩu thành công", { variant: "success" });
+        handleOpenCPModal();
+      })
+      .catch((err) => {
+        enqueueSnackbar("Đổi mật khẩu thất bại", { variant: "error" });
+        handleOpenCPModal();
+      });
+  };
+
   return (
     <div className="px-11 mx-auto mt-11 flex items-center">
       <div className="w-1/2">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             <Avatar
-              src={avatar}
+              src={userInfo.avatar}
               alt="avatar"
               size="xl"
               withBorder={true}
@@ -32,8 +66,8 @@ const ProfileForm = ({ avatar, username, email, fullname }) => {
               color="blue"
             />
             <div className="ml-5">
-              <h1 className="text-2xl font-semibold">{username}</h1>
-              <p className="text-gray-500">{email}</p>
+              <h1 className="text-2xl font-semibold">{userInfo.username}</h1>
+              <p className="text-gray-500">{userInfo.email}</p>
             </div>
           </div>
           <Button
@@ -52,7 +86,7 @@ const ProfileForm = ({ avatar, username, email, fullname }) => {
             <input
               type="text"
               className="p-3 w-full rounded-lg bg-slate-200 focus:border-[#004AAD] focus:outline-none border-2 mt-2"
-              value={username}
+              value={userInfo.username}
               disabled
             />
           </div>
@@ -61,7 +95,7 @@ const ProfileForm = ({ avatar, username, email, fullname }) => {
             <input
               type="text"
               className="p-3 w-full rounded-lg bg-slate-200 focus:border-[#004AAD] focus:outline-none border-2 mt-2"
-              value={fullname}
+              value={userInfo.fullname}
               disabled
             />
           </div>
@@ -70,7 +104,7 @@ const ProfileForm = ({ avatar, username, email, fullname }) => {
             <input
               type="text"
               className="p-3 w-full rounded-lg bg-slate-200 focus:border-[#004AAD] focus:outline-none border-2 mt-2"
-              value={email}
+              value={userInfo.email}
               disabled
             />
           </div>
@@ -106,6 +140,8 @@ const ProfileForm = ({ avatar, username, email, fullname }) => {
                   <input
                     type="password"
                     className="border border-slate-300 rounded-lg p-2 w-full focus:outline-none focus:border-blue-500"
+                    name="oldPassword"
+                    onChange={handleOldPasswordChange}
                   ></input>
                   <Typography className="" variant="h6">
                     Mật khẩu mới
@@ -113,6 +149,8 @@ const ProfileForm = ({ avatar, username, email, fullname }) => {
                   <input
                     type="password"
                     className="border border-slate-300 rounded-lg p-2 w-full focus:outline-none focus:border-blue-500"
+                    name="newPassword"
+                    onChange={handleNewPasswordChange}
                   ></input>
                   <Typography className="" variant="h6">
                     Nhập lại mật khẩu mới
@@ -120,12 +158,14 @@ const ProfileForm = ({ avatar, username, email, fullname }) => {
                   <input
                     type="password"
                     className="border border-slate-300 rounded-lg p-2 w-full focus:outline-none focus:border-blue-500"
+                    name="confirmPassword"
+                    onChange={handleConfirmPasswordChange}
                   ></input>
                 </CardBody>
                 <CardFooter className="pt-0">
                   <Button
                     variant="gradient"
-                    onClick={handleOpenCPModal}
+                    onClick={handleChangePassword}
                     fullWidth
                   >
                     Đổi mật khẩu

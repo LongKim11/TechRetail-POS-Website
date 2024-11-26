@@ -9,13 +9,13 @@ import { TbDevicesDollar } from "react-icons/tb";
 import { GrMoney } from "react-icons/gr";
 import axios from "axios";
 import { format } from "date-fns";
+import { useCookies } from "react-cookie";
+import { Navigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const AnalysPageStaff = () => {
-  const staff = {
-    fullname: "Nguyễn Văn A",
-    email: "nguyenvana@gmail.com",
-    username: "Username",
-  };
+  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+  const [staff, setStaff] = useState({ fullname: "", email: "", username: "" });
 
   const [value, setValue] = useState({
     startDate: format(new Date(), "yyyy-MM-dd"),
@@ -28,8 +28,22 @@ const AnalysPageStaff = () => {
   const [totalQuantityOrders, setTotalQuantityOrders] = useState(0);
 
   useEffect(() => {
+    if (cookies.jwt) {
+      const staff = jwtDecode(cookies.jwt);
+      setStaff({
+        fullname: staff.fullname,
+        email: staff.email,
+        username: staff.username,
+      });
+    }
+  }, [cookies.jwt]);
+
+  useEffect(() => {
     axios
       .get("http://localhost:8080/api/v1/orders/statistics", {
+        headers: {
+          Authorization: `Bearer ${cookies.jwt}`,
+        },
         params: {
           startDate: value.startDate,
           endDate: value.endDate,
@@ -47,7 +61,7 @@ const AnalysPageStaff = () => {
       .catch((error) => {
         console.error("Có lỗi xảy ra khi lấy dữ liệu thống kê!", error);
       });
-  }, []);
+  }, [value, cookies.jwt]);
 
   const handleSearch = () => {
     axios
@@ -67,6 +81,17 @@ const AnalysPageStaff = () => {
         console.error("Có lỗi xảy ra khi lấy dữ liệu thống kê!", error);
       });
   };
+
+  if (!cookies.jwt) {
+    console.log("You are not authenticated");
+    return <Navigate to="/" />;
+  } else if (cookies.jwt) {
+    if (jwtDecode(cookies.jwt).role !== "staff") {
+      console.log("You are not authorized to access this resource");
+      removeCookie("jwt");
+      return <Navigate to="/" />;
+    }
+  }
 
   return (
     <div className="flex">
@@ -115,7 +140,7 @@ const AnalysPageStaff = () => {
                     {totalAmountOrders}
                   </h1>
                   <h4 className="text-[#33343D] font-semibold">
-                    Tổng đơn hàng
+                    Tổng doanh thu
                   </h4>
                 </div>
               </div>

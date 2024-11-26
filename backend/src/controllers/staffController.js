@@ -6,7 +6,10 @@ import { Staff } from '../models/staffModel.js'
 import sendEmail from '../utils/email.js'
 
 const getStaffs = catchAsync(async (req, res, next) => {
-    const staffs = await Staff.find()
+    const staffs = await Staff.find({
+        'account.username': { $ne: 'admin' },
+    }).sort({ createdAt: -1 })
+
     res.status(200).json({
         status: 'success',
         results: staffs.length,
@@ -49,7 +52,7 @@ const getStaffById = catchAsync(async (req, res, next) => {
 const createStaff = catchAsync(async (req, res, next) => {
     const avatar = 'default-avatar.png'
     const username = req.body.email.split('@')[0]
-    const password = Math.random().toString(36).slice(-8)
+    const password = username
 
     const randomToken = crypto.randomBytes(32).toString('hex')
     const loginToken = crypto
@@ -88,14 +91,18 @@ const createStaff = catchAsync(async (req, res, next) => {
 })
 
 const updateStaff = catchAsync(async (req, res, next) => {
-    const editStaff = await Staff.findByIdAndUpdate(
-        req.params.id,
-        { ...req.body, avatar: req.file.filename },
-        {
-            new: true,
-            runValidators: true,
-        },
-    )
+    // const editStaff = await Staff.findByIdAndUpdate(
+    //     req.params.id,
+    //     { ...req.body, avatar: req.file.filename },
+    //     {
+    //         new: true,
+    //         runValidators: true,
+    //     },
+    // )
+    const editStaff = await Staff.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true,
+    })
 
     if (!editStaff) {
         return next(new AppError('No staff found with that ID', 404))

@@ -5,27 +5,55 @@ import { IoFilter } from "react-icons/io5";
 import CustomerTable from "../../components/CustomerTable";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { useCookies } from "react-cookie";
+import { Navigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const CustomersPage = () => {
-  const staff = {
-    fullname: "Nguyễn Văn A",
-    email: "nguyenvana@gmail.com",
-    username: "Username",
-  };
-
   const [customers, setCustomers] = useState([]);
 
+  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+  const [admin, setAdmin] = useState({ fullname: "", email: "", username: "" });
+
   useEffect(() => {
-    axios.get("http://localhost:8080/api/v1/customers").then((res) => {
-      setCustomers(res.data.data);
-    });
-  }, []);
+    if (cookies.jwt) {
+      const admin = jwtDecode(cookies.jwt);
+      setAdmin({
+        fullname: admin.fullname,
+        email: admin.email,
+        username: admin.username,
+      });
+    }
+  }, [cookies.jwt]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8080/api/v1/customers", {
+        headers: {
+          Authorization: `Bearer ${cookies.jwt}`,
+        },
+      })
+      .then((res) => {
+        setCustomers(res.data.data);
+      });
+  }, [cookies.jwt]);
+
+  if (!cookies.jwt) {
+    console.log("You are not authenticated");
+    return <Navigate to="/" />;
+  } else if (cookies.jwt) {
+    if (jwtDecode(cookies.jwt).role !== "admin") {
+      console.log("You are not authorized to access this resource");
+      removeCookie("jwt");
+      return <Navigate to="/" />;
+    }
+  }
 
   return (
     <div className="flex">
       <Sidebar />
       <div className="flex-1 p-7 bg-slate-100">
-        <Navbar heading="Quản lý khách hàng" staff={staff} />
+        <Navbar heading="Quản lý khách hàng" staff={admin} />
         <h1 className="text-2xl font-semibold mt-11">Danh sách</h1>
         <div className="w-full bg-white rounded-xl mt-7 border border-slate-200">
           <div className="flex justify-between items-center p-5">

@@ -14,7 +14,7 @@ import { verifyJWT } from '../middlewares/auth/auth.js'
 
 const router = express.Router()
 
-// router.use(verifyJWT)
+router.use(verifyJWT)
 
 router.route('/').get(getAllOrders).post(createOrder)
 router.route('/statistics').get(getOrderStatistics)

@@ -45,12 +45,16 @@ const getOrdersByCustomerId = catchAsync(async (req, res, next) => {
 
 const getOrderStatistics = catchAsync(async (req, res) => {
     const { startDate, endDate } = req.query
-    console.log(startDate, endDate)
     try {
+        const start = new Date(startDate)
+        start.setHours(0, 0, 0, 0)
+
+        const end = new Date(endDate)
+        end.setHours(23, 59, 59, 999)
         const orders = await Order.find({
             createdAt: {
-                $gte: new Date(startDate),
-                $lte: new Date(endDate),
+                $gte: start,
+                $lte: end,
             },
         }).populate('customer_id', 'fullname')
 

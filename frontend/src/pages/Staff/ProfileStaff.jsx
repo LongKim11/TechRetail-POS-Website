@@ -1,55 +1,35 @@
 import SidebarStaff from "../../components/SidebarStaff";
 import NavbarStaff from "../../components/NavbarStaff";
 import ProfileForm from "../../components/ProfileForm";
-// import { useCookies } from "react-cookie";
-// import { useGetStaffByIdQuery } from "../../features/staff/staffSlice";
-// import { setCredentials } from "../../features/auth/authSlice";
-// import { jwtDecode } from "jwt-decode";
-// import { Navigate, useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import { Navigate } from "react-router-dom";
 const ProfileStaff = () => {
-  const staff = {
-    fullname: "Nguyễn Văn A",
-    email: "nguyenvana@gmail.com",
-    username: "Username",
-  };
+  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+  const [staff, setStaff] = useState({ fullname: "", email: "", username: "" });
 
-  // const navigate = useNavigate();
-  // const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
-  // let staff = {};
+  useEffect(() => {
+    if (cookies.jwt) {
+      const staff = jwtDecode(cookies.jwt);
+      setStaff({
+        fullname: staff.fullname,
+        email: staff.email,
+        username: staff.username,
+      });
+    }
+  }, [cookies.jwt]);
 
-  // if (!cookies.jwt) {
-  //   navigate("/");
-  // }
-
-  // setCredentials({ token: cookies.jwt });
-  // let decoded;
-  // try {
-  //   decoded = jwtDecode(cookies.jwt);
-  // } catch (err) {
-  //   removeCookie("jwt");
-  //   return <Navigate to="/" />;
-  // }
-  // const { id } = decoded;
-  // const { data, isLoading, isSuccess, isError, error } = useGetStaffByIdQuery(
-  //   id,
-  //   "Staff"
-  // );
-
-  // if (isLoading) return <div>Loading...</div>;
-
-  // if (isError) {
-  //   if (error.status === 401) {
-  //     removeCookie("jwt");
-  //     return <Navigate to="/" />;
-  //   } else {
-  //     return <p>{error.data.message}</p>;
-  //   }
-  // }
-  // staff = {
-  //   fullname: data.staff.fullname,
-  //   email: data.staff.email,
-  //   username: data.staff.account.username,
-  // };
+  if (!cookies.jwt) {
+    console.log("You are not authenticated");
+    return <Navigate to="/" />;
+  } else if (cookies.jwt) {
+    if (jwtDecode(cookies.jwt).role !== "staff") {
+      console.log("You are not authorized to access this resource");
+      removeCookie("jwt");
+      return <Navigate to="/" />;
+    }
+  }
 
   return (
     <div className="flex">
@@ -58,9 +38,7 @@ const ProfileStaff = () => {
         <NavbarStaff heading="Thông tin cá nhân" staff={staff}></NavbarStaff>
         <ProfileForm
           avatar="./src/assets/user-avatar.png"
-          username="Username"
-          email="nguyenvana@gmail.com"
-          fullname="Nguyễn Văn A"
+          userInfo={staff}
         ></ProfileForm>
       </div>
     </div>

@@ -18,6 +18,7 @@ import PurchaseHistory from "../pages/Admin/PurchaseHistory";
 import PurchaseHistoryStaff from "../pages/Staff/PurchaseHistoryStaff";
 import AnalysPage from "../pages/Admin/AnalysPage";
 import AnalysPageStaff from "../pages/Staff/AnalysPageStaff";
+import NotFoundPage from "../pages/NotFoundPage";
 
 const Routers = () => {
   return (
@@ -48,12 +49,14 @@ const Routers = () => {
         <Route path="purchase-history" element={<PurchaseHistoryStaff />} />
         <Route
           path="purchase-history/:customerId"
-          element={<PurchaseHistory />}
+          element={<PurchaseHistoryStaff />}
         />
         <Route path="profile" element={<ProfileStaff />} />
         <Route path="change-password" element={<ChangePasswordStaff />} />
         <Route path="analys" element={<AnalysPageStaff />} />
       </Route>
+
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 };

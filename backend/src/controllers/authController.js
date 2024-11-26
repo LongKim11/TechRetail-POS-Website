@@ -14,36 +14,10 @@ const login = catchAsync(async (req, res, next) => {
         return next(new AppError('Please provide email and password!', 400))
     }
 
-    // 2) Check if this is admin login
-    if (username === 'admin' && password === '123') {
-        req.role = 'admin'
-
-        const refreshToken = jwt.sign(
-            { id: 'admin', role: 'admin' },
-            process.env.JWT_REFRESH_SECRET,
-            {
-                expiresIn: process.env.JWT_REFRESH_EXPIRES_IN,
-            },
-        )
-
-        res.cookie('jwt', refreshToken, {
-            // httpOnly: true,
-            // secure: true,
-            // sameSite: 'none',
-            maxAge: 1000 * 60 * 60 * 24 * 30,
-        })
-
-        return res.status(200).json({
-            status: 'success',
-            token: jwt.sign(
-                { id: 'admin', role: 'admin' },
-                process.env.JWT_SECRET,
-                {
-                    expiresIn: process.env.JWT_EXPIRES_IN,
-                },
-            ),
-        })
-    }
+    // // 2) Check if this is admin login
+    // if (username === 'admin' && password === '123') {
+    //
+    // }
 
     // 3) Check if staff exists && password is correct
     const staff = await Staff.findOne({ 'account.username': username }).select(
@@ -71,22 +45,9 @@ const login = catchAsync(async (req, res, next) => {
 
     const token = staff.jwtToken()
     staff.account.password = undefined
-    req.role = 'staff'
+    const role = staff.account.username === 'admin' ? 'admin' : 'staff'
 
-    const refreshToken = jwt.sign(
-        { id: staff._id, role: 'staff' },
-        process.env.JWT_REFRESH_SECRET,
-        {
-            expiresIn: process.env.JWT_REFRESH_EXPIRES_IN,
-        },
-    )
-
-    res.cookie('jwt', refreshToken, {
-        // httpOnly: true,
-        // secure: true,
-        // sameSite: 'none',
-        maxAge: 1000 * 60 * 60 * 24 * 30,
-    })
+    res.cookie('jwt', token, {})
 
     res.status(200).json({
         status: 'success',
@@ -226,18 +187,24 @@ const resetPassword = catchAsync(async (req, res, next) => {
 })
 
 const updatePassword = catchAsync(async (req, res, next) => {
-    const staff = await Staff.findById(req.staff.id).select('+account.password')
+    const staff = await Staff.findById(req.params.id).select(
+        '+account.password',
+    )
+
+    if (req.body.newPassword !== req.body.confirmPassword) {
+        return next(new AppError('Passwords are not the same', 400))
+    }
 
     if (
         !(await staff.comparePassword(
-            req.body.currentPassword,
+            req.body.oldPassword,
             staff.account.password,
         ))
     ) {
         return next(new AppError('Your current password is wrong.', 401))
     }
 
-    staff.account.password = req.body.password
+    staff.account.password = req.body.newPassword
     await staff.save()
 
     const token = staff.jwtToken()

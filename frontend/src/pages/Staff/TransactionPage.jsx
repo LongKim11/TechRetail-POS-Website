@@ -4,59 +4,41 @@ import { FaBarcode } from "react-icons/fa6";
 import { Button, Typography } from "@material-tailwind/react";
 import { FaArrowRight } from "react-icons/fa";
 import { MdOutlineDelete } from "react-icons/md";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { IconButton } from "@material-tailwind/react";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { useSnackbar } from "notistack";
 import { useCookies } from "react-cookie";
-import { useGetStaffByIdQuery } from "../../features/staff/staffSlice";
-import { setCredentials } from "../../features/auth/authSlice";
 import { jwtDecode } from "jwt-decode";
 
 const TransactionPage = () => {
-  const staff = {
-    fullname: "Nguyễn Văn A",
-    email: "nguyenvana@gmail.com",
-    username: "Username",
-  };
+  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+  const [staff, setStaff] = useState({ fullname: "", email: "", username: "" });
 
   const [searchProductResult, setSearchProductResult] = useState([]);
   const [searchByName, setSearchByName] = useState("");
   const [searchByBarcode, setSearchByBarcode] = useState("");
   const [addedProduct, setAddedProduct] = useState([]);
-  // const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
-  // let staff = {};
-  // if (!cookies.jwt) return <Navigate to="/" />;
 
-  // setCredentials({ token: cookies.jwt });
-  // const decoded = jwtDecode(cookies.jwt);
-  // const { id } = decoded;
-  // const { data, isLoading, isSuccess, isError, error } = useGetStaffByIdQuery(
-  //   id,
-  //   "Staff"
-  // );
-  // if (isLoading) return <p>Loading...</p>;
-  // if (isError) {
-  //   if (error.status === 401) {
-  //     removeCookie("jwt");
-  //     return <Navigate to="/" />;
-  //   } else {
-  //     return <p>{error.data.message}</p>;
-  //   }
-  // }
-  // staff = {
-  //   fullname: data.staff.fullname,
-  //   email: data.staff.email,
-  //   username: data.staff.account.username,
-  // };
   const { enqueueSnackbar } = useSnackbar();
 
   const [active, setActive] = useState(1);
   const [maxPage, setMaxPage] = useState(0);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (cookies.jwt) {
+      const staff = jwtDecode(cookies.jwt);
+      setStaff({
+        fullname: staff.fullname,
+        email: staff.email,
+        username: staff.username,
+      });
+    }
+  }, [cookies.jwt]);
 
   const dataPerPage = 5;
   const lastIndex = active * dataPerPage;
@@ -73,7 +55,7 @@ const TransactionPage = () => {
     setActive(active - 1);
   };
 
-  const handleSearch = () => {
+  useEffect(() => {
     let query = "";
     if (searchByName && searchByBarcode) {
       query = `name=${searchByName}&barcode=${searchByBarcode}`;
@@ -84,7 +66,12 @@ const TransactionPage = () => {
     }
 
     axios
-      .get(`http://localhost:8080/api/v1/products?${query}`)
+      .get(`http://localhost:8080/api/v1/products?${query}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${cookies.jwt}`,
+        },
+      })
       .then((res) => {
         setSearchProductResult(res.data.data);
         setMaxPage(Math.ceil(res.data.results / dataPerPage));
@@ -93,12 +80,12 @@ const TransactionPage = () => {
       .catch((error) => {
         console.error("Có lỗi xảy ra khi tìm kiếm sản phẩm!", error);
       });
-  };
+  }, [searchByName, searchByBarcode, cookies.jwt]);
 
   const handleAddProduct = (product) => {
     product.quantity = 1;
     product.subTotal = product.retail_price;
-    setAddedProduct([...addedProduct, product]);
+    setAddedProduct([product, ...addedProduct]);
   };
 
   const handleRemoveProduct = (index) => {
@@ -133,6 +120,17 @@ const TransactionPage = () => {
     }
     navigate("/staff/confirm-transaction", { state: { addedProduct } });
   };
+
+  if (!cookies.jwt) {
+    console.log("You are not authenticated");
+    return <Navigate to="/" />;
+  } else if (cookies.jwt) {
+    if (jwtDecode(cookies.jwt).role !== "staff") {
+      console.log("You are not authorized to access this resource");
+      removeCookie("jwt");
+      return <Navigate to="/" />;
+    }
+  }
 
   return (
     <div className="flex">
@@ -186,13 +184,6 @@ const TransactionPage = () => {
                   />
                 </div>
               </form>
-              <button
-                className="rounded-md bg-blue-600 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:bg-blue-700"
-                type="button"
-                onClick={handleSearch}
-              >
-                Tìm kiếm
-              </button>
             </div>
             <table className="w-full min-w-max table-auto">
               <thead className="">
@@ -223,6 +214,7 @@ const TransactionPage = () => {
                 {currentProducts.map((product, index) => {
                   return (
                     <tr key={index} className="hover:bg-slate-50">
+                      <input type="hidden" value={product._id} />
                       <td className="p-4 text-center">
                         <Typography className="font-semibold text-orange-600">
                           {product.barcode}

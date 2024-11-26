@@ -3,41 +3,15 @@ import Navbar from "../../components/Navbar";
 import DashboardBox from "../../components/DashboardBox";
 import ChartAdmin from "../../components/ChartAdmin";
 import { FaArrowRightLong } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
-// import { useGetAdminInfoQuery } from "../../features/admin/adminSlice";
-// import { useDispatch } from "react-redux";
-// import { useCookies } from "react-cookie";
-// import { setCredentials } from "../../features/auth/authSlice";
-// import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import { jwtDecode } from "jwt-decode";
+
 const Home = () => {
-  // const navigate = useNavigate();
-  // const dispatch = useDispatch();
-  // const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
-
-  // if (!cookies.jwt) {
-  //   console.log("No cookie found");
-  //   navigate("/");
-  // }
-  // dispatch(setCredentials({ token: cookies.jwt }));
-  // const { data, isLoading, isFetching, isError, isSuccess } =
-  //   useGetAdminInfoQuery("LIST");
-
-  // if (isLoading) return <div>Loading...</div>;
-  // if (isError) return <div>Error fetching data</div>;
-
-  // let admin = {
-  //   fullname: data.fullname,
-  //   email: data.email,
-  //   username: data.account.username,
-  // };
-
-  const staff = {
-    fullname: "Nguyễn Văn A",
-    email: "nguyenvana@gmail.com",
-    username: "Username",
-  };
+  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+  const [admin, setAdmin] = useState({ fullname: "", email: "", username: "" });
 
   const [totalAmountByMonth, setTotalAmountByMonth] = useState([]);
   const [months, setMonths] = useState([]);
@@ -50,11 +24,25 @@ const Home = () => {
   });
 
   useEffect(() => {
+    if (cookies.jwt) {
+      const admin = jwtDecode(cookies.jwt);
+      setAdmin({
+        fullname: admin.fullname,
+        email: admin.email,
+        username: admin.username,
+      });
+    }
+  }, [cookies.jwt]);
+
+  useEffect(() => {
     Promise.all([
       axios.get(
-        "http://localhost:8080/api/v1/orders/total-amount-last-12-months"
+        "http://localhost:8080/api/v1/orders/total-amount-last-12-months",
+        { headers: { Authorization: `Bearer ${cookies.jwt}` } }
       ),
-      axios.get("http://localhost:8080/api/v1/orders/overall-statistics"),
+      axios.get("http://localhost:8080/api/v1/orders/overall-statistics", {
+        headers: { Authorization: `Bearer ${cookies.jwt}` },
+      }),
     ])
       .then(([totalAmountRes, overallStatisticsRes]) => {
         setTotalAmountByMonth(totalAmountRes.data.totalAmountByMonth);
@@ -64,13 +52,24 @@ const Home = () => {
       .catch((error) => {
         console.error("Có lỗi xảy ra khi lấy dữ liệu thống kê!", error);
       });
-  }, []);
+  }, [cookies.jwt]);
+
+  if (!cookies.jwt) {
+    console.log("You are not authenticated");
+    return <Navigate to="/" />;
+  } else if (cookies.jwt) {
+    if (jwtDecode(cookies.jwt).role !== "admin") {
+      console.log("You are not authorized to access this resource");
+      removeCookie("jwt");
+      return <Navigate to="/" />;
+    }
+  }
 
   return (
     <div className="flex">
       <Sidebar />
       <div className="flex-1 p-7 bg-slate-100">
-        <Navbar heading="Hi, Welcome back 👋" staff={staff} />
+        <Navbar heading="Hi, Welcome back 👋" staff={admin} />
         <DashboardBox
           employees={overallStatistics.totalStaff}
           bills={overallStatistics.totalOrders}

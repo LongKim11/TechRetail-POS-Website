@@ -5,7 +5,6 @@ import { useCookies } from "react-cookie";
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { useGetStaffByIdQuery } from "../../features/staff/staffSlice";
 
 const ChangePasswordStaff = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);

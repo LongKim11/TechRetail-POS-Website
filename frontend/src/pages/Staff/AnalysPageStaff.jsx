@@ -17,6 +17,16 @@ const AnalysPageStaff = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   const [staff, setStaff] = useState({ fullname: "", email: "", username: "" });
 
+  const [value, setValue] = useState({
+    startDate: format(new Date(), "yyyy-MM-dd"),
+    endDate: format(new Date(), "yyyy-MM-dd"),
+  });
+
+  const [orders, setOrders] = useState([]);
+  const [totalOrders, setTotalOrders] = useState(0);
+  const [totalAmountOrders, setTotalAmountOrders] = useState(0);
+  const [totalQuantityOrders, setTotalQuantityOrders] = useState(0);
+
   useEffect(() => {
     if (cookies.jwt) {
       const staff = jwtDecode(cookies.jwt);
@@ -27,16 +37,6 @@ const AnalysPageStaff = () => {
       });
     }
   }, [cookies.jwt]);
-
-  const [value, setValue] = useState({
-    startDate: format(new Date(), "yyyy-MM-dd"),
-    endDate: format(new Date(), "yyyy-MM-dd"),
-  });
-
-  const [orders, setOrders] = useState([]);
-  const [totalOrders, setTotalOrders] = useState(0);
-  const [totalAmountOrders, setTotalAmountOrders] = useState(0);
-  const [totalQuantityOrders, setTotalQuantityOrders] = useState(0);
 
   useEffect(() => {
     axios

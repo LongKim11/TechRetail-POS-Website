@@ -6,7 +6,6 @@ import CustomerTableStaff from "../../components/CustomerTableStaff";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
-import { useGetStaffByIdQuery } from "../../features/admin/adminSlice";
 import { jwtDecode } from "jwt-decode";
 import { Navigate } from "react-router-dom";
 

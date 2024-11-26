@@ -11,23 +11,11 @@ import { IconButton } from "@material-tailwind/react";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { useSnackbar } from "notistack";
 import { useCookies } from "react-cookie";
-import { useGetStaffByIdQuery } from "../../features/staff/staffSlice";
 import { jwtDecode } from "jwt-decode";
 
 const TransactionPage = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   const [staff, setStaff] = useState({ fullname: "", email: "", username: "" });
-
-  useEffect(() => {
-    if (cookies.jwt) {
-      const staff = jwtDecode(cookies.jwt);
-      setStaff({
-        fullname: staff.fullname,
-        email: staff.email,
-        username: staff.username,
-      });
-    }
-  }, [cookies.jwt]);
 
   const [searchProductResult, setSearchProductResult] = useState([]);
   const [searchByName, setSearchByName] = useState("");
@@ -40,6 +28,17 @@ const TransactionPage = () => {
   const [maxPage, setMaxPage] = useState(0);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (cookies.jwt) {
+      const staff = jwtDecode(cookies.jwt);
+      setStaff({
+        fullname: staff.fullname,
+        email: staff.email,
+        username: staff.username,
+      });
+    }
+  }, [cookies.jwt]);
 
   const dataPerPage = 5;
   const lastIndex = active * dataPerPage;
@@ -84,8 +83,6 @@ const TransactionPage = () => {
   };
 
   const handleAddProduct = (product) => {
-    product.product_id = product._id;
-    delete product._id;
     product.quantity = 1;
     product.subTotal = product.retail_price;
     setAddedProduct([product, ...addedProduct]);

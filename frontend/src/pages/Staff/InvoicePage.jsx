@@ -8,24 +8,12 @@ import { IoIosPrint } from "react-icons/io";
 import { GrTransaction } from "react-icons/gr";
 import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import { useGetStaffByIdQuery } from "../../features/staff/staffSlice";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 
 const InvoicePage = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   const [staff, setStaff] = useState({ fullname: "", email: "", username: "" });
-
-  useEffect(() => {
-    if (cookies.jwt) {
-      const staff = jwtDecode(cookies.jwt);
-      setStaff({
-        fullname: staff.fullname,
-        email: staff.email,
-        username: staff.username,
-      });
-    }
-  }, [cookies.jwt]);
 
   const location = useLocation();
 
@@ -37,6 +25,17 @@ const InvoicePage = () => {
     phone,
     customerInfo,
   } = location.state || {};
+
+  useEffect(() => {
+    if (cookies.jwt) {
+      const staff = jwtDecode(cookies.jwt);
+      setStaff({
+        fullname: staff.fullname,
+        email: staff.email,
+        username: staff.username,
+      });
+    }
+  }, [cookies.jwt]);
 
   const Print = () => {
     let printContents = document.getElementById("printablediv").innerHTML;

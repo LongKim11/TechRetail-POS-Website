@@ -8,12 +8,15 @@ import axios from "axios";
 import { IconButton, Typography } from "@material-tailwind/react";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { useCookies } from "react-cookie";
-import { useGetStaffByIdQuery } from "../../features/staff/staffSlice";
 import { jwtDecode } from "jwt-decode";
 import { Navigate } from "react-router-dom";
 const ProductMPageStaff = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   const [staff, setStaff] = useState({ fullname: "", email: "", username: "" });
+
+  const [products, setProducts] = useState([]);
+  const [active, setActive] = useState(1);
+  const [maxPage, setMaxPage] = useState(0);
 
   useEffect(() => {
     if (cookies.jwt) {
@@ -25,10 +28,6 @@ const ProductMPageStaff = () => {
       });
     }
   }, [cookies.jwt]);
-
-  const [products, setProducts] = useState([]);
-  const [active, setActive] = useState(1);
-  const [maxPage, setMaxPage] = useState(0);
 
   const dataPerPage = 5;
   const lastIndex = active * dataPerPage;

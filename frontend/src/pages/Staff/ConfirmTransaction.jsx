@@ -12,11 +12,27 @@ import { FaSave } from "react-icons/fa";
 import { useSnackbar } from "notistack";
 import { useCookies } from "react-cookie";
 import { jwtDecode } from "jwt-decode";
-import { useGetStaffByIdQuery } from "../../features/staff/staffSlice";
 
 const ConfirmTransaction = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   const [staff, setStaff] = useState({ fullname: "", email: "", username: "" });
+
+  const location = useLocation();
+  const { addedProduct } = location.state || { addedProduct: [] };
+  console.log(addedProduct);
+  const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
+
+  const [receivedAmount, setReceivedAmount] = useState(0);
+  const [change, setChange] = useState(0);
+  const [phone, setPhone] = useState(0);
+  const [customerInfo, setCustomerInfo] = useState({
+    id: "",
+    fullname: "",
+    address: "",
+  });
+  const [isInputDisabled, setIsInputDisabled] = useState(true);
+  const [showSaveButton, setShowSaveButton] = useState(false);
 
   useEffect(() => {
     if (cookies.jwt) {
@@ -29,22 +45,6 @@ const ConfirmTransaction = () => {
     }
   }, [cookies.jwt]);
 
-  const location = useLocation();
-  const { addedProduct } = location.state || { addedProduct: [] };
-  const navigate = useNavigate();
-  const { enqueueSnackbar } = useSnackbar();
-
-  const [receivedAmount, setReceivedAmount] = useState(0);
-  const [change, setChange] = useState(0);
-  const [phone, setPhone] = useState(0);
-  const [customerInfo, setCustomerInfo] = useState({
-    fullname: "",
-    address: "",
-  });
-  const [customer_id, setCustomer_id] = useState("");
-  const [isInputDisabled, setIsInputDisabled] = useState(true);
-  const [showSaveButton, setShowSaveButton] = useState(false);
-
   const totalAmount = addedProduct.reduce(
     (total, product) => total + parseFloat(product.subTotal),
     0
@@ -53,21 +53,46 @@ const ConfirmTransaction = () => {
     if (
       receivedAmount == 0 ||
       phone == 0 ||
+      customerInfo.id == "" ||
       customerInfo.fullname == "" ||
       customerInfo.address == ""
     ) {
       enqueueSnackbar("Vui lòng nhập đầy đủ thông tin", { variant: "error" });
     } else {
-      console.log(customer_id + "ABC");
-      console.log(addedProduct);
-      axios.post("http://localhost:8080/api/v1/orders", {
-        staff_id: jwtDecode(cookies.jwt).id,
-        customer_id: customer_id,
-        totalAmount: totalAmount,
-        receivedAmount: receivedAmount,
-        change: change,
-        items: addedProduct,
+      const item = addedProduct.map((product) => {
+        return {
+          product_id: product._id,
+          name: product.name,
+          retail_price: product.retail_price,
+          quantity: product.quantity,
+          subTotal: product.subTotal,
+        };
       });
+      console.log(item);
+      axios
+        .post(
+          "http://localhost:8080/api/v1/orders",
+          {
+            staff_id: jwtDecode(cookies.jwt).id,
+            customer_id: customerInfo.id,
+            totalAmount: totalAmount,
+            receivedAmount: receivedAmount,
+            change: change,
+            items: item,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${cookies.jwt}`,
+            },
+          }
+        )
+        .then(() => {
+          enqueueSnackbar("Giao dịch thành công", { variant: "success" });
+        })
+        .catch((error) => {
+          console.error("Có lỗi xảy ra khi thêm hóa đơn!", error);
+          enqueueSnackbar("Giao dịch thất bại", { variant: "error" });
+        });
 
       navigate("/staff/invoice", {
         state: {
@@ -83,18 +108,27 @@ const ConfirmTransaction = () => {
   };
 
   const handleSaveCustomer = () => {
-    const res = axios
-      .post("http://localhost:8080/api/v1/customers", {
-        phone,
-        fullname: customerInfo.fullname,
-        address: customerInfo.address,
-      })
-      .then(() => {
+    axios
+      .post(
+        "http://localhost:8080/api/v1/customers",
+        {
+          phone,
+          fullname: customerInfo.fullname,
+          address: customerInfo.address,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.jwt}`,
+          },
+        }
+      )
+      .then((res) => {
+        const newCustomer = res.data.data;
         setCustomerInfo({
+          id: newCustomer._id,
           fullname: customerInfo.fullname,
           address: customerInfo.address,
         });
-        setCustomer_id(res.data.data._id);
         setIsInputDisabled(true);
         setShowSaveButton(false);
         enqueueSnackbar("Thêm khách hàng thành công", { variant: "success" });
@@ -116,15 +150,17 @@ const ConfirmTransaction = () => {
 
   const handleSearchCustomer = () => {
     axios
-      .get(`http://localhost:8080/api/v1/customers?phone=${phone}`)
+      .get(`http://localhost:8080/api/v1/customers?phone=${phone}`, {
+        headers: {
+          Authorization: `Bearer ${cookies.jwt}`,
+        },
+      })
       .then((res) => {
         if (res.data.data) {
           const customer = res.data.data[0];
-          setCustomer_id(customer._id);
-
-          console.log(customer_id + "ABC");
 
           setCustomerInfo({
+            id: customer._id,
             fullname: customer.fullname,
             address: customer.address,
           });
@@ -132,6 +168,7 @@ const ConfirmTransaction = () => {
           setShowSaveButton(false);
         } else {
           setCustomerInfo({
+            id: "",
             fullname: "",
             address: "",
           });
@@ -150,11 +187,8 @@ const ConfirmTransaction = () => {
   if (!cookies.jwt) {
     console.log("You are not authenticated");
     return <Navigate to="/" />;
-  } else if (isError) {
-    if (!cookies.jwt) {
-      console.log("You are not authenticated");
-      return <Navigate to="/" />;
-    } else if (error.status === 401) {
+  } else if (cookies.jwt) {
+    if (jwtDecode(cookies.jwt).role !== "staff") {
       console.log("You are not authorized to access this resource");
       removeCookie("jwt");
       return <Navigate to="/" />;

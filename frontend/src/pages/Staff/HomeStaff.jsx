@@ -19,23 +19,11 @@ import {
 } from "@material-tailwind/react";
 import { Navigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import { useGetStaffByIdQuery } from "../../features/admin/adminSlice";
 import { jwtDecode } from "jwt-decode";
 
 const HomeStaff = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   const [staff, setStaff] = useState({ fullname: "", email: "", username: "" });
-
-  useEffect(() => {
-    if (cookies.jwt) {
-      const staff = jwtDecode(cookies.jwt);
-      setStaff({
-        fullname: staff.fullname,
-        email: staff.email,
-        username: staff.username,
-      });
-    }
-  }, [cookies.jwt]);
 
   const [totalProductByMonth, setTotalProductByMonth] = useState([]);
   const [months, setMonths] = useState([]);
@@ -50,6 +38,17 @@ const HomeStaff = () => {
   const [openCPModal, setOpenCPModal] = useState(false);
   const [openLoginViaEmailModal, setOpenLoginViaEmailModal] = useState(false);
   const [openLockedAccountModal, setOpenLockedAccountModal] = useState(false);
+
+  useEffect(() => {
+    if (cookies.jwt) {
+      const staff = jwtDecode(cookies.jwt);
+      setStaff({
+        fullname: staff.fullname,
+        email: staff.email,
+        username: staff.username,
+      });
+    }
+  }, [cookies.jwt]);
 
   const handleOpenCPModal = () => setOpenCPModal((cur) => !cur);
 

@@ -1,10 +1,51 @@
+import { useNavigate } from "react-router-dom";
 import ChangeBG from "../assets/cp.jpg";
+import { useCookies } from "react-cookie";
+import {
+  useGetAdminInfoQuery,
+  useUpdatePasswordMutation,
+} from "../features/admin/adminSlice";
+import { useState } from "react";
+import { useSnackbar } from "notistack";
+import { jwtDecode } from "jwt-decode";
 
 const ChangePasswordForm = () => {
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const { enqueueSnackbar } = useSnackbar();
+  const [updatePassword, { isLoading }] = useUpdatePasswordMutation("Admin");
+  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+
+  const handleOldPasswordChange = (e) => setOldPassword(e.target.value);
+  const handleNewPasswordChange = (e) => setNewPassword(e.target.value);
+  const handleConfirmPasswordChange = (e) => setConfirmPassword(e.target.value);
+
+  const handleChangePassword = () => {
+    const token = cookies.jwt;
+    const id = jwtDecode(token).id;
+    updatePassword({
+      id,
+      oldPassword,
+      newPassword,
+      confirmPassword,
+    })
+      .unwrap()
+      .then((res) => {
+        enqueueSnackbar("Đổi mật khẩu thành công", { variant: "success" });
+        setOldPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+      })
+      .catch((err) => {
+        enqueueSnackbar("Đổi mật khẩu thất bại", { variant: "error" });
+      });
+  };
+
   return (
     <div className="px-11 mt-11">
       <div className="flex items-center justify-between">
-        <form className="w-1/2">
+        <div className="w-1/2">
           <h1 className="text-2xl text-black font-semibold">
             Thay đổi mật khẩu
           </h1>
@@ -17,6 +58,8 @@ const ChangePasswordForm = () => {
               id="old-password"
               className="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               required
+              value={oldPassword}
+              onChange={handleOldPasswordChange}
             />
           </div>
           <div className="mb-5">
@@ -28,6 +71,8 @@ const ChangePasswordForm = () => {
               id="new-password"
               className="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               required
+              value={newPassword}
+              onChange={handleNewPasswordChange}
             />
             <span className="text-sm text-gray-400">
               Mật khẩu cần ít nhất 6 kí tự
@@ -42,15 +87,18 @@ const ChangePasswordForm = () => {
               id="confirm-new-password"
               className="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               required
+              value={confirmPassword}
+              onChange={handleConfirmPasswordChange}
             />
           </div>
           <button
             type="submit"
             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+            onClick={handleChangePassword}
           >
             Đổi mật khẩu
           </button>
-        </form>
+        </div>
         <div className="w-1/2 ml-20">
           <img src={ChangeBG} className="mix-blend-multiply"></img>
         </div>

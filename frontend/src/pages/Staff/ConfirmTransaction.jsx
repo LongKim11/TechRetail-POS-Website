@@ -2,8 +2,8 @@ import SidebarStaff from "../../components/SidebarStaff";
 import NavbarStaff from "../../components/NavbarStaff";
 import { Button, Typography } from "@material-tailwind/react";
 import { FaArrowRight } from "react-icons/fa";
-import { useLocation } from "react-router-dom";
-import { useState } from "react";
+import { Navigate, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import axios from "axios";
 import { format } from "date-fns";
@@ -11,47 +11,28 @@ import { useNavigate } from "react-router-dom";
 import { FaSave } from "react-icons/fa";
 import { useSnackbar } from "notistack";
 import { useCookies } from "react-cookie";
-import { setCredentials } from "../../features/auth/authSlice";
 import { jwtDecode } from "jwt-decode";
 import { useGetStaffByIdQuery } from "../../features/staff/staffSlice";
 
 const ConfirmTransaction = () => {
-  const staff = {
-    fullname: "Nguyễn Văn A",
-    email: "nguyenvana@gmail.com",
-    username: "Username",
-  };
+  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+  const [staff, setStaff] = useState({ fullname: "", email: "", username: "" });
+
+  useEffect(() => {
+    if (cookies.jwt) {
+      const staff = jwtDecode(cookies.jwt);
+      setStaff({
+        fullname: staff.fullname,
+        email: staff.email,
+        username: staff.username,
+      });
+    }
+  }, [cookies.jwt]);
 
   const location = useLocation();
   const { addedProduct } = location.state || { addedProduct: [] };
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-
-  // const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
-  // let staff = {};
-  // if (!cookies.jwt) return <Navigate to="/" />;
-
-  // setCredentials({ token: cookies.jwt });
-  // const decoded = jwtDecode(cookies.jwt);
-  // const { id } = decoded;
-  // const { data, isLoading, isSuccess, isError, error } = useGetStaffByIdQuery(
-  //   id,
-  //   "Staff"
-  // );
-  // if (isLoading) return <p>Loading...</p>;
-  // if (isError) {
-  //   if (error.status === 401) {
-  //     removeCookie("jwt");
-  //     return <Navigate to="/" />;
-  //   } else {
-  //     return <p>{error.data.message}</p>;
-  //   }
-  // }
-  // staff = {
-  //   fullname: data.staff.fullname,
-  //   email: data.staff.email,
-  //   username: data.staff.account.username,
-  // };
 
   const [receivedAmount, setReceivedAmount] = useState(0);
   const [change, setChange] = useState(0);
@@ -60,6 +41,7 @@ const ConfirmTransaction = () => {
     fullname: "",
     address: "",
   });
+  const [customer_id, setCustomer_id] = useState("");
   const [isInputDisabled, setIsInputDisabled] = useState(true);
   const [showSaveButton, setShowSaveButton] = useState(false);
 
@@ -67,7 +49,6 @@ const ConfirmTransaction = () => {
     (total, product) => total + parseFloat(product.subTotal),
     0
   );
-
   const handleConfirm = () => {
     if (
       receivedAmount == 0 ||
@@ -76,23 +57,33 @@ const ConfirmTransaction = () => {
       customerInfo.address == ""
     ) {
       enqueueSnackbar("Vui lòng nhập đầy đủ thông tin", { variant: "error" });
-      return;
-    }
+    } else {
+      console.log(customer_id + "ABC");
+      console.log(addedProduct);
+      axios.post("http://localhost:8080/api/v1/orders", {
+        staff_id: jwtDecode(cookies.jwt).id,
+        customer_id: customer_id,
+        totalAmount: totalAmount,
+        receivedAmount: receivedAmount,
+        change: change,
+        items: addedProduct,
+      });
 
-    navigate("/staff/invoice", {
-      state: {
-        addedProduct,
-        totalAmount,
-        receivedAmount,
-        change,
-        phone,
-        customerInfo,
-      },
-    });
+      navigate("/staff/invoice", {
+        state: {
+          addedProduct,
+          totalAmount,
+          receivedAmount,
+          change,
+          phone,
+          customerInfo,
+        },
+      });
+    }
   };
 
   const handleSaveCustomer = () => {
-    axios
+    const res = axios
       .post("http://localhost:8080/api/v1/customers", {
         phone,
         fullname: customerInfo.fullname,
@@ -103,6 +94,7 @@ const ConfirmTransaction = () => {
           fullname: customerInfo.fullname,
           address: customerInfo.address,
         });
+        setCustomer_id(res.data.data._id);
         setIsInputDisabled(true);
         setShowSaveButton(false);
         enqueueSnackbar("Thêm khách hàng thành công", { variant: "success" });
@@ -115,7 +107,11 @@ const ConfirmTransaction = () => {
 
   const handleReceivedAmount = (e) => {
     setReceivedAmount(e.target.value);
-    setChange(parseFloat(e.target.value) - totalAmount);
+    if (e.target.value < totalAmount) {
+      setChange(0);
+    } else {
+      setChange(parseFloat(e.target.value) - totalAmount);
+    }
   };
 
   const handleSearchCustomer = () => {
@@ -124,6 +120,9 @@ const ConfirmTransaction = () => {
       .then((res) => {
         if (res.data.data) {
           const customer = res.data.data[0];
+          setCustomer_id(customer._id);
+
+          console.log(customer_id + "ABC");
 
           setCustomerInfo({
             fullname: customer.fullname,
@@ -147,6 +146,20 @@ const ConfirmTransaction = () => {
         setShowSaveButton(true);
       });
   };
+
+  if (!cookies.jwt) {
+    console.log("You are not authenticated");
+    return <Navigate to="/" />;
+  } else if (isError) {
+    if (!cookies.jwt) {
+      console.log("You are not authenticated");
+      return <Navigate to="/" />;
+    } else if (error.status === 401) {
+      console.log("You are not authorized to access this resource");
+      removeCookie("jwt");
+      return <Navigate to="/" />;
+    }
+  }
 
   return (
     <div className="flex">
@@ -315,7 +328,7 @@ const ConfirmTransaction = () => {
                   </td>
                   <td className="p-4 text-center">
                     <Typography className="font-semibold text-slate-500">
-                      Nguyễn Văn A
+                      {staff.fullname}
                     </Typography>
                   </td>
                 </tr>

@@ -16,7 +16,6 @@ export const adminApiSlice = apiSlice.injectEndpoints({
         return response.status === 200 && !result.isError;
       },
       transformResponse: (responseData) => {
-        console.log(responseData);
         return responseData.data;
       },
       providesTags: (result, error, arg) => {
@@ -27,6 +26,13 @@ export const adminApiSlice = apiSlice.injectEndpoints({
           ];
         } else return [{ type: "Admin", id: "LIST" }];
       },
+    }),
+    updatePassword: builder.mutation({
+      query: (passwordData) => ({
+        url: `/api/v1/auth/updatePassword/${passwordData.id}`,
+        method: "PATCH",
+        body: { ...passwordData },
+      }),
     }),
     getStaffById: builder.query({
       query: (id) => ({ url: `/api/v1/staffs/${id}`, method: "GET" }),
@@ -48,13 +54,14 @@ export const adminApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: [{ type: "Staff", id: "LIST" }],
     }),
     updateStaff: builder.mutation({
-      query: (initialUserData) => ({
-        url: "/api/v1/staffs",
-        method: "PATCH",
-        body: {
-          ...initialUserData,
-        },
-      }),
+      query: ({ id, ...patch }) => {
+        console.log(id, patch);
+        return {
+          url: `/api/v1/staffs/${id}`,
+          method: "PUT",
+          body: patch,
+        };
+      },
       invalidatesTags: (result, error, arg) => [{ type: "Staff", id: arg.id }],
     }),
     deleteStaff: builder.mutation({
@@ -70,6 +77,7 @@ export const adminApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useGetAdminInfoQuery,
+  useUpdatePasswordMutation,
   useGetStaffByIdQuery,
   useAddNewStaffMutation,
   useUpdateStaffMutation,
@@ -77,7 +85,7 @@ export const {
 } = adminApiSlice;
 
 // returns the query result object
-export const selectAdminResult = adminApiSlice.endpoints.getStaffs.select();
+export const selectAdminResult = adminApiSlice.endpoints.getStaffById.select();
 
 // creates memoized selector
 const selectUsersData = createSelector(

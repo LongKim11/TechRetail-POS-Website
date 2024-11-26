@@ -2,56 +2,31 @@ import SidebarStaff from "../../components/SidebarStaff";
 import NavbarStaff from "../../components/NavbarStaff";
 import Logo from "../../assets/logo-vector.png";
 import { Typography } from "@material-tailwind/react";
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { format } from "date-fns";
 import { IoIosPrint } from "react-icons/io";
 import { GrTransaction } from "react-icons/gr";
 import { Link } from "react-router-dom";
-// import { useCookies } from "react-cookie";
-// import { setCredentials } from "../../features/auth/authSlice";
-// import { jwtDecode } from "jwt-decode";
-// import { useGetStaffByIdQuery } from "../../features/staff/staffSlice";
+import { useCookies } from "react-cookie";
+import { useGetStaffByIdQuery } from "../../features/staff/staffSlice";
+import { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
+
 const InvoicePage = () => {
-  const staff = {
-    fullname: "Nguyễn Văn A",
-    email: "nguyenvana@gmail.com",
-    username: "Username",
-  };
-  // const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
-  // let staff = {};
+  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+  const [staff, setStaff] = useState({ fullname: "", email: "", username: "" });
 
-  // if (!cookies.jwt) {
-  //   return <Navigate to="/" />;
-  // }
+  useEffect(() => {
+    if (cookies.jwt) {
+      const staff = jwtDecode(cookies.jwt);
+      setStaff({
+        fullname: staff.fullname,
+        email: staff.email,
+        username: staff.username,
+      });
+    }
+  }, [cookies.jwt]);
 
-  // try {
-  //   setCredentials({ token: cookies.jwt });
-  //   const decoded = jwtDecode(cookies.jwt);
-  //   const { id } = decoded;
-
-  //   const { data, isLoading, isError, error } = useGetStaffByIdQuery(
-  //     id,
-  //     "Staff"
-  //   );
-
-  //   if (isLoading) return;
-
-  //   if (isError) {
-  //     if (error.status === 401) {
-  //       removeCookie("jwt");
-  //       return <Navigate to="/" />;
-  //     }
-  //   } else {
-  //     staff = {
-  //       fullname: data.staff.fullname,
-  //       username: data.staff.account.username,
-  //       email: data.staff.email,
-  //     };
-  //   }
-  // } catch (err) {
-  //   removeCookie("jwt");
-  //   return <Navigate to="/" />;
-  // }
   const location = useLocation();
 
   const {
@@ -71,6 +46,17 @@ const InvoicePage = () => {
     document.body.innerHTML = originalContents;
     window.location.reload();
   };
+
+  if (!cookies.jwt) {
+    console.log("You are not authenticated");
+    return <Navigate to="/" />;
+  } else if (cookies.jwt) {
+    if (jwtDecode(cookies.jwt).role !== "staff") {
+      console.log("You are not authorized to access this resource");
+      removeCookie("jwt");
+      return <Navigate to="/" />;
+    }
+  }
 
   return (
     <div className="flex">

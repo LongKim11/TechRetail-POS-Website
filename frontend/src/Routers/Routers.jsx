@@ -48,7 +48,7 @@ const Routers = () => {
         <Route path="purchase-history" element={<PurchaseHistoryStaff />} />
         <Route
           path="purchase-history/:customerId"
-          element={<PurchaseHistory />}
+          element={<PurchaseHistoryStaff />}
         />
         <Route path="profile" element={<ProfileStaff />} />
         <Route path="change-password" element={<ChangePasswordStaff />} />

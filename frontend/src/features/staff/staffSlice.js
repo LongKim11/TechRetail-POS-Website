@@ -29,9 +29,13 @@ export const staffsApiSlice = apiSlice.injectEndpoints({
       },
     }),
     getStaffById: builder.query({
-      query: (id) => ({ url: `/api/v1/staffs/${id}`, method: "GET" }),
+      query: (id) => {
+        if (!id) {
+          console.log("No id provided");
+        }
+        return { url: `/api/v1/staffs/${id}`, method: "GET" };
+      },
       transformResponse: (responseData) => {
-        responseData.id = responseData._id;
         return responseData;
       },
       providesTags: (result, error, arg) => [{ type: "Staff", id: arg }],
@@ -43,6 +47,8 @@ export const { useGetStaffsQuery, useGetStaffByIdQuery } = staffsApiSlice;
 
 // returns the query result object
 export const selectStaffResult = staffsApiSlice.endpoints.getStaffs.select();
+export const selectStaffByIdResult =
+  staffsApiSlice.endpoints.getStaffById.select();
 
 // creates memoized selector
 const selectUsersData = createSelector(

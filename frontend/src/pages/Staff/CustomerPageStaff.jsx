@@ -5,21 +5,49 @@ import { IoFilter } from "react-icons/io5";
 import CustomerTableStaff from "../../components/CustomerTableStaff";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { useCookies } from "react-cookie";
+import { useGetStaffByIdQuery } from "../../features/admin/adminSlice";
+import { jwtDecode } from "jwt-decode";
+import { Navigate } from "react-router-dom";
 
 const CustomersPageStaff = () => {
-  const staff = {
-    fullname: "Nguyễn Văn A",
-    email: "nguyenvana@gmail.com",
-    username: "Username",
-  };
-
+  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+  const [staff, setStaff] = useState({ fullname: "", email: "", username: "" });
   const [customers, setCustomers] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:8080/api/v1/customers").then((res) => {
-      setCustomers(res.data.data);
-    });
+    if (cookies.jwt) {
+      const staff = jwtDecode(cookies.jwt);
+      setStaff({
+        fullname: staff.fullname,
+        email: staff.email,
+        username: staff.username,
+      });
+    }
+  }, [cookies.jwt]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8080/api/v1/customers", {
+        headers: {
+          Authorization: `Bearer ${cookies.jwt}`,
+        },
+      })
+      .then((res) => {
+        setCustomers(res.data.data);
+      });
   }, []);
+
+  if (!cookies.jwt) {
+    console.log("You are not authenticated");
+    return <Navigate to="/" />;
+  } else if (cookies.jwt) {
+    if (jwtDecode(cookies.jwt).role !== "staff") {
+      console.log("You are not authorized to access this resource");
+      removeCookie("jwt");
+      return <Navigate to="/" />;
+    }
+  }
 
   return (
     <div className="flex">

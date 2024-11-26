@@ -22,8 +22,14 @@ import axios from "axios";
 import { useSnackbar } from "notistack";
 import { IconButton } from "@material-tailwind/react";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
+import { Navigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import { jwtDecode } from "jwt-decode";
 
 const ProductManagementPage = () => {
+  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+  const [admin, setAdmin] = useState({ fullname: "", email: "", username: "" });
+
   const [products, setProducts] = useState([]);
   const [newProduct, setNewProduct] = useState({
     name: "",
@@ -35,17 +41,22 @@ const ProductManagementPage = () => {
   });
   const { enqueueSnackbar } = useSnackbar();
 
-  const staff = {
-    fullname: "Nguyễn Văn A",
-    email: "nguyenvana@gmail.com",
-    username: "Username",
-  };
-
   const [active, setActive] = useState(1);
   const [maxPage, setMaxPage] = useState(0);
   const [totalLength, setTotalLength] = useState(0);
 
   const [openAddProductModal, setOpenAddProductModal] = useState(false);
+
+  useEffect(() => {
+    if (cookies.jwt) {
+      const admin = jwtDecode(cookies.jwt);
+      setAdmin({
+        fullname: admin.fullname,
+        email: admin.email,
+        username: admin.username,
+      });
+    }
+  }, [cookies.jwt]);
 
   const dataPerPage = 5;
   const lastIndex = active * dataPerPage;
@@ -63,12 +74,18 @@ const ProductManagementPage = () => {
   };
 
   useEffect(() => {
-    axios.get("http://localhost:8080/api/v1/products").then((res) => {
-      setProducts(res.data.data);
-      setTotalLength(res.data.results);
-      setMaxPage(Math.ceil(res.data.results / dataPerPage));
-    });
-  }, []);
+    axios
+      .get("http://localhost:8080/api/v1/products", {
+        headers: {
+          Authorization: `Bearer ${cookies.jwt}`,
+        },
+      })
+      .then((res) => {
+        setProducts(res.data.data);
+        setTotalLength(res.data.results);
+        setMaxPage(Math.ceil(res.data.results / dataPerPage));
+      });
+  }, [cookies.jwt]);
 
   useEffect(() => {
     setMaxPage(Math.ceil(totalLength / dataPerPage));
@@ -89,7 +106,11 @@ const ProductManagementPage = () => {
 
   const handleAddProduct = () => {
     axios
-      .post("http://localhost:8080/api/v1/products", newProduct)
+      .post("http://localhost:8080/api/v1/products", newProduct, {
+        headers: {
+          Authorization: `Bearer ${cookies.jwt}`,
+        },
+      })
       .then((res) => {
         setProducts([res.data, ...products]);
         setOpenAddProductModal(false);
@@ -114,7 +135,11 @@ const ProductManagementPage = () => {
 
   const handleDeleteProduct = (productId, closeModal) => {
     axios
-      .delete(`http://localhost:8080/api/v1/products/${productId}`)
+      .delete(`http://localhost:8080/api/v1/products/${productId}`, {
+        headers: {
+          Authorization: `Bearer ${cookies.jwt}`,
+        },
+      })
       .then(() => {
         setProducts(products.filter((product) => product._id !== productId));
         enqueueSnackbar("Xóa sản phẩm thành công", { variant: "success" });
@@ -127,11 +152,22 @@ const ProductManagementPage = () => {
       });
   };
 
+  if (!cookies.jwt) {
+    console.log("You are not authenticated");
+    return <Navigate to="/" />;
+  } else if (cookies.jwt) {
+    if (jwtDecode(cookies.jwt).role !== "admin") {
+      console.log("You are not authorized to access this resource");
+      removeCookie("jwt");
+      return <Navigate to="/" />;
+    }
+  }
+
   return (
     <div className="flex">
       <Sidebar />
       <div className="flex-1 p-7 bg-slate-100">
-        <Navbar heading="Quản lý sản phẩm" staff={staff} />
+        <Navbar heading="Quản lý sản phẩm" staff={admin} />
         <div className="flex justify-between mt-11 items-center">
           <h1 className="text-2xl font-semibold">Danh sách</h1>
           <Button

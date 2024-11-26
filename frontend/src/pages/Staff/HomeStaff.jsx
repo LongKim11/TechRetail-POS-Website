@@ -17,56 +17,25 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
-import { Navigate, useNavigate } from "react-router-dom";
-import { useGetStaffByIdQuery } from "../../features/staff/staffSlice";
-import { setCredentials } from "../../features/auth/authSlice";
+import { Navigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import { useGetStaffByIdQuery } from "../../features/admin/adminSlice";
 import { jwtDecode } from "jwt-decode";
 
 const HomeStaff = () => {
-  // const navigate = useNavigate();
-  // const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
-  // let staff = {};
+  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+  const [staff, setStaff] = useState({ fullname: "", email: "", username: "" });
 
-  // if (!cookies.jwt) {
-  //   navigate("/");
-  // }
-
-  // setCredentials({ token: cookies.jwt });
-  // let decoded
-  // try {
-  //   decoded = jwtDecode(cookies.jwt);
-  // } catch (err) {
-  //   removeCookie("jwt");
-  //   return <Navigate to="/" />;
-  // }
-  // const { id } = decoded;
-  // const { data, isLoading, isSuccess, isError, error } = useGetStaffByIdQuery(
-  //   id,
-  //   "Staff"
-  // );
-
-  // if (isLoading) return <div>Loading...</div>;
-
-  // if (isError) {
-  //   if (error.status === 401) {
-  //     removeCookie("jwt");
-  //     return <Navigate to="/" />;
-  //   } else {
-  //     return <p>{error.data.message}</p>;
-  //   }
-  // }
-  // staff = {
-  //   fullname: data.staff.fullname,
-  //   email: data.staff.email,
-  //   username: data.staff.account.username,
-  // };
-
-  const staff = {
-    fullname: "Nguyễn Văn A",
-    email: "nguyenvana@gmail.com",
-    username: "Username",
-  };
+  useEffect(() => {
+    if (cookies.jwt) {
+      const staff = jwtDecode(cookies.jwt);
+      setStaff({
+        fullname: staff.fullname,
+        email: staff.email,
+        username: staff.username,
+      });
+    }
+  }, [cookies.jwt]);
 
   const [totalProductByMonth, setTotalProductByMonth] = useState([]);
   const [months, setMonths] = useState([]);
@@ -93,9 +62,18 @@ const HomeStaff = () => {
   useEffect(() => {
     Promise.all([
       axios.get(
-        "http://localhost:8080/api/v1/orders/total-product-last-12-months"
+        "http://localhost:8080/api/v1/orders/total-product-last-12-months",
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.jwt}`,
+          },
+        }
       ),
-      axios.get("http://localhost:8080/api/v1/orders/overall-statistics"),
+      axios.get("http://localhost:8080/api/v1/orders/overall-statistics", {
+        headers: {
+          Authorization: `Bearer ${cookies.jwt}`,
+        },
+      }),
     ])
       .then(([totalProductRes, overallStatisticsRes]) => {
         setTotalProductByMonth(totalProductRes.data.totalProductByMonth);
@@ -106,6 +84,17 @@ const HomeStaff = () => {
         console.error("Có lỗi xảy ra khi lấy dữ liệu thống kê!", error);
       });
   }, []);
+
+  if (!cookies.jwt) {
+    console.log("You are not authenticated");
+    return <Navigate to="/" />;
+  } else if (cookies.jwt) {
+    if (jwtDecode(cookies.jwt).role !== "staff") {
+      console.log("You are not authorized to access this resource");
+      removeCookie("jwt");
+      return <Navigate to="/" />;
+    }
+  }
 
   return (
     <div className="flex">

@@ -21,6 +21,10 @@ import { MdOutlineDateRange } from "react-icons/md";
 import { MdOutlineSignalWifiStatusbarNull } from "react-icons/md";
 import { MdWorkOutline } from "react-icons/md";
 import { IoMdUnlock } from "react-icons/io";
+import { format } from "date-fns";
+import { useSnackbar } from "notistack";
+import { useCookies } from "react-cookie";
+import axios from "axios";
 
 const TABLE_HEAD = [
   "Họ và tên",
@@ -36,6 +40,8 @@ const StaffTable = ({ staffs }) => {
   const [openLockModal, setOpenLockModal] = useState(false);
   const [openUnlockModal, setOpenUnlockModal] = useState(false);
   const [selectedStaff, setSelectedStaff] = useState(null);
+  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleOpenDetailModal = (staff) => {
     setOpenDetailModal(!openDetailModal);
@@ -48,6 +54,60 @@ const StaffTable = ({ staffs }) => {
   const handleOpenUnlockModal = (staff) => {
     setSelectedStaff(staff);
     setOpenUnlockModal(!openUnlockModal);
+  };
+
+  const handleLockAccount = () => {
+    axios
+      .patch(
+        `http://localhost:8080/api/v1/staffs/${selectedStaff._id}`,
+        { is_locked: "True" },
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.jwt}`,
+          },
+        }
+      )
+      .then(() => {
+        setOpenLockModal(!openLockModal);
+        staffs = staffs.map((staff) => {
+          if (staff._id === selectedStaff._id) {
+            staff.is_locked = "True";
+          }
+        });
+        enqueueSnackbar("Khóa tài khoản thành công", { variant: "success" });
+      })
+      .catch((err) => {
+        console.log(err);
+        setOpenLockModal(!openLockModal);
+        enqueueSnackbar("Khóa tài khoản thất bại", { variant: "error" });
+      });
+  };
+
+  const handleUnlockAccount = () => {
+    axios
+      .patch(
+        `http://localhost:8080/api/v1/staffs/${selectedStaff._id}`,
+        { is_locked: "False" },
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.jwt}`,
+          },
+        }
+      )
+      .then(() => {
+        setOpenUnlockModal(!openUnlockModal);
+        staffs = staffs.map((staff) => {
+          if (staff._id === selectedStaff._id) {
+            staff.is_locked = "False";
+          }
+        });
+        enqueueSnackbar("Mở khóa tài khoản thành công", { variant: "success" });
+      })
+      .catch((err) => {
+        console.log(err);
+        setOpenUnlockModal(!openUnlockModal);
+        enqueueSnackbar("Mở khóa tài khoản thất bại", { variant: "error" });
+      });
   };
 
   return (
@@ -71,21 +131,22 @@ const StaffTable = ({ staffs }) => {
                 <td className="p-4">
                   <div className="flex items-center gap-x-3">
                     <Avatar
-                      src={staff.img}
-                      alt={staff.name}
+                      // src={staff.img}
+                      src=""
+                      alt={staff.fullname}
                       size="md"
                       withBorder={true}
                       color="blue"
                       className="border object-contain p-1"
                     />
                     <Typography className="font-semibold">
-                      {staff.name}
+                      {staff.fullname}
                     </Typography>
                   </div>
                 </td>
                 <td className="p-4">
                   <Typography className="font-semibold">
-                    {staff.createdAt}
+                    {format(staff.createdAt, "dd-MM-yyyy")}
                   </Typography>
                 </td>
                 <td className="p-4">
@@ -104,7 +165,7 @@ const StaffTable = ({ staffs }) => {
                       size="lg"
                       variant="ghost"
                       value={staff.is_locked}
-                      color={staff.is_locked == "true" ? "red" : "cyan"}
+                      color={staff.is_locked == "True" ? "red" : "cyan"}
                     />
                   </div>
                 </td>
@@ -132,7 +193,7 @@ const StaffTable = ({ staffs }) => {
                         <BsInfoCircle className="text-2xl text-green-600" />
                       </a>
                     </Tooltip>
-                    {staff.is_locked == "false" ? (
+                    {staff.is_locked == "False" ? (
                       <Tooltip
                         content="Khóa tài khoản"
                         animate={{
@@ -167,7 +228,11 @@ const StaffTable = ({ staffs }) => {
           })}
         </tbody>
       </table>
-      <Dialog open={openDetailModal} handler={handleOpenDetailModal} size="sm">
+      <Dialog
+        open={openDetailModal}
+        handler={() => setOpenDetailModal(!openDetailModal)}
+        size="sm"
+      >
         <DialogHeader className="relative m-0 block">
           <Typography variant="h3">Chi tiết nhân viên</Typography>
           <Typography className="mt-1 font-normal text-slate-500">
@@ -181,7 +246,7 @@ const StaffTable = ({ staffs }) => {
               <Typography variant="h6">Họ và tên</Typography>
             </div>
             <input
-              value={selectedStaff?.name}
+              value={selectedStaff?.fullname}
               className="p-2 rounded-md w-full mt-2 border border-gray-200 font-normal text-slate-700"
               disabled
             ></input>
@@ -192,7 +257,7 @@ const StaffTable = ({ staffs }) => {
               <Typography variant="h6">Tên đăng nhập</Typography>
             </div>
             <input
-              value={selectedStaff?.username}
+              value={selectedStaff?.account.username}
               className="p-2 rounded-md w-full mt-2 border border-gray-200 font-normal text-slate-700"
               disabled
             ></input>
@@ -238,56 +303,76 @@ const StaffTable = ({ staffs }) => {
               <Typography variant="h6">Ngày tạo</Typography>
             </div>
             <input
-              value={selectedStaff?.createdAt}
+              value={
+                selectedStaff?.createdAt &&
+                format(selectedStaff?.createdAt, "dd-MM-yyyy")
+              }
               className="p-2 rounded-md w-full mt-2 border border-gray-200 font-normal text-slate-700"
               disabled
             ></input>
           </div>
         </DialogBody>
         <DialogFooter>
-          <Button color="red" onClick={handleOpenDetailModal}>
+          <Button
+            color="blue"
+            onClick={() => setOpenDetailModal(!openDetailModal)}
+          >
             <span>Đóng</span>
           </Button>
         </DialogFooter>
       </Dialog>
-      <Dialog open={openLockModal} handler={handleOpenLockModal} size="sm">
+      <Dialog
+        open={openLockModal}
+        handler={() => setOpenLockModal(!openLockModal)}
+        size="sm"
+      >
         <DialogHeader className="relative m-0 block">
           <Typography variant="h3">Khóa tài khoản</Typography>
         </DialogHeader>
         <DialogBody>
           <p className="font-normal text-slate-500">
             Bạn có chắc chắn muốn khóa tài khoản của nhân viên{" "}
-            <span className="font-bold">{selectedStaff?.name}</span> này không?
+            <span className="font-bold">{selectedStaff?.fullname}</span> này
+            không?
           </p>
         </DialogBody>
         <DialogFooter>
-          <Button variant="text" onClick={handleOpenLockModal} className="mr-1">
+          <Button
+            variant="text"
+            onClick={() => setOpenLockModal(!openLockModal)}
+            className="mr-1"
+          >
             <span>Đóng</span>
           </Button>
-          <Button color="red" onClick={handleOpenLockModal}>
+          <Button color="red" onClick={handleLockAccount}>
             <span>Đồng ý</span>
           </Button>
         </DialogFooter>
       </Dialog>
-      <Dialog open={openUnlockModal} handler={handleOpenUnlockModal} size="sm">
+      <Dialog
+        open={openUnlockModal}
+        handler={() => setOpenUnlockModal(!openUnlockModal)}
+        size="sm"
+      >
         <DialogHeader className="relative m-0 block">
           <Typography variant="h3">Mở khóa tài khoản</Typography>
         </DialogHeader>
         <DialogBody>
           <p className="font-normal text-slate-500">
             Bạn có chắc chắn muốn mở khóa tài khoản của nhân viên{" "}
-            <span className="font-bold">{selectedStaff?.name}</span> này không?
+            <span className="font-bold">{selectedStaff?.fullname}</span> này
+            không?
           </p>
         </DialogBody>
         <DialogFooter>
           <Button
             variant="text"
-            onClick={handleOpenUnlockModal}
+            onClick={() => setOpenUnlockModal(!openUnlockModal)}
             className="mr-1"
           >
             <span>Đóng</span>
           </Button>
-          <Button color="red" onClick={handleOpenUnlockModal}>
+          <Button color="blue" onClick={handleUnlockAccount}>
             <span>Đồng ý</span>
           </Button>
         </DialogFooter>

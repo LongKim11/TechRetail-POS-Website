@@ -1,42 +1,32 @@
 import { FaUser } from "react-icons/fa";
 import { FaLock } from "react-icons/fa";
 import { Navigate, useNavigate } from "react-router-dom";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useDispatch } from "react-redux";
 import { useLoginMutation } from "../features/auth/authApiSlice";
 import { setCredentials } from "../features/auth/authSlice";
 import { useCookies } from "react-cookie";
+import { useSnackbar } from "notistack";
 
 const LoginPage = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
-  const userRef = useRef();
-  const errRef = useRef();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [login, { isLoading }] = useLoginMutation();
 
-  // useEffect(() => {
-  //   userRef.current.focus();
-  // }, []);
-
-  useEffect(() => {
-    setError("");
-  }, [username, password]);
+  const { enqueueSnackbar } = useSnackbar();
 
   if (cookies.jwt) {
     const role = jwtDecode(cookies.jwt).role;
     if (role === "staff") return <Navigate to="/staff/home" />;
     if (role === "admin") return <Navigate to="/admin/home" />;
   }
-
-  const errClass = error ? "block" : "hidden";
 
   const handleUserInput = (e) => setUsername(e.target.value);
   const handlePwdInput = (e) => setPassword(e.target.value);
@@ -55,19 +45,9 @@ const LoginPage = () => {
 
       if (role === "staff") navigate("/staff/home");
       if (role === "admin") navigate("/admin/home");
-    } catch (err) {
-      if (!err.status) {
-        setError("No Server Response");
-      } else if (err.status === 400) {
-        setError("Missing Username or Password");
-      } else if (err.status === 401) {
-        setError("Unauthorized");
-      } else {
-        setError(err.data?.message);
-      }
-      console.log(err);
-
-      errRef.current.focus();
+    } catch (error) {
+      enqueueSnackbar("Đăng nhập thất bại", { variant: "error" });
+      console.error("Đăng nhập thất bại", error);
     }
   };
 
@@ -97,7 +77,6 @@ const LoginPage = () => {
               className="py-3 px-4 w-full rounded-lg bg-[#E2E2E2] focus:border-[#004AAD] focus:outline-none border-2"
               type="text"
               name="username"
-              ref={userRef}
               value={username}
               onChange={handleUserInput}
               placeholder="Tên đăng nhập"
@@ -131,9 +110,6 @@ const LoginPage = () => {
           </span>
         </form>
       </div>
-      <p ref={errRef} className={errClass} aria-live="assertive">
-        {error}
-      </p>
     </div>
   );
 };

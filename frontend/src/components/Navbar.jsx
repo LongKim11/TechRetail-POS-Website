@@ -9,9 +9,25 @@ import {
 import { FaRegUserCircle, FaFingerprint, FaSignOutAlt } from "react-icons/fa";
 import { MdSettings } from "react-icons/md";
 import UserAvatar from "../assets/user-avatar.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useSendLogoutMutation } from "../features/auth/authApiSlice";
+import { useState } from "react";
+import { useCookies } from "react-cookie";
 
 const Navbar = ({ staff, heading }) => {
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(true);
+  const [logout, { isLoading }] = useSendLogoutMutation();
+  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+
+  const handleLogout = async () => {
+    const { message } = await logout().unwrap();
+    console.log("ABC");
+    if (message) {
+      removeCookie("jwt");
+    }
+  };
+
   return (
     <div className="flex justify-between items-center">
       <h1 className="text-2xl font-semibold ">{heading}</h1>
@@ -63,7 +79,7 @@ const Navbar = ({ staff, heading }) => {
               </Typography>
             </MenuItem>
             <hr className="my-2 border-blue-gray-50" />
-            <a href="/">
+            <a href="/" onClick={handleLogout} className="hover:outline-none">
               <MenuItem className="flex items-center gap-3 hover:bg-gray-200">
                 <FaSignOutAlt className="text-xl text-red-600" />
                 <Typography

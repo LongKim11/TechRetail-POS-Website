@@ -9,13 +9,24 @@ import { TbDevicesDollar } from "react-icons/tb";
 import { GrMoney } from "react-icons/gr";
 import axios from "axios";
 import { format } from "date-fns";
+import { useCookies } from "react-cookie";
+import { Navigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const AnalysPage = () => {
-  const staff = {
-    fullname: "Nguyễn Văn A",
-    email: "nguyenvana@gmail.com",
-    username: "Username",
-  };
+  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+  const [admin, setAdmin] = useState({ fullname: "", email: "", username: "" });
+
+  useEffect(() => {
+    if (cookies.jwt) {
+      const admin = jwtDecode(cookies.jwt);
+      setAdmin({
+        fullname: admin.fullname,
+        email: admin.email,
+        username: admin.username,
+      });
+    }
+  }, [cookies.jwt]);
 
   const [value, setValue] = useState({
     startDate: format(new Date(), "yyyy-MM-dd"),
@@ -34,6 +45,9 @@ const AnalysPage = () => {
           startDate: value.startDate,
           endDate: value.endDate,
         },
+        headers: {
+          Authorization: `Bearer ${cookies.jwt}`,
+        },
       })
       .then((res) => {
         if (res.data.length === 0) {
@@ -47,7 +61,7 @@ const AnalysPage = () => {
       .catch((error) => {
         console.error("Có lỗi xảy ra khi lấy dữ liệu thống kê!", error);
       });
-  }, []);
+  }, [value, cookies.jwt]);
 
   const handleSearch = () => {
     axios
@@ -55,6 +69,9 @@ const AnalysPage = () => {
         params: {
           startDate: format(value.startDate, "yyyy-MM-dd"),
           endDate: format(value.endDate, "yyyy-MM-dd"),
+        },
+        headers: {
+          Authorization: `Bearer ${cookies.jwt}`,
         },
       })
       .then((res) => {
@@ -68,11 +85,22 @@ const AnalysPage = () => {
       });
   };
 
+  if (!cookies.jwt) {
+    console.log("You are not authenticated");
+    return <Navigate to="/" />;
+  } else if (cookies.jwt) {
+    if (jwtDecode(cookies.jwt).role !== "admin") {
+      console.log("You are not authorized to access this resource");
+      removeCookie("jwt");
+      return <Navigate to="/" />;
+    }
+  }
+
   return (
     <div className="flex">
       <Sidebar />
       <div className="flex-1 p-7 bg-slate-100">
-        <Navbar heading="Trang phân tích và thống kê" staff={staff} />
+        <Navbar heading="Trang phân tích và thống kê" staff={admin} />
         <div className="flex mt-7 mb-11 items-center gap-x-10">
           <div className="flex w-1/3 flex-col gap-y-3">
             <div className="flex gap-x-3 items-center">

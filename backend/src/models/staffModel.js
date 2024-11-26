@@ -89,9 +89,20 @@ staffSchema.methods.createPasswordResetToken = function () {
 
 staffSchema.methods.jwtToken = function () {
     const user = this
-    return jwt.sign({ id: user._id, role: 'staff' }, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRES_IN,
-    })
+    const role = this.account.username === 'admin' ? 'admin' : 'staff'
+    return jwt.sign(
+        {
+            id: user._id,
+            role: role,
+            username: user.account.username,
+            email: user.email,
+            fullname: user.fullname,
+        },
+        process.env.JWT_SECRET,
+        {
+            expiresIn: process.env.JWT_EXPIRES_IN,
+        },
+    )
 }
 
 const Staff = mongoose.model('Staff', staffSchema)

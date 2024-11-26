@@ -1,16 +1,26 @@
 import SidebarStaff from "../../components/SidebarStaff";
 import NavbarStaff from "../../components/NavbarStaff";
 import PurchaseHistoryTable from "../../components/PurchaseHistoryTable";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useCookies } from "react-cookie";
+import { jwtDecode } from "jwt-decode";
 
 const PurchaseHistoryStaff = () => {
-  const staff = {
-    fullname: "Nguyễn Văn A",
-    email: "nguyenvana@gmail.com",
-    username: "Username",
-  };
+  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+  const [staff, setStaff] = useState({ fullname: "", email: "", username: "" });
+
+  useEffect(() => {
+    if (cookies.jwt) {
+      const staff = jwtDecode(cookies.jwt);
+      setStaff({
+        fullname: staff.fullname,
+        email: staff.email,
+        username: staff.username,
+      });
+    }
+  }, [cookies.jwt]);
 
   const [orders, setOrders] = useState([]);
   const { customerId } = useParams();
@@ -19,14 +29,29 @@ const PurchaseHistoryStaff = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/v1/customers/${customerId}/orders`)
+      .get(`http://localhost:8080/api/v1/customers/${customerId}/orders`, {
+        headers: {
+          Authorization: `Bearer ${cookies.jwt}`,
+        },
+      })
       .then((res) => {
         setOrders(res.data.data);
       })
       .catch((error) => {
         console.error("Có lỗi xảy ra khi lấy dữ liệu đơn hàng!", error);
       });
-  }, [customerId]);
+  }, [customerId, cookies.jwt]);
+
+  if (!cookies.jwt) {
+    console.log("You are not authenticated");
+    return <Navigate to="/" />;
+  } else if (cookies.jwt) {
+    if (jwtDecode(cookies.jwt).role !== "staff") {
+      console.log("You are not authorized to access this resource");
+      removeCookie("jwt");
+      return <Navigate to="/" />;
+    }
+  }
 
   return (
     <div className="flex">

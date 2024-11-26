@@ -8,21 +8,26 @@ import { FaChartLine } from "react-icons/fa6";
 import { FiLogOut } from "react-icons/fi";
 import Control from "../assets/control.png";
 import YellowLogo from "../assets/logo-yellow-bg.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useSendLogoutMutation } from "../features/auth/authApiSlice";
+import { useCookies } from "react-cookie";
 
 const Sidebar = () => {
-  const navigate = useNavigate();
   const [open, setOpen] = useState(true);
-
   const [logout, { isLoading }] = useSendLogoutMutation();
+
+  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+
+  if (isLoading) {
+    return <div>Logging out...</div>;
+  }
 
   const handleLogout = async () => {
     const { message } = await logout().unwrap();
-    if (message)
-      navigate("/", {
-        state: { message: "You have been logged out successfully" },
-      });
+    console.log("ABC");
+    if (message) {
+      removeCookie("jwt");
+    }
   };
 
   return (
@@ -115,7 +120,7 @@ const Sidebar = () => {
             </span>
           </li>
         </Link>
-        <a href="/">
+        <a href="/" onClick={handleLogout}>
           <li className="flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4 mt-12">
             <span className="text-2xl text-white">
               <FiLogOut></FiLogOut>

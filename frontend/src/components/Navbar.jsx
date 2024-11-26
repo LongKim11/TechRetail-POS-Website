@@ -16,13 +16,11 @@ import { useCookies } from "react-cookie";
 
 const Navbar = ({ staff, heading }) => {
   const navigate = useNavigate();
-  const [open, setOpen] = useState(true);
   const [logout, { isLoading }] = useSendLogoutMutation();
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
 
   const handleLogout = async () => {
     const { message } = await logout().unwrap();
-    console.log("ABC");
     if (message) {
       removeCookie("jwt");
     }

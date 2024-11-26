@@ -8,6 +8,7 @@ import { useLoginMutation } from "../features/auth/authApiSlice";
 import { setCredentials } from "../features/auth/authSlice";
 import { useCookies } from "react-cookie";
 import { useSnackbar } from "notistack";
+import ThreeDotsLoader from "../components/Spinner/ThreeDotsLoader";
 
 const LoginPage = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
@@ -31,7 +32,7 @@ const LoginPage = () => {
   const handleUserInput = (e) => setUsername(e.target.value);
   const handlePwdInput = (e) => setPassword(e.target.value);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <ThreeDotsLoader />;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -52,7 +53,10 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-w-screen min-h-screen p-12 bg-center bg-cover bg-[url('./src/assets/login-bg.jpg')]">
+    <div
+      className="min-w-screen min-h-screen p-12 bg-center bg-cover"
+      style={{ backgroundImage: `url('./src/assets/login-bg.jpg')` }}
+    >
       <div className="sm:w-[490px] sm:h-[590px] mx-auto rounded-lg p-7 bg-white shadow-2xl shadow-yellow-800">
         <div className="flex flex-row items-center justify-center sm:mb-10 gap-x-5">
           <div>

@@ -39,9 +39,7 @@ const StaffManagementPage = () => {
         username: admin.username,
       });
     }
-  }, [cookies.jwt]);
 
-  useEffect(() => {
     axios
       .get("http://localhost:8080/api/v1/staffs", {
         headers: {
@@ -52,6 +50,7 @@ const StaffManagementPage = () => {
         const entries = res.data;
         const list = Object.values(entries.data);
         setStaffs(list);
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Có lỗi xảy ra khi lấy dữ liệu thống kê!", error);

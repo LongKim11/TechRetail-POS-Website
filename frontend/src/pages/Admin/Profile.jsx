@@ -5,19 +5,33 @@ import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { jwtDecode } from "jwt-decode";
+import { api } from "../../app/api/api";
 
 const Profile = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
-  const [admin, setAdmin] = useState({ fullname: "", email: "", username: "" });
+  const [admin, setAdmin] = useState({});
 
   useEffect(() => {
     if (cookies.jwt) {
-      const admin = jwtDecode(cookies.jwt);
-      setAdmin({
-        fullname: admin.fullname,
-        email: admin.email,
-        username: admin.username,
-      });
+      const id = jwtDecode(cookies.jwt).id;
+
+      const handleLoadInfo = (id) => {
+        api
+          .get(`/staffs/${id}`, {
+            headers: {
+              Authorization: `Bearer ${cookies.jwt}`,
+            },
+          })
+          .then((res) => {
+            const { data } = res.data;
+            setAdmin(data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      };
+
+      handleLoadInfo(id);
     }
   }, [cookies.jwt]);
 

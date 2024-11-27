@@ -1,20 +1,15 @@
-import { useNavigate } from "react-router-dom";
 import ChangeBG from "../assets/cp.jpg";
 import { useCookies } from "react-cookie";
-import {
-  useGetAdminInfoQuery,
-  useUpdatePasswordMutation,
-} from "../features/admin/adminSlice";
 import { useState } from "react";
 import { useSnackbar } from "notistack";
 import { jwtDecode } from "jwt-decode";
+import { api } from "../app/api/api";
 
 const ChangePasswordForm = () => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const { enqueueSnackbar } = useSnackbar();
-  const [updatePassword, { isLoading }] = useUpdatePasswordMutation("Admin");
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
 
   const handleOldPasswordChange = (e) => setOldPassword(e.target.value);
@@ -24,18 +19,24 @@ const ChangePasswordForm = () => {
   const handleChangePassword = () => {
     const token = cookies.jwt;
     const id = jwtDecode(token).id;
-    updatePassword({
-      id,
-      oldPassword,
-      newPassword,
-      confirmPassword,
-    })
-      .unwrap()
+
+    api
+      .patch(
+        `/auth/updatePassword/${id}`,
+        {
+          oldPassword,
+          newPassword,
+          confirmPassword,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then((res) => {
         enqueueSnackbar("Đổi mật khẩu thành công", { variant: "success" });
-        setOldPassword("");
-        setNewPassword("");
-        setConfirmPassword("");
+        removeCookie("jwt");
       })
       .catch((err) => {
         enqueueSnackbar("Đổi mật khẩu thất bại", { variant: "error" });

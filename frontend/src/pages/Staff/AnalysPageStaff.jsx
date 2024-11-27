@@ -7,11 +7,11 @@ import AnalystTable from "../../components/AnalysTable";
 import { TbDeviceIpadCheck } from "react-icons/tb";
 import { TbDevicesDollar } from "react-icons/tb";
 import { GrMoney } from "react-icons/gr";
-import axios from "axios";
 import { format } from "date-fns";
 import { useCookies } from "react-cookie";
 import { Navigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { api } from "../../app/api/api";
 
 const AnalysPageStaff = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
@@ -29,18 +29,30 @@ const AnalysPageStaff = () => {
 
   useEffect(() => {
     if (cookies.jwt) {
-      const staff = jwtDecode(cookies.jwt);
-      setStaff({
-        fullname: staff.fullname,
-        email: staff.email,
-        username: staff.username,
-      });
+      if (jwtDecode(cookies.jwt).never_login) {
+        // handleOpenCPModal();
+      } else {
+        const id = jwtDecode(cookies.jwt).id;
+        api
+          .get(`/staffs/${id}`, {
+            headers: {
+              Authorization: `Bearer ${cookies.jwt}`,
+            },
+          })
+          .then((res) => {
+            const { data } = res.data;
+            setStaff(data);
+          })
+          .catch((error) => {
+            console.error("Có lỗi xảy ra khi lấy thông tin nhân viên!", error);
+          });
+      }
     }
   }, [cookies.jwt]);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8080/api/v1/orders/statistics", {
+    api
+      .get("/orders/statistics", {
         headers: {
           Authorization: `Bearer ${cookies.jwt}`,
         },
@@ -64,8 +76,8 @@ const AnalysPageStaff = () => {
   }, [value, cookies.jwt]);
 
   const handleSearch = () => {
-    axios
-      .get("http://localhost:8080/api/v1/orders/statistics", {
+    api
+      .get("/orders/statistics", {
         params: {
           startDate: format(value.startDate, "yyyy-MM-dd"),
           endDate: format(value.endDate, "yyyy-MM-dd"),

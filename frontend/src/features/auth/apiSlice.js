@@ -1,7 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { setCredentials } from "../../features/auth/authSlice";
-import axios from "axios"; // Set default Axios configuration to include credentials
-axios.defaults.withCredentials = true;
+import { setCredentials } from "./authSlice";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: "http://localhost:8080",

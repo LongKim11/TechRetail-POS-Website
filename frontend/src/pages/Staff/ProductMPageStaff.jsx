@@ -4,13 +4,13 @@ import { Button } from "@material-tailwind/react";
 import { IoFilter } from "react-icons/io5";
 import ProductTableStaff from "../../components/ProductTableStaff";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { FaBarcode } from "react-icons/fa6";
 import { IconButton, Typography } from "@material-tailwind/react";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { useCookies } from "react-cookie";
 import { jwtDecode } from "jwt-decode";
 import { Navigate } from "react-router-dom";
+import { api } from "../../app/api/api";
 
 const ProductMPageStaff = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
@@ -25,16 +25,28 @@ const ProductMPageStaff = () => {
 
   useEffect(() => {
     if (cookies.jwt) {
-      const staff = jwtDecode(cookies.jwt);
-      setStaff({
-        fullname: staff.fullname,
-        email: staff.email,
-        username: staff.username,
-      });
+      if (jwtDecode(cookies.jwt).never_login) {
+        // handleOpenCPModal();
+      } else {
+        const id = jwtDecode(cookies.jwt).id;
+        api
+          .get(`/staffs/${id}`, {
+            headers: {
+              Authorization: `Bearer ${cookies.jwt}`,
+            },
+          })
+          .then((res) => {
+            const { data } = res.data;
+            setStaff(data);
+          })
+          .catch((error) => {
+            console.error("Có lỗi xảy ra khi lấy thông tin nhân viên!", error);
+          });
+      }
     }
 
-    axios
-      .get("http://localhost:8080/api/v1/products", {
+    api
+      .get("/products", {
         headers: {
           Authorization: `Bearer ${cookies.jwt}`,
         },
@@ -46,15 +58,12 @@ const ProductMPageStaff = () => {
   }, [cookies.jwt]);
 
   useEffect(() => {
-    axios
-      .get(
-        `http://localhost:8080/api/v1/products?name=${searchName}&barcode=${searchBarcode}`,
-        {
-          headers: {
-            Authorization: `Bearer ${cookies.jwt}`,
-          },
-        }
-      )
+    api
+      .get(`/products?name=${searchName}&barcode=${searchBarcode}`, {
+        headers: {
+          Authorization: `Bearer ${cookies.jwt}`,
+        },
+      })
       .then((res) => {
         setProducts(res.data.data);
         setMaxPage(Math.ceil(res.data.results / dataPerPage));

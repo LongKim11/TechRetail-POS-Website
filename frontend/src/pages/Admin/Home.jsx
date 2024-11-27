@@ -5,9 +5,9 @@ import ChartAdmin from "../../components/ChartAdmin";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { Link, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { useCookies } from "react-cookie";
 import { jwtDecode } from "jwt-decode";
+import { api } from "../../app/api/api";
 
 const Home = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
@@ -25,20 +25,32 @@ const Home = () => {
 
   useEffect(() => {
     if (cookies.jwt) {
-      const admin = jwtDecode(cookies.jwt);
-      setAdmin({
-        fullname: admin.fullname,
-        email: admin.email,
-        username: admin.username,
-      });
+      const id = jwtDecode(cookies.jwt).id;
+
+      const handleLoadInfo = (id) => {
+        api
+          .get(`/staffs/${id}`, {
+            headers: {
+              Authorization: `Bearer ${cookies.jwt}`,
+            },
+          })
+          .then((res) => {
+            const { data } = res.data;
+            setAdmin(data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      };
+
+      handleLoadInfo(id);
     }
 
     Promise.all([
-      axios.get(
-        "http://localhost:8080/api/v1/orders/total-amount-last-12-months",
-        { headers: { Authorization: `Bearer ${cookies.jwt}` } }
-      ),
-      axios.get("http://localhost:8080/api/v1/orders/overall-statistics", {
+      api.get("/orders/total-amount-last-12-months", {
+        headers: { Authorization: `Bearer ${cookies.jwt}` },
+      }),
+      api.get("/orders/overall-statistics", {
         headers: { Authorization: `Bearer ${cookies.jwt}` },
       }),
     ])

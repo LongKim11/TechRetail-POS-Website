@@ -3,11 +3,11 @@ import NavbarStaff from "../../components/NavbarStaff";
 import { Button } from "@material-tailwind/react";
 import { IoFilter } from "react-icons/io5";
 import CustomerTableStaff from "../../components/CustomerTableStaff";
-import axios from "axios";
 import { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { jwtDecode } from "jwt-decode";
 import { Navigate } from "react-router-dom";
+import { api } from "../../app/api/api";
 
 const CustomersPageStaff = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
@@ -20,8 +20,44 @@ const CustomersPageStaff = () => {
   };
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:8080/api/v1/customers?fullname=${searchName}`, {
+    if (cookies.jwt) {
+      if (jwtDecode(cookies.jwt).never_login) {
+        // handleOpenCPModal();
+      } else {
+        const id = jwtDecode(cookies.jwt).id;
+        api
+          .get(`/staffs/${id}`, {
+            headers: {
+              Authorization: `Bearer ${cookies.jwt}`,
+            },
+          })
+          .then((res) => {
+            const { data } = res.data;
+            setStaff(data);
+          })
+          .catch((error) => {
+            console.error("Có lỗi xảy ra khi lấy thông tin nhân viên!", error);
+          });
+      }
+    }
+
+    api
+      .get("/customers", {
+        headers: {
+          Authorization: `Bearer ${cookies.jwt}`,
+        },
+      })
+      .then((res) => {
+        setCustomers(res.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [cookies.jwt]);
+
+  useEffect(() => {
+    api
+      .get(`/customers?fullname=${searchName}`, {
         headers: {
           Authorization: `Bearer ${cookies.jwt}`,
         },
@@ -30,27 +66,6 @@ const CustomersPageStaff = () => {
         setCustomers(res.data.data);
       });
   }, [searchName, cookies.jwt]);
-
-  useEffect(() => {
-    if (cookies.jwt) {
-      const staff = jwtDecode(cookies.jwt);
-      setStaff({
-        fullname: staff.fullname,
-        email: staff.email,
-        username: staff.username,
-      });
-    }
-
-    axios
-      .get("http://localhost:8080/api/v1/customers", {
-        headers: {
-          Authorization: `Bearer ${cookies.jwt}`,
-        },
-      })
-      .then((res) => {
-        setCustomers(res.data.data);
-      });
-  }, [cookies.jwt]);
 
   if (!cookies.jwt) {
     console.log("You are not authenticated");

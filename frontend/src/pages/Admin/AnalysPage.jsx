@@ -7,31 +7,43 @@ import AnalystTable from "../../components/AnalysTable";
 import { TbDeviceIpadCheck } from "react-icons/tb";
 import { TbDevicesDollar } from "react-icons/tb";
 import { GrMoney } from "react-icons/gr";
-import axios from "axios";
 import { format } from "date-fns";
 import { useCookies } from "react-cookie";
 import { Navigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { api } from "../../app/api/api";
 
 const AnalysPage = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
-  const [admin, setAdmin] = useState({ fullname: "", email: "", username: "" });
-
-  useEffect(() => {
-    if (cookies.jwt) {
-      const admin = jwtDecode(cookies.jwt);
-      setAdmin({
-        fullname: admin.fullname,
-        email: admin.email,
-        username: admin.username,
-      });
-    }
-  }, [cookies.jwt]);
-
+  const [admin, setAdmin] = useState({});
   const [value, setValue] = useState({
     startDate: format(new Date(), "yyyy-MM-dd"),
     endDate: format(new Date(), "yyyy-MM-dd"),
   });
+
+  useEffect(() => {
+    if (cookies.jwt) {
+      const id = jwtDecode(cookies.jwt).id;
+
+      const handleLoadInfo = (id) => {
+        api
+          .get(`/staffs/${id}`, {
+            headers: {
+              Authorization: `Bearer ${cookies.jwt}`,
+            },
+          })
+          .then((res) => {
+            const { data } = res.data;
+            setAdmin(data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      };
+
+      handleLoadInfo(id);
+    }
+  }, [cookies.jwt]);
 
   const [orders, setOrders] = useState([]);
   const [totalOrders, setTotalOrders] = useState(0);
@@ -39,8 +51,8 @@ const AnalysPage = () => {
   const [totalQuantityOrders, setTotalQuantityOrders] = useState(0);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8080/api/v1/orders/statistics", {
+    api
+      .get("/orders/statistics", {
         params: {
           startDate: value.startDate,
           endDate: value.endDate,

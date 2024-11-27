@@ -12,6 +12,8 @@ import orderRoute from './src/routes/orderRoutes.js'
 import AppError from './src/utils/appError.js'
 import globalErrorHandler from './src/controllers/errorController.js'
 import cookieParser from 'cookie-parser'
+import path from 'path'
+import { __dirname } from './src/utils/fileUtils.js'
 
 configDotenv({ path: './config.env' })
 
@@ -27,7 +29,7 @@ app.use(
         credentials: true,
     }),
 )
-app.use(express.static('public'))
+app.use(express.static(path.join(__dirname, 'public')))
 app.use(morgan('dev'))
 
 // Routes

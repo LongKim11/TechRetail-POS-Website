@@ -1,19 +1,30 @@
 import { FaUser } from "react-icons/fa";
 import { FaLock } from "react-icons/fa";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useLoginMutation } from "../features/auth/authApiSlice";
-import { setCredentials } from "../features/auth/authSlice";
 import { useCookies } from "react-cookie";
 import { useSnackbar } from "notistack";
 import ThreeDotsLoader from "../components/Spinner/ThreeDotsLoader";
+import {
+  Button,
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  DialogHeader,
+  Typography,
+} from "@material-tailwind/react";
 
 const LoginPage = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const [openLoginViaEmailModal, setOpenLoginViaEmailModal] = useState(false);
+  const [openLockedAccountModal, setOpenLockedAccountModal] = useState(false);
 
   const navigate = useNavigate();
 
@@ -30,13 +41,25 @@ const LoginPage = () => {
   const handleUserInput = (e) => setUsername(e.target.value);
   const handlePwdInput = (e) => setPassword(e.target.value);
 
-  if (isLoading) return <ThreeDotsLoader />;
+  const handleOpenLoginViaEmailModal = () => {
+    setOpenLoginViaEmailModal((cur) => !cur);
+  };
+
+  const handleOpenLockedAccountModal = () => {
+    setOpenLockedAccountModal((cur) => !cur);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    const loginToken = searchParams.get("token")
+      ? searchParams.get("token")
+      : "null";
     try {
-      const { token } = await login({ username, password }).unwrap();
+      const { token } = await login({
+        loginToken,
+        username,
+        password,
+      }).unwrap();
       setUsername("");
       setPassword("");
       const role = jwtDecode(token).role;
@@ -44,10 +67,27 @@ const LoginPage = () => {
       if (role === "staff") navigate("/staff/home");
       if (role === "admin") navigate("/admin/home");
     } catch (error) {
-      enqueueSnackbar("Đăng nhập thất bại", { variant: "error" });
       console.error("Đăng nhập thất bại", error);
+      if (error.data.message === "Login token is wrong") {
+        handleOpenLoginViaEmailModal();
+      } else if (error.data.message === "Account is locked") {
+        handleOpenLockedAccountModal();
+      } else if (error.data.message === "Request failed with status code 401") {
+        enqueueSnackbar("Tên đăng nhập hoặc mật khẩu không đúng", {
+          variant: "error",
+        });
+      } else if (error.data.message === "Login token is expired") {
+        enqueueSnackbar(
+          "Link này đã hết hạn đăng nhập, hãy liên hệ admin để được cấp lại link",
+          { variant: "error" }
+        );
+      } else {
+        enqueueSnackbar("Đăng nhập thất bại", { variant: "error" });
+      }
     }
   };
+
+  if (isLoading) return <ThreeDotsLoader />;
 
   return (
     <div
@@ -111,6 +151,55 @@ const LoginPage = () => {
           </span>
         </form>
       </div>
+      <Dialog
+        open={openLoginViaEmailModal}
+        handler={handleOpenLoginViaEmailModal}
+        size="sm"
+      >
+        <DialogHeader>Xác thực tài khoản</DialogHeader>
+        <DialogBody>
+          <Typography
+            className="font-normal text-slate-500"
+            variant="paragraph"
+          >
+            Vui lòng đăng nhập thông qua liên kết được gửi đến email để xác thực
+            tài khoản.
+          </Typography>
+        </DialogBody>
+        <DialogFooter>
+          <Button
+            variant="gradient"
+            color="blue"
+            className="focus:outline-none"
+          >
+            <a onClick={handleOpenLoginViaEmailModal}>Thoát</a>
+          </Button>
+        </DialogFooter>
+      </Dialog>
+      <Dialog
+        open={openLockedAccountModal}
+        handler={handleOpenLockedAccountModal}
+        size="sm"
+      >
+        <DialogHeader>Khóa tài khoản</DialogHeader>
+        <DialogBody>
+          <Typography
+            className="font-normal text-slate-500"
+            variant="paragraph"
+          >
+            Tài khoản của bạn đã bị khóa vui lòng liên hệ với quản trị viên.
+          </Typography>
+        </DialogBody>
+        <DialogFooter>
+          <Button
+            variant="gradient"
+            color="blue"
+            className="focus:outline-none"
+          >
+            <a onClick={handleOpenLockedAccountModal}>Thoát</a>
+          </Button>
+        </DialogFooter>
+      </Dialog>
     </div>
   );
 };

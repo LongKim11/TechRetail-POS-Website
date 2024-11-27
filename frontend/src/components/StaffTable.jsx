@@ -24,7 +24,7 @@ import { IoMdUnlock } from "react-icons/io";
 import { format } from "date-fns";
 import { useSnackbar } from "notistack";
 import { useCookies } from "react-cookie";
-import axios from "axios";
+import { api } from "../app/api/api";
 
 const TABLE_HEAD = [
   "Họ và tên",
@@ -36,12 +36,14 @@ const TABLE_HEAD = [
 ];
 
 const StaffTable = ({ staffs }) => {
+  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+  const { enqueueSnackbar } = useSnackbar();
+
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [openLockModal, setOpenLockModal] = useState(false);
   const [openUnlockModal, setOpenUnlockModal] = useState(false);
+
   const [selectedStaff, setSelectedStaff] = useState(null);
-  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
-  const { enqueueSnackbar } = useSnackbar();
 
   const handleOpenDetailModal = (staff) => {
     setOpenDetailModal(!openDetailModal);
@@ -57,9 +59,9 @@ const StaffTable = ({ staffs }) => {
   };
 
   const handleLockAccount = () => {
-    axios
+    api
       .patch(
-        `http://localhost:8080/api/v1/staffs/${selectedStaff._id}`,
+        `/staffs/${selectedStaff._id}`,
         { is_locked: "True" },
         {
           headers: {
@@ -84,9 +86,9 @@ const StaffTable = ({ staffs }) => {
   };
 
   const handleUnlockAccount = () => {
-    axios
+    api
       .patch(
-        `http://localhost:8080/api/v1/staffs/${selectedStaff._id}`,
+        `/staffs/${selectedStaff._id}`,
         { is_locked: "False" },
         {
           headers: {
@@ -107,6 +109,27 @@ const StaffTable = ({ staffs }) => {
         console.log(err);
         setOpenUnlockModal(!openUnlockModal);
         enqueueSnackbar("Mở khóa tài khoản thất bại", { variant: "error" });
+      });
+  };
+
+  const handleSendEmail = (staff) => {
+    console.log(staff);
+    api
+      .post(
+        `/auth/resendEmail`,
+        { email: staff.email },
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.jwt}`,
+          },
+        }
+      )
+      .then(() => {
+        enqueueSnackbar("Gửi mail thành công", { variant: "success" });
+      })
+      .catch((err) => {
+        console.log(err);
+        enqueueSnackbar("Gửi mail thất bại", { variant: "error" });
       });
   };
 
@@ -131,8 +154,9 @@ const StaffTable = ({ staffs }) => {
                 <td className="p-4">
                   <div className="flex items-center gap-x-3">
                     <Avatar
-                      // src={staff.img}
-                      src=""
+                      src={
+                        "http://localhost:8080/uploads/avatars/" + staff.avatar
+                      }
                       alt={staff.fullname}
                       size="md"
                       withBorder={true}
@@ -175,6 +199,7 @@ const StaffTable = ({ staffs }) => {
                     size="sm"
                     color="blue"
                     variant="outlined"
+                    onClick={() => handleSendEmail(staff)}
                   >
                     <IoIosMail className="text-xl text-blue-500" />
                     Gửi
@@ -189,7 +214,7 @@ const StaffTable = ({ staffs }) => {
                         unmount: { scale: 0, y: 25 },
                       }}
                     >
-                      <a href="#" onClick={() => handleOpenDetailModal(staff)}>
+                      <a onClick={() => handleOpenDetailModal(staff)}>
                         <BsInfoCircle className="text-2xl text-green-600" />
                       </a>
                     </Tooltip>
@@ -201,7 +226,7 @@ const StaffTable = ({ staffs }) => {
                           unmount: { scale: 0, y: 25 },
                         }}
                       >
-                        <a href="#" onClick={() => handleOpenLockModal(staff)}>
+                        <a onClick={() => handleOpenLockModal(staff)}>
                           <MdLockPerson className="text-2xl text-red-600" />
                         </a>
                       </Tooltip>
@@ -213,10 +238,7 @@ const StaffTable = ({ staffs }) => {
                           unmount: { scale: 0, y: 25 },
                         }}
                       >
-                        <a
-                          href="#"
-                          onClick={() => handleOpenUnlockModal(staff)}
-                        >
+                        <a onClick={() => handleOpenUnlockModal(staff)}>
                           <IoMdUnlock className="text-2xl text-blue-600" />
                         </a>
                       </Tooltip>

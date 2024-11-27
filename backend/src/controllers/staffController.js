@@ -1,9 +1,11 @@
+import fs from 'fs'
 import crypto from 'crypto'
 import catchAsync from '../utils/catchAsync.js'
 import AppError from '../utils/appError.js'
 
 import { Staff } from '../models/staffModel.js'
 import sendEmail from '../utils/email.js'
+import { __dirname } from '../utils/fileUtils.js'
 
 const getStaffs = catchAsync(async (req, res, next) => {
     const { fullname } = req.query
@@ -33,23 +35,6 @@ const getStaffs = catchAsync(async (req, res, next) => {
 
 const getStaffById = catchAsync(async (req, res, next) => {
     const { id } = req.params
-    if (id === 'admin') {
-        return res.status(200).json({
-            status: 'success',
-            data: {
-                _id: 'admin',
-                fullname: 'Admin',
-                email: 'admin@gmail.com',
-                avatar: 'default-avatar.png',
-                account: {
-                    username: 'admin',
-                },
-                status: 'Active',
-                createdAt: '2024-11-19T09:10:39.988Z',
-                updatedAt: '2024-11-19T09:10:39.988Z',
-            },
-        })
-    }
 
     const staff = await Staff.findById(id)
 
@@ -64,7 +49,8 @@ const getStaffById = catchAsync(async (req, res, next) => {
 })
 
 const createStaff = catchAsync(async (req, res, next) => {
-    const avatar = 'default-avatar.png'
+    console.log(req.body, req.file)
+    const avatar = req.file?.filename || 'default-avatar.png'
     const username = req.body.email.split('@')[0]
     const password = username
 
@@ -86,8 +72,8 @@ const createStaff = catchAsync(async (req, res, next) => {
     }
 
     // send email with temporary password
-    const url = `${req.protocol}://${req.get('host')}/api/v1/auth/login?token=${loginToken}`
-    const message = `Your account has been created. Your username is ${username} and password is ${password}. Please login to ${url} to change your password.`
+    const url = `${process.env.FE_URL}/?token=${loginToken}`
+    const message = `Your account has been created. Your username is ${username} and password is ${password}.\nPlease login to ${url} to change your password. (This link is valid for 10 minutes)`
     try {
         sendEmail({
             email: newStaff.email,
@@ -105,6 +91,9 @@ const createStaff = catchAsync(async (req, res, next) => {
 })
 
 const updateStaff = catchAsync(async (req, res, next) => {
+    const staff = await Staff.findById(req.params.id)
+    const oldAvatar = staff.avatar
+
     // const editStaff = await Staff.findByIdAndUpdate(
     //     req.params.id,
     //     { ...req.body, avatar: req.file.filename },
@@ -113,13 +102,39 @@ const updateStaff = catchAsync(async (req, res, next) => {
     //         runValidators: true,
     //     },
     // )
-    const editStaff = await Staff.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-        runValidators: true,
-    })
+    let editStaff
+
+    if (req.file) {
+        editStaff = await Staff.findByIdAndUpdate(
+            req.params.id,
+            { ...req.body, avatar: req.file.filename },
+            {
+                new: true,
+                runValidators: true,
+            },
+        )
+    } else {
+        editStaff = await Staff.findByIdAndUpdate(
+            req.params.id,
+            { ...req.body },
+            {
+                new: true,
+                runValidators: true,
+            },
+        )
+    }
 
     if (!editStaff) {
         return next(new AppError('No staff found with that ID', 404))
+    }
+
+    if (oldAvatar !== 'default-avatar.png') {
+        fs.unlink(`public/uploads/avatars/${oldAvatar}`, (err) => {
+            if (err) {
+                console.error(err)
+                return
+            }
+        })
     }
 
     res.status(200).json({

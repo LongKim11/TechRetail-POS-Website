@@ -19,8 +19,8 @@ import { IoMdPricetags } from "react-icons/io";
 import { BiCategory } from "react-icons/bi";
 import { MdOutlineDevices } from "react-icons/md";
 import { format } from "date-fns";
-import axios from "axios";
 import { useSnackbar } from "notistack";
+import { api } from "../app/api/api";
 
 const TABLE_HEAD = [
   "Barcode",
@@ -60,11 +60,8 @@ const ProductTable = ({ products, onDeleteProduct }) => {
   };
 
   const handleEditProduct = () => {
-    axios
-      .put(
-        `http://localhost:8080/api/v1/products/${selectedProduct._id}`,
-        selectedProduct
-      )
+    api
+      .put(`/products/${selectedProduct._id}`, selectedProduct)
       .then(() => {
         setProductsRender(
           productsRender.map((product) =>

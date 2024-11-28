@@ -79,7 +79,7 @@ const NavbarStaff = ({ staff, heading }) => {
               </Typography>
             </MenuItem>
             <hr className="my-2 border-blue-gray-50" />
-            <a href="/" className="hover:outline-none" onClick={handleLogout}>
+            <a className="hover:outline-none" onClick={handleLogout}>
               <MenuItem className="flex items-center gap-3 hover:bg-gray-200">
                 <FaSignOutAlt className="text-xl text-red-600" />
                 <Typography

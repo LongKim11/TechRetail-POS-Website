@@ -6,8 +6,8 @@ const sendEmail = (options) => {
         host: 'smtp.gmail.com',
         port: 587,
         auth: {
-            user: 'dangminh1312@gmail.com',
-            pass: 'wbvk tofq hlgy gsdq',
+            user: 'poscaesar@gmail.com',
+            pass: 'kfau jvyh lfir fpun',
         },
     })
 

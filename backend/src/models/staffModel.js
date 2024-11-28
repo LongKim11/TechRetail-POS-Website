@@ -120,7 +120,7 @@ staffSchema.methods.createLoginToken = function () {
         .update(randomToken)
         .digest('hex')
 
-    this.loginTokenExpires = Date.now() + 10 * 60 * 1000
+    this.loginTokenExpires = Date.now() + 60 * 1000
 
     return this.loginToken
 }

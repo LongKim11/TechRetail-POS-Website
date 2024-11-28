@@ -109,7 +109,6 @@ const HomeStaff = () => {
       )
       .then((res) => {
         enqueueSnackbar("Đổi mật khẩu thành công", { variant: "success" });
-        removeCookie("jwt");
       })
       .catch((err) => {
         enqueueSnackbar("Đổi mật khẩu thất bại", { variant: "error" });

@@ -5,7 +5,6 @@ import ChartStaff from "../../components/ChartStaff";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import {
   Typography,
   Button,
@@ -13,17 +12,16 @@ import {
   Card,
   CardBody,
   CardFooter,
-  DialogHeader,
-  DialogBody,
-  DialogFooter,
 } from "@material-tailwind/react";
 import { Navigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import { useSnackbar } from "notistack";
 import { jwtDecode } from "jwt-decode";
+import { api } from "../../app/api/api";
 
 const HomeStaff = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
-  const [staff, setStaff] = useState({ fullname: "", email: "", username: "" });
+  const [staff, setStaff] = useState({});
 
   const [totalProductByMonth, setTotalProductByMonth] = useState([]);
   const [months, setMonths] = useState([]);
@@ -35,30 +33,42 @@ const HomeStaff = () => {
     totalProductsSold: 0,
   });
 
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const { enqueueSnackbar } = useSnackbar();
+
   const [openCPModal, setOpenCPModal] = useState(false);
-  const [openLoginViaEmailModal, setOpenLoginViaEmailModal] = useState(false);
-  const [openLockedAccountModal, setOpenLockedAccountModal] = useState(false);
 
   useEffect(() => {
     if (cookies.jwt) {
-      const staff = jwtDecode(cookies.jwt);
-      setStaff({
-        fullname: staff.fullname,
-        email: staff.email,
-        username: staff.username,
-      });
+      if (jwtDecode(cookies.jwt).never_login) {
+        handleOpenCPModal();
+      } else {
+        const id = jwtDecode(cookies.jwt).id;
+        api
+          .get(`/staffs/${id}`, {
+            headers: {
+              Authorization: `Bearer ${cookies.jwt}`,
+            },
+          })
+          .then((res) => {
+            const { data } = res.data;
+            setStaff(data);
+          })
+          .catch((error) => {
+            console.error("Có lỗi xảy ra khi lấy thông tin nhân viên!", error);
+          });
+      }
     }
 
     Promise.all([
-      axios.get(
-        "http://localhost:8080/api/v1/orders/total-product-last-12-months",
-        {
-          headers: {
-            Authorization: `Bearer ${cookies.jwt}`,
-          },
-        }
-      ),
-      axios.get("http://localhost:8080/api/v1/orders/overall-statistics", {
+      api.get("/orders/total-product-last-12-months", {
+        headers: {
+          Authorization: `Bearer ${cookies.jwt}`,
+        },
+      }),
+      api.get("/orders/overall-statistics", {
         headers: {
           Authorization: `Bearer ${cookies.jwt}`,
         },
@@ -74,13 +84,37 @@ const HomeStaff = () => {
       });
   }, [cookies.jwt]);
 
+  const handleOldPasswordChange = (e) => setOldPassword(e.target.value);
+  const handleNewPasswordChange = (e) => setNewPassword(e.target.value);
+  const handleConfirmPasswordChange = (e) => setConfirmPassword(e.target.value);
+
   const handleOpenCPModal = () => setOpenCPModal((cur) => !cur);
+  const handleChangePassword = () => {
+    const token = cookies.jwt;
+    const id = jwtDecode(token).id;
 
-  const handleOpenLoginViaEmailModal = () =>
-    setOpenLoginViaEmailModal((cur) => !cur);
-
-  const handleOpenLockedAccountModal = () =>
-    setOpenLockedAccountModal((cur) => !cur);
+    api
+      .patch(
+        `/auth/updatePassword/${id}`,
+        {
+          oldPassword,
+          newPassword,
+          confirmPassword,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((res) => {
+        enqueueSnackbar("Đổi mật khẩu thành công", { variant: "success" });
+        removeCookie("jwt");
+      })
+      .catch((err) => {
+        enqueueSnackbar("Đổi mật khẩu thất bại", { variant: "error" });
+      });
+  };
 
   if (!cookies.jwt) {
     console.log("You are not authenticated");
@@ -142,6 +176,8 @@ const HomeStaff = () => {
               <input
                 type="password"
                 className="border border-slate-300 rounded-lg p-2 w-full focus:outline-none focus:border-blue-500"
+                name="oldPassword"
+                onChange={handleOldPasswordChange}
               ></input>
               <Typography className="" variant="h6">
                 Mật khẩu mới
@@ -149,6 +185,8 @@ const HomeStaff = () => {
               <input
                 type="password"
                 className="border border-slate-300 rounded-lg p-2 w-full focus:outline-none focus:border-blue-500"
+                name="newPassword"
+                onChange={handleNewPasswordChange}
               ></input>
               <Typography className="" variant="h6">
                 Nhập lại mật khẩu mới
@@ -156,55 +194,20 @@ const HomeStaff = () => {
               <input
                 type="password"
                 className="border border-slate-300 rounded-lg p-2 w-full focus:outline-none focus:border-blue-500"
+                name="confirmPassword"
+                onChange={handleConfirmPasswordChange}
               ></input>
             </CardBody>
             <CardFooter className="pt-0">
-              <Button variant="gradient" onClick={handleOpenCPModal} fullWidth>
+              <Button
+                variant="gradient"
+                onClick={handleChangePassword}
+                fullWidth
+              >
                 Đổi mật khẩu
               </Button>
             </CardFooter>
           </Card>
-        </Dialog>
-        <Dialog open={openLoginViaEmailModal} size="sm">
-          <DialogHeader>Xác thực tài khoản</DialogHeader>
-          <DialogBody>
-            <Typography
-              className="font-normal text-slate-500"
-              variant="paragraph"
-            >
-              Vui lòng đăng nhập thông qua liên kết được gửi đến email để xác
-              thực tài khoản.
-            </Typography>
-          </DialogBody>
-          <DialogFooter>
-            <Button
-              variant="gradient"
-              color="blue"
-              className="focus:outline-none"
-            >
-              <a href="/">Thoát</a>
-            </Button>
-          </DialogFooter>
-        </Dialog>
-        <Dialog open={openLockedAccountModal} size="sm">
-          <DialogHeader>Khóa tài khoản</DialogHeader>
-          <DialogBody>
-            <Typography
-              className="font-normal text-slate-500"
-              variant="paragraph"
-            >
-              Tài khoản của bạn đã bị khóa vui lòng liên hệ với quản trị viên.
-            </Typography>
-          </DialogBody>
-          <DialogFooter>
-            <Button
-              variant="gradient"
-              color="blue"
-              className="focus:outline-none"
-            >
-              <a href="/">Thoát</a>
-            </Button>
-          </DialogFooter>
         </Dialog>
       </div>
     </div>

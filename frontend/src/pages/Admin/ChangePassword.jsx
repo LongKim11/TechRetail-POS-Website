@@ -5,6 +5,7 @@ import { useCookies } from "react-cookie";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { Navigate } from "react-router-dom";
+import { api } from "../../app/api/api";
 
 const ChangePassword = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
@@ -12,12 +13,25 @@ const ChangePassword = () => {
 
   useEffect(() => {
     if (cookies.jwt) {
-      const admin = jwtDecode(cookies.jwt);
-      setAdmin({
-        fullname: admin.fullname,
-        email: admin.email,
-        username: admin.username,
-      });
+      const id = jwtDecode(cookies.jwt).id;
+
+      const handleLoadInfo = (id) => {
+        api
+          .get(`/staffs/${id}`, {
+            headers: {
+              Authorization: `Bearer ${cookies.jwt}`,
+            },
+          })
+          .then((res) => {
+            const { data } = res.data;
+            setAdmin(data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      };
+
+      handleLoadInfo(id);
     }
   }, [cookies.jwt]);
 

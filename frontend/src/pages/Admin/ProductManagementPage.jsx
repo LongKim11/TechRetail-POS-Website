@@ -18,27 +18,20 @@ import { FaSackDollar } from "react-icons/fa6";
 import { IoMdPricetags } from "react-icons/io";
 import { BiCategory } from "react-icons/bi";
 import { MdOutlineDevices } from "react-icons/md";
-import axios from "axios";
 import { useSnackbar } from "notistack";
 import { IconButton } from "@material-tailwind/react";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { Navigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { jwtDecode } from "jwt-decode";
+import { api } from "../../app/api/api";
 
 const ProductManagementPage = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
-  const [admin, setAdmin] = useState({ fullname: "", email: "", username: "" });
+  const [admin, setAdmin] = useState({});
 
   const [products, setProducts] = useState([]);
-  const [newProduct, setNewProduct] = useState({
-    name: "",
-    brand: "",
-    category: "",
-    barcode: "",
-    import_price: "",
-    retail_price: "",
-  });
+  const [newProduct, setNewProduct] = useState({});
   const { enqueueSnackbar } = useSnackbar();
 
   const [searchName, setSearchName] = useState("");
@@ -52,16 +45,29 @@ const ProductManagementPage = () => {
 
   useEffect(() => {
     if (cookies.jwt) {
-      const admin = jwtDecode(cookies.jwt);
-      setAdmin({
-        fullname: admin.fullname,
-        email: admin.email,
-        username: admin.username,
-      });
+      const id = jwtDecode(cookies.jwt).id;
+
+      const handleLoadInfo = (id) => {
+        api
+          .get(`/staffs/${id}`, {
+            headers: {
+              Authorization: `Bearer ${cookies.jwt}`,
+            },
+          })
+          .then((res) => {
+            const { data } = res.data;
+            setAdmin(data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      };
+
+      handleLoadInfo(id);
     }
 
-    axios
-      .get("http://localhost:8080/api/v1/products", {
+    api
+      .get("/products", {
         headers: {
           Authorization: `Bearer ${cookies.jwt}`,
         },
@@ -89,15 +95,12 @@ const ProductManagementPage = () => {
   };
 
   useEffect(() => {
-    axios
-      .get(
-        `http://localhost:8080/api/v1/products?name=${searchName}&barcode=${searchBarcode}`,
-        {
-          headers: {
-            Authorization: `Bearer ${cookies.jwt}`,
-          },
-        }
-      )
+    api
+      .get(`/products?name=${searchName}&barcode=${searchBarcode}`, {
+        headers: {
+          Authorization: `Bearer ${cookies.jwt}`,
+        },
+      })
       .then((res) => {
         setProducts(res.data.data);
         setTotalLength(res.data.results);
@@ -132,8 +135,8 @@ const ProductManagementPage = () => {
   };
 
   const handleAddProduct = () => {
-    axios
-      .post("http://localhost:8080/api/v1/products", newProduct, {
+    api
+      .post("/products", newProduct, {
         headers: {
           Authorization: `Bearer ${cookies.jwt}`,
         },
@@ -161,8 +164,8 @@ const ProductManagementPage = () => {
   };
 
   const handleDeleteProduct = (productId, closeModal) => {
-    axios
-      .delete(`http://localhost:8080/api/v1/products/${productId}`, {
+    api
+      .delete(`/products/${productId}`, {
         headers: {
           Authorization: `Bearer ${cookies.jwt}`,
         },

@@ -3,11 +3,11 @@ import Navbar from "../../components/Navbar";
 import { Button } from "@material-tailwind/react";
 import { IoFilter } from "react-icons/io5";
 import CustomerTable from "../../components/CustomerTable";
-import axios from "axios";
 import { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { Navigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { api } from "../../app/api/api";
 
 const CustomersPage = () => {
   const [customers, setCustomers] = useState([]);
@@ -22,8 +22,8 @@ const CustomersPage = () => {
   };
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:8080/api/v1/customers?fullname=${searchName}`, {
+    api
+      .get(`/customers?fullname=${searchName}`, {
         headers: {
           Authorization: `Bearer ${cookies.jwt}`,
         },
@@ -35,15 +35,29 @@ const CustomersPage = () => {
 
   useEffect(() => {
     if (cookies.jwt) {
-      const admin = jwtDecode(cookies.jwt);
-      setAdmin({
-        fullname: admin.fullname,
-        email: admin.email,
-        username: admin.username,
-      });
+      const id = jwtDecode(cookies.jwt).id;
+
+      const handleLoadInfo = (id) => {
+        api
+          .get(`/staffs/${id}`, {
+            headers: {
+              Authorization: `Bearer ${cookies.jwt}`,
+            },
+          })
+          .then((res) => {
+            const { data } = res.data;
+            setAdmin(data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      };
+
+      handleLoadInfo(id);
     }
-    axios
-      .get("http://localhost:8080/api/v1/customers", {
+    
+    api
+      .get("/customers", {
         headers: {
           Authorization: `Bearer ${cookies.jwt}`,
         },

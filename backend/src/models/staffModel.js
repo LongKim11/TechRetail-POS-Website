@@ -43,7 +43,7 @@ const staffSchema = mongoose.Schema(
             type: String,
             required: [true, 'Status is required'],
             enum: ['Active', 'Inactive'],
-            default: 'Active',
+            default: 'Inactive',
         },
         is_locked: {
             type: String,
@@ -51,7 +51,12 @@ const staffSchema = mongoose.Schema(
             enum: ['True', 'False'],
             default: 'False',
         },
+        never_login: {
+            type: Boolean,
+            default: true,
+        },
         loginToken: String,
+        loginTokenExpires: Date,
         passwordResetToken: String,
         passwordResetExpires: Date,
     },
@@ -97,12 +102,27 @@ staffSchema.methods.jwtToken = function () {
             username: user.account.username,
             email: user.email,
             fullname: user.fullname,
+            is_locked: user.is_locked,
+            never_login: user.never_login,
+            loginToken: user?.loginToken,
         },
         process.env.JWT_SECRET,
         {
             expiresIn: process.env.JWT_EXPIRES_IN,
         },
     )
+}
+
+staffSchema.methods.createLoginToken = function () {
+    const randomToken = crypto.randomBytes(32).toString('hex')
+    this.loginToken = crypto
+        .createHash('sha256')
+        .update(randomToken)
+        .digest('hex')
+
+    this.loginTokenExpires = Date.now() + 10 * 60 * 1000
+
+    return this.loginToken
 }
 
 const Staff = mongoose.model('Staff', staffSchema)

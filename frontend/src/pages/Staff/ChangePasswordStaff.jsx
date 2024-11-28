@@ -5,6 +5,7 @@ import { useCookies } from "react-cookie";
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { api } from "../../app/api/api";
 
 const ChangePasswordStaff = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
@@ -12,12 +13,24 @@ const ChangePasswordStaff = () => {
 
   useEffect(() => {
     if (cookies.jwt) {
-      const staff = jwtDecode(cookies.jwt);
-      setStaff({
-        fullname: staff.fullname,
-        email: staff.email,
-        username: staff.username,
-      });
+      if (jwtDecode(cookies.jwt).never_login) {
+        // handleOpenCPModal();
+      } else {
+        const id = jwtDecode(cookies.jwt).id;
+        api
+          .get(`/staffs/${id}`, {
+            headers: {
+              Authorization: `Bearer ${cookies.jwt}`,
+            },
+          })
+          .then((res) => {
+            const { data } = res.data;
+            setStaff(data);
+          })
+          .catch((error) => {
+            console.error("Có lỗi xảy ra khi lấy thông tin nhân viên!", error);
+          });
+      }
     }
   }, [cookies.jwt]);
 

@@ -5,18 +5,27 @@ import { useCookies } from "react-cookie";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { Navigate } from "react-router-dom";
+import { api } from "../../app/api/api";
 const ProfileStaff = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   const [staff, setStaff] = useState({ fullname: "", email: "", username: "" });
 
   useEffect(() => {
     if (cookies.jwt) {
-      const staff = jwtDecode(cookies.jwt);
-      setStaff({
-        fullname: staff.fullname,
-        email: staff.email,
-        username: staff.username,
-      });
+      const id = jwtDecode(cookies.jwt).id;
+      api
+        .get(`/staffs/${id}`, {
+          headers: {
+            Authorization: `Bearer ${cookies.jwt}`,
+          },
+        })
+        .then((res) => {
+          console.log(res)
+          setStaff(res.data.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }, [cookies.jwt]);
 

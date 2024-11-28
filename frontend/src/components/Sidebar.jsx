@@ -9,25 +9,23 @@ import { FiLogOut } from "react-icons/fi";
 import Control from "../assets/control.png";
 import YellowLogo from "../assets/logo-yellow-bg.png";
 import { Link } from "react-router-dom";
-import { useSendLogoutMutation } from "../features/auth/authApiSlice";
 import { useCookies } from "react-cookie";
+import { api } from "../app/api/api";
 
 const Sidebar = () => {
   const [open, setOpen] = useState(true);
-  const [logout, { isLoading }] = useSendLogoutMutation();
-
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
 
-  if (isLoading) {
-    return <div>Logging out...</div>;
-  }
-
-  const handleLogout = async () => {
-    const { message } = await logout().unwrap();
-    console.log("ABC");
-    if (message) {
-      removeCookie("jwt");
-    }
+  const handleLogout = () => {
+    api
+      .post("/auth/logout", {})
+      .then((res) => {
+        console.log(res);
+        removeCookie("jwt");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -120,7 +118,7 @@ const Sidebar = () => {
             </span>
           </li>
         </Link>
-        <a href="/" onClick={handleLogout}>
+        <a onClick={handleLogout}>
           <li className="flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4 mt-12">
             <span className="text-2xl text-white">
               <FiLogOut></FiLogOut>

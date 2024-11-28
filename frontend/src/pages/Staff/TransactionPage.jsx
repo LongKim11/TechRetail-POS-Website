@@ -6,12 +6,12 @@ import { FaArrowRight } from "react-icons/fa";
 import { MdOutlineDelete } from "react-icons/md";
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { IconButton } from "@material-tailwind/react";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { useSnackbar } from "notistack";
 import { useCookies } from "react-cookie";
 import { jwtDecode } from "jwt-decode";
+import { api } from "../../app/api/api";
 
 const TransactionPage = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
@@ -31,12 +31,24 @@ const TransactionPage = () => {
 
   useEffect(() => {
     if (cookies.jwt) {
-      const staff = jwtDecode(cookies.jwt);
-      setStaff({
-        fullname: staff.fullname,
-        email: staff.email,
-        username: staff.username,
-      });
+      if (jwtDecode(cookies.jwt).never_login) {
+        // handleOpenCPModal();
+      } else {
+        const id = jwtDecode(cookies.jwt).id;
+        api
+          .get(`/staffs/${id}`, {
+            headers: {
+              Authorization: `Bearer ${cookies.jwt}`,
+            },
+          })
+          .then((res) => {
+            const { data } = res.data;
+            setStaff(data);
+          })
+          .catch((error) => {
+            console.error("Có lỗi xảy ra khi lấy thông tin nhân viên!", error);
+          });
+      }
     }
   }, [cookies.jwt]);
 
@@ -65,8 +77,8 @@ const TransactionPage = () => {
       query = `barcode=${searchByBarcode}`;
     }
 
-    axios
-      .get(`http://localhost:8080/api/v1/products?${query}`, {
+    api
+      .get(`/products?${query}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${cookies.jwt}`,

@@ -8,23 +8,26 @@ import {
   CardFooter,
 } from "@material-tailwind/react";
 import { GrUpdate } from "react-icons/gr";
-import { useState } from "react";
 import { PiNumpad } from "react-icons/pi";
 import ProfileBG from "../assets/profile-bg.jpg";
 import { useSnackbar } from "notistack";
-import { useUpdatePasswordMutation } from "../features/admin/adminSlice";
 import { useCookies } from "react-cookie";
 import { jwtDecode } from "jwt-decode";
+import { api } from "../app/api/api";
+import { useState } from "react";
 
 const ProfileForm = ({ userInfo }) => {
+  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+  const { enqueueSnackbar } = useSnackbar();
+
   const [openCPModal, setOpenCPModal] = useState(false);
   const [openCAModal, setOpenCAModal] = useState(false);
+
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const { enqueueSnackbar } = useSnackbar();
-  const [updatePassword, { isLoading }] = useUpdatePasswordMutation();
-  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+
+  const [avatar, setAvatar] = useState(null);
 
   const handleOldPasswordChange = (e) => setOldPassword(e.target.value);
   const handleNewPasswordChange = (e) => setNewPassword(e.target.value);
@@ -32,19 +35,27 @@ const ProfileForm = ({ userInfo }) => {
 
   const handleOpenCPModal = () => setOpenCPModal((cur) => !cur);
   const handleOpenCAModal = () => setOpenCAModal((cur) => !cur);
+
   const handleChangePassword = () => {
     const token = cookies.jwt;
     const id = jwtDecode(token).id;
-    updatePassword({
-      id,
-      oldPassword,
-      newPassword,
-      confirmPassword,
-    })
-      .unwrap()
+    api
+      .patch(
+        `/auth/updatePassword/${id}`,
+        {
+          oldPassword,
+          newPassword,
+          confirmPassword,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then((res) => {
         enqueueSnackbar("Đổi mật khẩu thành công", { variant: "success" });
-        handleOpenCPModal();
+        removeCookie("jwt");
       })
       .catch((err) => {
         enqueueSnackbar("Đổi mật khẩu thất bại", { variant: "error" });
@@ -52,13 +63,42 @@ const ProfileForm = ({ userInfo }) => {
       });
   };
 
+  const handleFileChange = (e) => {
+    setAvatar(e.target.files[0]);
+  };
+
+  const handleUploadAvatar = () => {
+    const token = cookies.jwt;
+    const id = jwtDecode(token).id;
+
+    let formData = new FormData();
+    formData.append("avatar", avatar);
+
+    api
+      .patch(`/staffs/${id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        enqueueSnackbar("Cập nhật ảnh đại diện thành công", {
+          variant: "success",
+        });
+        window.location.reload();
+        handleOpenCAModal();
+      })
+      .catch((err) => {
+        enqueueSnackbar("Cập nhật ảnh đại diện thất bại", { variant: "error" });
+        handleOpenCAModal();
+      });
+  };
   return (
     <div className="px-11 mx-auto mt-11 flex items-center">
       <div className="w-1/2">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             <Avatar
-              src={userInfo.avatar}
+              src={"http://localhost:8080/uploads/avatars/" + userInfo.avatar}
               alt="avatar"
               size="xl"
               withBorder={true}
@@ -66,7 +106,9 @@ const ProfileForm = ({ userInfo }) => {
               color="blue"
             />
             <div className="ml-5">
-              <h1 className="text-2xl font-semibold">{userInfo.username}</h1>
+              <h1 className="text-2xl font-semibold">
+                {userInfo.account?.username}
+              </h1>
               <p className="text-gray-500">{userInfo.email}</p>
             </div>
           </div>
@@ -86,7 +128,7 @@ const ProfileForm = ({ userInfo }) => {
             <input
               type="text"
               className="p-3 w-full rounded-lg bg-slate-200 focus:border-[#004AAD] focus:outline-none border-2 mt-2"
-              value={userInfo.username}
+              value={userInfo.account?.username}
               disabled
             />
           </div>
@@ -196,12 +238,13 @@ const ProfileForm = ({ userInfo }) => {
                   <input
                     type="file"
                     className="font-semibold file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200"
+                    onChange={handleFileChange}
                   ></input>
                 </CardBody>
                 <CardFooter className="pt-0">
                   <Button
                     variant="gradient"
-                    onClick={handleOpenCAModal}
+                    onClick={handleUploadAvatar}
                     fullWidth
                   >
                     Lưu ảnh đại diện

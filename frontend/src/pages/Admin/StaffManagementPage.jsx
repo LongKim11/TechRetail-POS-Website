@@ -1,6 +1,6 @@
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
-import { FaUserPlus } from "react-icons/fa";
+import { FaRegAddressCard, FaUserPlus } from "react-icons/fa";
 import { IoFilter } from "react-icons/io5";
 import StaffTable from "../../components/StaffTable";
 import {
@@ -15,34 +15,50 @@ import { useState, useEffect } from "react";
 import { FaRegUser } from "react-icons/fa";
 import { MdMailOutline } from "react-icons/md";
 import { Navigate } from "react-router-dom";
-import axios from "axios";
 import { useCookies } from "react-cookie";
 import { useSnackbar } from "notistack";
 import { jwtDecode } from "jwt-decode";
+import { api } from "../../app/api/api";
 
 const StaffManagementPage = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
-  const [admin, setAdmin] = useState({ fullname: "", email: "", username: "" });
+  const { enqueueSnackbar } = useSnackbar();
+
+  const [admin, setAdmin] = useState({});
   const [searchName, setSearchName] = useState("");
 
-  const [openAddStaffModal, setOpenAddStaffModal] = useState(false);
   const [fullname, setFullname] = useState("");
   const [email, setEmail] = useState("");
+  const [avatar, setAvatar] = useState(null);
   const [staffs, setStaffs] = useState([]);
-  const { enqueueSnackbar } = useSnackbar();
+
+  const [openAddStaffModal, setOpenAddStaffModal] = useState(false);
 
   useEffect(() => {
     if (cookies.jwt) {
-      const admin = jwtDecode(cookies.jwt);
-      setAdmin({
-        fullname: admin.fullname,
-        email: admin.email,
-        username: admin.username,
-      });
+      const id = jwtDecode(cookies.jwt).id;
+
+      const handleLoadInfo = (id) => {
+        api
+          .get(`/staffs/${id}`, {
+            headers: {
+              Authorization: `Bearer ${cookies.jwt}`,
+            },
+          })
+          .then((res) => {
+            const { data } = res.data;
+            setAdmin(data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      };
+
+      handleLoadInfo(id);
     }
 
-    axios
-      .get("http://localhost:8080/api/v1/staffs", {
+    api
+      .get("/staffs", {
         headers: {
           Authorization: `Bearer ${cookies.jwt}`,
         },
@@ -58,8 +74,8 @@ const StaffManagementPage = () => {
   }, [cookies.jwt]);
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:8080/api/v1/staffs?fullname=${searchName}`, {
+    api
+      .get(`/staffs?fullname=${searchName}`, {
         headers: {
           Authorization: `Bearer ${cookies.jwt}`,
         },
@@ -100,6 +116,10 @@ const StaffManagementPage = () => {
     setOpenAddStaffModal(!openAddStaffModal);
   };
 
+  const handleFileChange = (e) => {
+    setAvatar(e.target.files[0]);
+  };
+
   const handleAddNewStaff = () => {
     const newStaff = {
       fullname,
@@ -109,10 +129,16 @@ const StaffManagementPage = () => {
     if (!newStaff.fullname || !newStaff.email) {
       enqueueSnackbar("Vui lòng điền đầy đủ thông tin", { variant: "error" });
       setOpenAddStaffModal(!openAddStaffModal);
+      return;
     }
+    console.log(newStaff, avatar);
+    let formData = new FormData();
+    formData.append("avatar", avatar);
+    formData.append("fullname", fullname);
+    formData.append("email", email);
 
-    axios
-      .post(`http://localhost:8080/api/v1/staffs`, newStaff, {
+    api
+      .post(`/staffs`, formData, {
         headers: {
           Authorization: `Bearer ${cookies.jwt}`,
         },
@@ -126,6 +152,7 @@ const StaffManagementPage = () => {
       .catch((err) => {
         console.log(err);
         enqueueSnackbar("Thêm nhân viên thất bại!", { variant: "error" });
+        setOpenAddStaffModal(!openAddStaffModal);
       });
   };
 
@@ -217,7 +244,7 @@ const StaffManagementPage = () => {
               onChange={handleEmailChange}
             ></input>
           </div>
-          {/* <div className="mb-6">
+          <div className="mb-6">
             <div className="flex gap-x-2 items-center">
               <FaRegAddressCard className="text-xl" />
               <Typography variant="h6">Ảnh đại diện</Typography>
@@ -225,8 +252,9 @@ const StaffManagementPage = () => {
             <input
               type="file"
               className="mt-2 font-semibold file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200"
+              onChange={handleFileChange}
             ></input>
-          </div> */}
+          </div>
         </DialogBody>
         <DialogFooter>
           <Button color="blue" onClick={handleAddNewStaff}>

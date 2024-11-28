@@ -15,7 +15,10 @@ const router = express.Router()
 
 router.use(verifyJWT)
 
-router.route('/').get(getStaffs).post(createStaff)
+router
+    .route('/')
+    .get(getStaffs)
+    .post(uploadAvatar.single('avatar'), createStaff)
 
 router
     .route('/:id')

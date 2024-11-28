@@ -14,12 +14,6 @@ const login = catchAsync(async (req, res, next) => {
         return next(new AppError('Please provide email and password!', 400))
     }
 
-    // // 2) Check if this is admin login
-    // if (username === 'admin' && password === '123') {
-    //
-    // }
-
-    // 3) Check if staff exists && password is correct
     const staff = await Staff.findOne({ 'account.username': username }).select(
         '+account.password',
     )
@@ -30,17 +24,25 @@ const login = catchAsync(async (req, res, next) => {
         return next(new AppError('Incorrect username or password', 401))
     }
 
-    // 4) if the account has loginToken but dont use token in query, dont login
     if (staff.loginToken && !req.query.token) {
         return next(new AppError('You need to use login token to login', 401))
     }
 
-    // 5) if the account has loginToken and use token in query, but the token is wrong, dont login
     if (staff.loginToken && req.query.token !== staff.loginToken) {
         return next(new AppError('Login token is wrong', 401))
     }
 
+    if (staff.loginTokenExpires && staff.loginTokenExpires < Date.now()) {
+        return next(new AppError('Login token is expired', 401))
+    }
+
+    if (staff.is_locked === 'True') {
+        return next(new AppError('Account is locked', 401))
+    }
+
     staff.loginToken = undefined
+    staff.loginTokenExpires = undefined
+    staff.status = 'Active'
     await staff.save({ validateBeforeSave: false })
 
     const token = staff.jwtToken()
@@ -55,9 +57,15 @@ const login = catchAsync(async (req, res, next) => {
     })
 })
 
-const logout = (req, res) => {
+const logout = async (req, res) => {
     const cookies = req.cookies
     if (!cookies?.jwt) return res.sendStatus(204) //No content
+
+    const id = await jwt.decode(cookies.jwt).id
+    const staff = await Staff.findById(id).select('+account')
+    staff.status = 'Inactive'
+    await staff.save({ validateBeforeSave: false })
+
     res.clearCookie('jwt')
     res.json({ message: 'Cookie cleared' })
 }
@@ -120,6 +128,7 @@ const restrictTo = (...roles) => {
 
 const forgotPassword = catchAsync(async (req, res, next) => {
     const staff = await Staff.findOne({ email: req.body.email })
+
     if (!staff) {
         return next(new AppError('There is no user with email address.', 404))
     }
@@ -205,6 +214,7 @@ const updatePassword = catchAsync(async (req, res, next) => {
     }
 
     staff.account.password = req.body.newPassword
+    staff.never_login = false
     await staff.save()
 
     const token = staff.jwtToken()
@@ -239,6 +249,45 @@ const updateMe = catchAsync(async (req, res, next) => {
     })
 })
 
+const resendLoginEmail = catchAsync(async (req, res, next) => {
+    const staff = await Staff.findOne({ email: req.body.email }).select(
+        '+account.password',
+    )
+
+    if (!staff) {
+        return next(new AppError('There is no user with email address.', 404))
+    }
+
+    const loginToken = staff.createLoginToken()
+    await staff.save({ validateBeforeSave: false })
+
+    const url = `${process.env.FE_URL}/?token=${loginToken}`
+    const message = `Your account has been created. Your username is ${staff.account.username}.\nPlease login to ${url} to change your password. (This link is valid for 10 minutes)`
+    try {
+        sendEmail({
+            email: staff.email,
+            subject: 'Account created',
+            message,
+        })
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Token sent to email!',
+        })
+    } catch (err) {
+        staff.loginToken = undefined
+        staff.loginTokenExpires = undefined
+        await staff.save({ validateBeforeSave: false })
+
+        return next(
+            new AppError(
+                'There was an error sending the email. Try again later!',
+            ),
+            500,
+        )
+    }
+})
+
 export {
     login,
     logout,
@@ -248,4 +297,5 @@ export {
     resetPassword,
     updatePassword,
     updateMe,
+    resendLoginEmail,
 }

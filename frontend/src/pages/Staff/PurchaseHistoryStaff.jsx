@@ -3,9 +3,9 @@ import NavbarStaff from "../../components/NavbarStaff";
 import PurchaseHistoryTable from "../../components/PurchaseHistoryTable";
 import { useParams, useLocation, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { useCookies } from "react-cookie";
 import { jwtDecode } from "jwt-decode";
+import { api } from "../../app/api/api";
 
 const PurchaseHistoryStaff = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
@@ -28,8 +28,8 @@ const PurchaseHistoryStaff = () => {
   const { name, phone, address } = location.state || {};
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:8080/api/v1/customers/${customerId}/orders`, {
+    api
+      .get(`/customers/${customerId}/orders`, {
         headers: {
           Authorization: `Bearer ${cookies.jwt}`,
         },

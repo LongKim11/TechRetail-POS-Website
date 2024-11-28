@@ -5,13 +5,13 @@ import { FaArrowRight } from "react-icons/fa";
 import { Navigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
-import axios from "axios";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { FaSave } from "react-icons/fa";
 import { useSnackbar } from "notistack";
 import { useCookies } from "react-cookie";
 import { jwtDecode } from "jwt-decode";
+import { api } from "../../app/api/api";
 
 const ConfirmTransaction = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
@@ -69,9 +69,9 @@ const ConfirmTransaction = () => {
         };
       });
       console.log(item);
-      axios
+      api
         .post(
-          "http://localhost:8080/api/v1/orders",
+          "/orders",
           {
             staff_id: jwtDecode(cookies.jwt).id,
             customer_id: customerInfo.id,
@@ -108,9 +108,9 @@ const ConfirmTransaction = () => {
   };
 
   const handleSaveCustomer = () => {
-    axios
+    api
       .post(
-        "http://localhost:8080/api/v1/customers",
+        "/customers",
         {
           phone,
           fullname: customerInfo.fullname,
@@ -149,8 +149,8 @@ const ConfirmTransaction = () => {
   };
 
   const handleSearchCustomer = () => {
-    axios
-      .get(`http://localhost:8080/api/v1/customers?phone=${phone}`, {
+    api
+      .get(`/customers?phone=${phone}`, {
         headers: {
           Authorization: `Bearer ${cookies.jwt}`,
         },

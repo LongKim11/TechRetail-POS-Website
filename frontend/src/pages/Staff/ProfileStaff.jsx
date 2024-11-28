@@ -6,7 +6,11 @@ import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { Navigate } from "react-router-dom";
 import { api } from "../../app/api/api";
+import CircleLoader from "../../components/Spinner/CircleLoader";
+
 const ProfileStaff = () => {
+  const [loading, setLoading] = useState(true);
+
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   const [staff, setStaff] = useState({ fullname: "", email: "", username: "" });
 
@@ -20,8 +24,9 @@ const ProfileStaff = () => {
           },
         })
         .then((res) => {
-          console.log(res)
+          console.log(res);
           setStaff(res.data.data);
+          setLoading(false);
         })
         .catch((err) => {
           console.log(err);
@@ -44,6 +49,7 @@ const ProfileStaff = () => {
     <div className="flex">
       <SidebarStaff></SidebarStaff>
       <div className="flex-1 p-7 bg-slate-100">
+        {loading && <CircleLoader></CircleLoader>}
         <NavbarStaff heading="Thông tin cá nhân" staff={staff}></NavbarStaff>
         <ProfileForm
           avatar="./src/assets/user-avatar.png"

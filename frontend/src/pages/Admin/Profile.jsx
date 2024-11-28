@@ -6,8 +6,11 @@ import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { jwtDecode } from "jwt-decode";
 import { api } from "../../app/api/api";
+import CircleLoader from "../../components/Spinner/CircleLoader";
 
 const Profile = () => {
+  const [loading, setLoading] = useState(true);
+
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   const [admin, setAdmin] = useState({});
 
@@ -25,6 +28,7 @@ const Profile = () => {
           .then((res) => {
             const { data } = res.data;
             setAdmin(data);
+            setLoading(false);
           })
           .catch((err) => {
             console.log(err);
@@ -50,6 +54,7 @@ const Profile = () => {
     <div className="flex">
       <Sidebar></Sidebar>
       <div className="flex-1 p-7 bg-slate-100">
+        {loading && <CircleLoader />}
         <Navbar heading="Thông tin cá nhân" staff={admin}></Navbar>
         <ProfileForm userInfo={admin}></ProfileForm>
       </div>

@@ -18,8 +18,11 @@ import { useCookies } from "react-cookie";
 import { useSnackbar } from "notistack";
 import { jwtDecode } from "jwt-decode";
 import { api } from "../../app/api/api";
+import CircleLoader from "../../components/Spinner/CircleLoader";
 
 const HomeStaff = () => {
+  const [loading, setLoading] = useState(true);
+
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   const [staff, setStaff] = useState({});
 
@@ -78,6 +81,7 @@ const HomeStaff = () => {
         setTotalProductByMonth(totalProductRes.data.totalProductByMonth);
         setMonths(totalProductRes.data.months);
         setOverallStatistics(overallStatisticsRes.data);
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Có lỗi xảy ra khi lấy dữ liệu thống kê!", error);
@@ -131,6 +135,7 @@ const HomeStaff = () => {
     <div className="flex">
       <SidebarStaff />
       <div className="flex-1 p-7 bg-slate-100">
+        {loading && <CircleLoader />}
         <NavbarStaff heading="Hi, Welcome back 👋" staff={staff} />
         <DashboardBoxStaff
           customers={overallStatistics.totalCustomers}

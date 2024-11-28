@@ -21,8 +21,11 @@ import { useSnackbar } from "notistack";
 import { jwtDecode } from "jwt-decode";
 import { api } from "../../app/api/api";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
+import BallTriangleLoader from "../../components/Spinner/CircleLoader";
 
 const StaffManagementPage = () => {
+  const [loading, setLoading] = useState(true);
+
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -97,6 +100,7 @@ const StaffManagementPage = () => {
         setStaffs(list);
         setTotalLength(list.length);
         setMaxPage(Math.ceil(list.length / dataPerPage));
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Có lỗi xảy ra khi lấy dữ liệu thống kê!", error);
@@ -192,6 +196,7 @@ const StaffManagementPage = () => {
     <div className="flex">
       <Sidebar />
       <div className="flex-1 p-7 bg-slate-100">
+        {loading && <BallTriangleLoader />}
         <Navbar heading="Quản lý nhân viên" staff={admin} />
         <div className="flex justify-between mt-11 items-center">
           <h1 className="text-2xl font-semibold">Danh sách</h1>

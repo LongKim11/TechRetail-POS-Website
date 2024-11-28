@@ -1,6 +1,11 @@
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
-import { useParams, useLocation, Navigate } from "react-router-dom";
+import {
+  useParams,
+  useLocation,
+  Navigate,
+  useNavigate,
+} from "react-router-dom";
 import { useState, useEffect } from "react";
 import PurchaseHistoryTable from "../../components/PurchaseHistoryTable";
 import { jwtDecode } from "jwt-decode";
@@ -8,8 +13,13 @@ import { useCookies } from "react-cookie";
 import { api } from "../../app/api/api";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { IconButton, Typography } from "@material-tailwind/react";
+import CircleLoader from "../../components/Spinner/CircleLoader";
+import { IoCaretBackCircleOutline } from "react-icons/io5";
 
 const PurchaseHistory = () => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   const [admin, setAdmin] = useState({ fullname: "", email: "", username: "" });
 
@@ -64,6 +74,7 @@ const PurchaseHistory = () => {
       .then((res) => {
         setOrders(res.data.data);
         setMaxPage(Math.ceil(res.data.data.length / dataPerPage));
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Có lỗi xảy ra khi lấy dữ liệu đơn hàng!", error);
@@ -85,6 +96,7 @@ const PurchaseHistory = () => {
     <div className="flex">
       <Sidebar></Sidebar>
       <div className="flex-1 p-7 bg-slate-100">
+        {loading && <CircleLoader></CircleLoader>}
         <Navbar heading="Đơn hàng đã mua" staff={admin}></Navbar>
         <div className="my-7 text-slate-700">
           <div className="flex gap-x-3 items-center mb-3">
@@ -101,9 +113,13 @@ const PurchaseHistory = () => {
           </div>
         </div>
         <div className="w-full bg-white rounded-xl mt-7 border border-slate-200">
-          <h3 className="text-center text-2xl font-semibold my-6">
-            Lịch sử mua hàng
-          </h3>
+          <div className="flex items-center justify-center gap-x-3">
+            <IoCaretBackCircleOutline
+              className="text-4xl cursor-pointer text-blue-600"
+              onClick={() => navigate("/admin/customers")}
+            />
+            <h3 className="text-2xl font-semibold my-6">Lịch sử mua hàng</h3>
+          </div>
           <PurchaseHistoryTable orders={currentOrders}></PurchaseHistoryTable>
         </div>
         <div className="flex items-center gap-8 fixed bottom-4 left-[50%]">

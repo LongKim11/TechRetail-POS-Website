@@ -12,8 +12,11 @@ import { useSnackbar } from "notistack";
 import { useCookies } from "react-cookie";
 import { jwtDecode } from "jwt-decode";
 import { api } from "../../app/api/api";
+import CircleLoader from "../../components/Spinner/CircleLoader";
 
 const TransactionPage = () => {
+  const [loading, setLoading] = useState(true);
+
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   const [staff, setStaff] = useState({ fullname: "", email: "", username: "" });
 
@@ -88,6 +91,7 @@ const TransactionPage = () => {
         setSearchProductResult(res.data.data);
         setMaxPage(Math.ceil(res.data.results / dataPerPage));
         setActive(1);
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Có lỗi xảy ra khi tìm kiếm sản phẩm!", error);
@@ -148,6 +152,7 @@ const TransactionPage = () => {
     <div className="flex">
       <SidebarStaff />
       <div className="flex-1 p-7 bg-slate-100">
+        {loading && <CircleLoader />}
         <NavbarStaff heading="Trang xử lý mua hàng" staff={staff} />
         <div className="flex gap-x-5 mt-11">
           <div className="w-1/2 bg-white rounded-lg shadow-md">

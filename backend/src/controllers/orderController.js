@@ -31,7 +31,9 @@ const getOrdersByCustomerId = catchAsync(async (req, res, next) => {
     const { id } = req.params
 
     try {
-        const orders = await Order.find({ customer_id: id })
+        const orders = await Order.find({ customer_id: id }).sort({
+            createdAt: -1,
+        })
         if (!orders) {
             return res
                 .status(404)
@@ -94,7 +96,7 @@ const getTotalAmountLast12Months = catchAsync(async (req, res) => {
     const now = new Date()
     const startYear = now.getFullYear() - 1
     const startMonth = now.getMonth() + 1
-    const startDate = now.getDate()
+    const startDate = '01'
     const begin = new Date(`${startYear}-${startMonth}-${startDate}`)
 
     const orders = await Order.find({
@@ -138,7 +140,7 @@ const getTotalProductLast12Months = catchAsync(async (req, res) => {
     const now = new Date()
     const startYear = now.getFullYear() - 1
     const startMonth = now.getMonth() + 1
-    const startDate = now.getDate()
+    const startDate = '01'
     const begin = new Date(`${startYear}-${startMonth}-${startDate}`)
 
     const orders = await Order.find({

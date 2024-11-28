@@ -8,8 +8,11 @@ import { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { jwtDecode } from "jwt-decode";
 import { api } from "../../app/api/api";
+import CircleLoader from "../../components/Spinner/CircleLoader";
 
 const Home = () => {
+  const [loading, setLoading] = useState(true);
+
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   const [admin, setAdmin] = useState({ fullname: "", email: "", username: "" });
 
@@ -58,6 +61,7 @@ const Home = () => {
         setTotalAmountByMonth(totalAmountRes.data.totalAmountByMonth);
         setMonths(totalAmountRes.data.months);
         setOverallStatistics(overallStatisticsRes.data);
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Có lỗi xảy ra khi lấy dữ liệu thống kê!", error);
@@ -79,6 +83,7 @@ const Home = () => {
     <div className="flex">
       <Sidebar />
       <div className="flex-1 p-7 bg-slate-100">
+        {loading && <CircleLoader />}
         <Navbar heading="Hi, Welcome back 👋" staff={admin} />
         <DashboardBox
           employees={overallStatistics.totalStaff}

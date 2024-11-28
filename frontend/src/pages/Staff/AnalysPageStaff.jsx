@@ -7,15 +7,18 @@ import AnalystTable from "../../components/AnalysTable";
 import { TbDeviceIpadCheck } from "react-icons/tb";
 import { TbDevicesDollar } from "react-icons/tb";
 import { GrMoney } from "react-icons/gr";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import { useCookies } from "react-cookie";
 import { Navigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { api } from "../../app/api/api";
 import { IconButton, Typography } from "@material-tailwind/react";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
+import CircleLoader from "../../components/Spinner/CircleLoader";
 
 const AnalysPageStaff = () => {
+  const [loading, setLoading] = useState(true);
+
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   const [staff, setStaff] = useState({ fullname: "", email: "", username: "" });
 
@@ -101,6 +104,7 @@ const AnalysPageStaff = () => {
         setTotalLength(res.data.orders.length);
         setMaxPage(Math.ceil(res.data.orders.length / dataPerPage));
         setActive(1);
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Có lỗi xảy ra khi lấy dữ liệu thống kê!", error);
@@ -122,6 +126,7 @@ const AnalysPageStaff = () => {
     <div className="flex">
       <SidebarStaff />
       <div className="flex-1 p-7 bg-slate-100">
+        {loading && <CircleLoader />}
         <NavbarStaff heading="Trang phân tích và thống kê" staff={staff} />
         <div className="flex mt-7 mb-11 items-center gap-x-20">
           <div className="flex w-1/3 flex-col gap-y-3">

@@ -9,8 +9,11 @@ import { jwtDecode } from "jwt-decode";
 import { Navigate } from "react-router-dom";
 import { api } from "../../app/api/api";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
+import CircleLoader from "../../components/Spinner/CircleLoader";
 
 const CustomersPageStaff = () => {
+  const [loading, setLoading] = useState(true);
+
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   const [staff, setStaff] = useState({ fullname: "", email: "", username: "" });
   const [customers, setCustomers] = useState([]);
@@ -78,6 +81,7 @@ const CustomersPageStaff = () => {
         setCustomers(res.data.data);
         setTotalLength(res.data.data.length);
         setMaxPage(Math.ceil(res.data.data.length / dataPerPage));
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
@@ -112,6 +116,7 @@ const CustomersPageStaff = () => {
     <div className="flex">
       <SidebarStaff />
       <div className="flex-1 p-7 bg-slate-100">
+        {loading && <CircleLoader />}
         <NavbarStaff heading="Quản lý khách hàng" staff={staff} />
         <h1 className="text-2xl font-semibold mt-11">Danh sách</h1>
         <div className="w-full bg-white rounded-xl mt-7 border border-slate-200">

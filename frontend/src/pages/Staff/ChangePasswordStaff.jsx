@@ -6,8 +6,11 @@ import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { api } from "../../app/api/api";
+import CircleLoader from "../../components/Spinner/CircleLoader";
 
 const ChangePasswordStaff = () => {
+  const [loading, setLoading] = useState(true);
+
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   const [staff, setStaff] = useState({ fullname: "", email: "", username: "" });
 
@@ -26,6 +29,7 @@ const ChangePasswordStaff = () => {
           .then((res) => {
             const { data } = res.data;
             setStaff(data);
+            setLoading(false);
           })
           .catch((error) => {
             console.error("Có lỗi xảy ra khi lấy thông tin nhân viên!", error);
@@ -49,6 +53,7 @@ const ChangePasswordStaff = () => {
     <div className="flex">
       <SidebarStaff />
       <div className="flex-1 p-7 bg-slate-100">
+        {loading && <CircleLoader />}
         <NavbarStaff heading="Tài khoản" staff={staff} />
         <ChangePasswordForm />
       </div>

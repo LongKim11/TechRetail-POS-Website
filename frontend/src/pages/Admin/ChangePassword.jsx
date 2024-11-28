@@ -6,8 +6,11 @@ import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { Navigate } from "react-router-dom";
 import { api } from "../../app/api/api";
+import CircleLoader from "../../components/Spinner/CircleLoader";
 
 const ChangePassword = () => {
+  const [loading, setLoading] = useState(true);
+
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   const [admin, setAdmin] = useState({ fullname: "", email: "", username: "" });
 
@@ -25,6 +28,7 @@ const ChangePassword = () => {
           .then((res) => {
             const { data } = res.data;
             setAdmin(data);
+            setLoading(false);
           })
           .catch((err) => {
             console.log(err);
@@ -50,6 +54,7 @@ const ChangePassword = () => {
     <div className="flex">
       <Sidebar />
       <div className="flex-1 p-7 bg-slate-100">
+        {loading && <CircleLoader />}
         <Navbar heading="Tài khoản" staff={admin} />
         <ChangePasswordForm />
       </div>

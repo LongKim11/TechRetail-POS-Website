@@ -25,8 +25,11 @@ import { Navigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { jwtDecode } from "jwt-decode";
 import { api } from "../../app/api/api";
+import CircleLoader from "../../components/Spinner/CircleLoader";
 
 const ProductManagementPage = () => {
+  const [loading, setLoading] = useState(true);
+
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   const [admin, setAdmin] = useState({});
 
@@ -76,6 +79,7 @@ const ProductManagementPage = () => {
         setProducts(res.data.data);
         setTotalLength(res.data.results);
         setMaxPage(Math.ceil(res.data.results / dataPerPage));
+        setLoading(false);
       });
   }, [cookies.jwt]);
 
@@ -198,6 +202,7 @@ const ProductManagementPage = () => {
     <div className="flex">
       <Sidebar />
       <div className="flex-1 p-7 bg-slate-100">
+        {loading && <CircleLoader />}
         <Navbar heading="Quản lý sản phẩm" staff={admin} />
         <div className="flex justify-between mt-11 items-center">
           <h1 className="text-2xl font-semibold">Danh sách</h1>

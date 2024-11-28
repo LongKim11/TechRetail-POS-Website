@@ -31,7 +31,7 @@ const PurchaseHistoryStaff = () => {
   const [active, setActive] = useState(1);
   const [maxPage, setMaxPage] = useState(0);
 
-  const dataPerPage = 5;
+  const dataPerPage = 4;
   const lastIndex = active * dataPerPage;
   const firtIndex = lastIndex - dataPerPage;
   const currentOrders = orders.slice(firtIndex, lastIndex);

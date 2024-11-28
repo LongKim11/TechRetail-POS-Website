@@ -5,7 +5,7 @@ import { GrMoney } from "react-icons/gr";
 
 const DashboardBox = ({ employees, bills, income, products }) => {
   return (
-    <div className="mt-5 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-7">
+    <div className="mt-5 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-7">
       <div className="rounded-md p-5 bg-gradient-to-r from-cyan-200 to-cyan-300 flex justify-between shadow-lg shadow-gray-200 transition-all duration-500 hover:scale-105 hover:shadow-gray-400 cursor-pointer">
         <div>
           <h4 className="text-[#33343D] mb-3 font-semibold">Tổng nhân viên</h4>

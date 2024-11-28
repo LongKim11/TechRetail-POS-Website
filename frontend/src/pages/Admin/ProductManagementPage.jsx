@@ -152,6 +152,7 @@ const ProductManagementPage = () => {
           import_price: "",
           retail_price: "",
         });
+        setActive(1);
         enqueueSnackbar("Thêm sản phẩm thành công", { variant: "success" });
       })
       .catch((error) => {

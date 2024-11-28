@@ -55,7 +55,8 @@ const ConfirmTransaction = () => {
       phone == 0 ||
       customerInfo.id == "" ||
       customerInfo.fullname == "" ||
-      customerInfo.address == ""
+      customerInfo.address == "" ||
+      showSaveButton
     ) {
       enqueueSnackbar("Vui lòng nhập đầy đủ thông tin", { variant: "error" });
     } else {

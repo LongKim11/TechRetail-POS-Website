@@ -12,6 +12,8 @@ import { useCookies } from "react-cookie";
 import { Navigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { api } from "../../app/api/api";
+import { IconButton, Typography } from "@material-tailwind/react";
+import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 
 const AnalysPageStaff = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
@@ -26,6 +28,33 @@ const AnalysPageStaff = () => {
   const [totalOrders, setTotalOrders] = useState(0);
   const [totalAmountOrders, setTotalAmountOrders] = useState(0);
   const [totalQuantityOrders, setTotalQuantityOrders] = useState(0);
+
+  const [active, setActive] = useState(1);
+  const [maxPage, setMaxPage] = useState(0);
+  const [totalLength, setTotalLength] = useState(0);
+
+  const dataPerPage = 4;
+  const lastIndex = active * dataPerPage;
+  const firtIndex = lastIndex - dataPerPage;
+  const currentOrders = orders.slice(firtIndex, lastIndex);
+
+  const next = () => {
+    if (active === maxPage) return;
+    setActive(active + 1);
+  };
+
+  const prev = () => {
+    if (active === 1) return;
+    setActive(active - 1);
+  };
+
+  useEffect(() => {
+    setMaxPage(Math.ceil(totalLength / dataPerPage));
+  }, [totalLength]);
+
+  useEffect(() => {
+    setTotalLength(orders.length);
+  }, [orders]);
 
   useEffect(() => {
     if (cookies.jwt) {
@@ -69,30 +98,14 @@ const AnalysPageStaff = () => {
         setTotalOrders(res.data.totalOrders);
         setTotalAmountOrders(res.data.totalAmountOrders);
         setTotalQuantityOrders(res.data.totalQuantityOrders);
+        setTotalLength(res.data.orders.length);
+        setMaxPage(Math.ceil(res.data.orders.length / dataPerPage));
+        setActive(1);
       })
       .catch((error) => {
         console.error("Có lỗi xảy ra khi lấy dữ liệu thống kê!", error);
       });
   }, [value, cookies.jwt]);
-
-  const handleSearch = () => {
-    api
-      .get("/orders/statistics", {
-        params: {
-          startDate: format(value.startDate, "yyyy-MM-dd"),
-          endDate: format(value.endDate, "yyyy-MM-dd"),
-        },
-      })
-      .then((res) => {
-        setOrders(res.data.orders);
-        setTotalOrders(res.data.totalOrders);
-        setTotalAmountOrders(res.data.totalAmountOrders);
-        setTotalQuantityOrders(res.data.totalQuantityOrders);
-      })
-      .catch((error) => {
-        console.error("Có lỗi xảy ra khi lấy dữ liệu thống kê!", error);
-      });
-  };
 
   if (!cookies.jwt) {
     console.log("You are not authenticated");
@@ -116,10 +129,7 @@ const AnalysPageStaff = () => {
               <h3 className="font-semibold text-xl text-center">
                 Chọn thời điểm
               </h3>
-              <button
-                className="bg-white px-3 py-2 hover:bg-blue-500 hover:text-white text-blue-500 font-semibold rounded-lg border border-blue-500 transition-all"
-                onClick={handleSearch}
-              >
+              <button className="bg-white px-3 py-2 hover:bg-blue-500 hover:text-white text-blue-500 font-semibold rounded-lg border border-blue-500 transition-all">
                 <FaSearch />
               </button>
             </div>
@@ -175,7 +185,29 @@ const AnalysPageStaff = () => {
           <h3 className="text-center text-2xl font-semibold my-5">
             Danh sách hóa đơn
           </h3>
-          <AnalystTable orders={orders} />
+          <AnalystTable orders={currentOrders} />
+        </div>
+        <div className="flex items-center gap-8 fixed bottom-4 left-[50%]">
+          <IconButton
+            size="sm"
+            onClick={prev}
+            disabled={active === 1}
+            className="bg-blue-600"
+          >
+            <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" />
+          </IconButton>
+          <Typography color="gray" className="font-normal">
+            Page <strong className="text-gray-900">{active}</strong> of{" "}
+            <strong className="text-gray-900">{maxPage}</strong>
+          </Typography>
+          <IconButton
+            size="sm"
+            className="bg-blue-600"
+            onClick={next}
+            disabled={active === maxPage}
+          >
+            <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
+          </IconButton>
         </div>
       </div>
     </div>

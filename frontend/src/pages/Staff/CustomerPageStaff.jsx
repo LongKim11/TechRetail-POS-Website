@@ -1,6 +1,6 @@
 import SidebarStaff from "../../components/SidebarStaff";
 import NavbarStaff from "../../components/NavbarStaff";
-import { Button } from "@material-tailwind/react";
+import { Button, IconButton, Typography } from "@material-tailwind/react";
 import { IoFilter } from "react-icons/io5";
 import CustomerTableStaff from "../../components/CustomerTableStaff";
 import { useState, useEffect } from "react";
@@ -8,16 +8,43 @@ import { useCookies } from "react-cookie";
 import { jwtDecode } from "jwt-decode";
 import { Navigate } from "react-router-dom";
 import { api } from "../../app/api/api";
+import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 
 const CustomersPageStaff = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   const [staff, setStaff] = useState({ fullname: "", email: "", username: "" });
   const [customers, setCustomers] = useState([]);
   const [searchName, setSearchName] = useState("");
+  const [active, setActive] = useState(1);
+  const [maxPage, setMaxPage] = useState(0);
+  const [totalLength, setTotalLength] = useState(0);
+
+  const dataPerPage = 5;
+  const lastIndex = active * dataPerPage;
+  const firtIndex = lastIndex - dataPerPage;
+  const currentCustomers = customers.slice(firtIndex, lastIndex);
+
+  const next = () => {
+    if (active === maxPage) return;
+    setActive(active + 1);
+  };
+
+  const prev = () => {
+    if (active === 1) return;
+    setActive(active - 1);
+  };
 
   const handleSearchNameChange = (e) => {
     setSearchName(e.target.value);
   };
+
+  useEffect(() => {
+    setMaxPage(Math.ceil(totalLength / dataPerPage));
+  }, [totalLength]);
+
+  useEffect(() => {
+    setTotalLength(customers.length);
+  }, [customers]);
 
   useEffect(() => {
     if (cookies.jwt) {
@@ -49,6 +76,8 @@ const CustomersPageStaff = () => {
       })
       .then((res) => {
         setCustomers(res.data.data);
+        setTotalLength(res.data.data.length);
+        setMaxPage(Math.ceil(res.data.data.length / dataPerPage));
       })
       .catch((error) => {
         console.log(error);
@@ -64,6 +93,7 @@ const CustomersPageStaff = () => {
       })
       .then((res) => {
         setCustomers(res.data.data);
+        setActive(1);
       });
   }, [searchName, cookies.jwt]);
 
@@ -121,7 +151,29 @@ const CustomersPageStaff = () => {
               </Button>
             </div>
           </div>
-          <CustomerTableStaff customers={customers} />
+          <CustomerTableStaff customers={currentCustomers} />
+        </div>
+        <div className="flex items-center gap-8 fixed bottom-4 left-[50%]">
+          <IconButton
+            size="sm"
+            onClick={prev}
+            disabled={active === 1}
+            className="bg-blue-600"
+          >
+            <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" />
+          </IconButton>
+          <Typography color="gray" className="font-normal">
+            Page <strong className="text-gray-900">{active}</strong> of{" "}
+            <strong className="text-gray-900">{maxPage}</strong>
+          </Typography>
+          <IconButton
+            size="sm"
+            className="bg-blue-600"
+            onClick={next}
+            disabled={active === maxPage}
+          >
+            <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
+          </IconButton>
         </div>
       </div>
     </div>

@@ -6,6 +6,8 @@ import PurchaseHistoryTable from "../../components/PurchaseHistoryTable";
 import { jwtDecode } from "jwt-decode";
 import { useCookies } from "react-cookie";
 import { api } from "../../app/api/api";
+import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
+import { IconButton, Typography } from "@material-tailwind/react";
 
 const PurchaseHistory = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
@@ -16,15 +18,43 @@ const PurchaseHistory = () => {
   const location = useLocation();
   const { name, phone, address } = location.state || {};
 
+  const [active, setActive] = useState(1);
+  const [maxPage, setMaxPage] = useState(0);
+
+  const dataPerPage = 5;
+  const lastIndex = active * dataPerPage;
+  const firtIndex = lastIndex - dataPerPage;
+  const currentOrders = orders.slice(firtIndex, lastIndex);
+
+  const next = () => {
+    if (active === maxPage) return;
+    setActive(active + 1);
+  };
+
+  const prev = () => {
+    if (active === 1) return;
+    setActive(active - 1);
+  };
+
   useEffect(() => {
     if (cookies.jwt) {
-      const admin = jwtDecode(cookies.jwt);
-      setAdmin({
-        fullname: admin.fullname,
-        email: admin.email,
-        username: admin.username,
-      });
+      const id = jwtDecode(cookies.jwt).id;
+
+      api
+        .get(`/staffs/${id}`, {
+          headers: {
+            Authorization: `Bearer ${cookies.jwt}`,
+          },
+        })
+        .then((res) => {
+          const { data } = res.data;
+          setAdmin(data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
+
     api
       .get(`/customers/${customerId}/orders`, {
         headers: {
@@ -33,6 +63,7 @@ const PurchaseHistory = () => {
       })
       .then((res) => {
         setOrders(res.data.data);
+        setMaxPage(Math.ceil(res.data.data.length / dataPerPage));
       })
       .catch((error) => {
         console.error("Có lỗi xảy ra khi lấy dữ liệu đơn hàng!", error);
@@ -73,7 +104,29 @@ const PurchaseHistory = () => {
           <h3 className="text-center text-2xl font-semibold my-6">
             Lịch sử mua hàng
           </h3>
-          <PurchaseHistoryTable orders={orders}></PurchaseHistoryTable>
+          <PurchaseHistoryTable orders={currentOrders}></PurchaseHistoryTable>
+        </div>
+        <div className="flex items-center gap-8 fixed bottom-4 left-[50%]">
+          <IconButton
+            size="sm"
+            onClick={prev}
+            disabled={active === 1}
+            className="bg-blue-600"
+          >
+            <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" />
+          </IconButton>
+          <Typography color="gray" className="font-normal">
+            Page <strong className="text-gray-900">{active}</strong> of{" "}
+            <strong className="text-gray-900">{maxPage}</strong>
+          </Typography>
+          <IconButton
+            size="sm"
+            className="bg-blue-600"
+            onClick={next}
+            disabled={active === maxPage}
+          >
+            <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
+          </IconButton>
         </div>
       </div>
     </div>

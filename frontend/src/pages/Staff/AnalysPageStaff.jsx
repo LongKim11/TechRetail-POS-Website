@@ -33,7 +33,7 @@ const AnalysPageStaff = () => {
   const [totalQuantityOrders, setTotalQuantityOrders] = useState(0);
 
   const [active, setActive] = useState(1);
-  const [maxPage, setMaxPage] = useState(0);
+  const [maxPage, setMaxPage] = useState(1);
   const [totalLength, setTotalLength] = useState(0);
 
   const dataPerPage = 4;
@@ -52,6 +52,7 @@ const AnalysPageStaff = () => {
   };
 
   useEffect(() => {
+    if (totalLength == 0) return;
     setMaxPage(Math.ceil(totalLength / dataPerPage));
   }, [totalLength]);
 
@@ -94,7 +95,15 @@ const AnalysPageStaff = () => {
         },
       })
       .then((res) => {
-        if (res.data.length === 0) {
+        if (res.data.orders.length == 0) {
+          setLoading(false);
+          setOrders([]);
+          setTotalOrders(0);
+          setTotalAmountOrders(0);
+          setTotalQuantityOrders(0);
+          setTotalLength(0);
+          setMaxPage(1);
+          setActive(1);
           return;
         }
         setOrders(res.data.orders);

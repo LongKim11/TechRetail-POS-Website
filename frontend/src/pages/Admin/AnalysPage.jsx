@@ -7,7 +7,7 @@ import AnalystTable from "../../components/AnalysTable";
 import { TbDeviceIpadCheck } from "react-icons/tb";
 import { TbDevicesDollar } from "react-icons/tb";
 import { GrMoney } from "react-icons/gr";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import { useCookies } from "react-cookie";
 import { Navigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
@@ -32,7 +32,7 @@ const AnalysPage = () => {
   const [totalQuantityOrders, setTotalQuantityOrders] = useState(0);
 
   const [active, setActive] = useState(1);
-  const [maxPage, setMaxPage] = useState(0);
+  const [maxPage, setMaxPage] = useState(1);
   const [totalLength, setTotalLength] = useState(0);
 
   const dataPerPage = 4;
@@ -51,6 +51,7 @@ const AnalysPage = () => {
   };
 
   useEffect(() => {
+    if (totalLength == 0) return;
     setMaxPage(Math.ceil(totalLength / dataPerPage));
   }, [totalLength]);
 
@@ -94,7 +95,15 @@ const AnalysPage = () => {
         },
       })
       .then((res) => {
-        if (res.data.length === 0) {
+        if (res.data.orders.length == 0) {
+          setLoading(false);
+          setOrders([]);
+          setTotalOrders(0);
+          setTotalAmountOrders(0);
+          setTotalQuantityOrders(0);
+          setTotalLength(0);
+          setMaxPage(1);
+          setActive(1);
           return;
         }
         setOrders(res.data.orders);
@@ -104,7 +113,6 @@ const AnalysPage = () => {
         setTotalLength(res.data.orders.length);
         setMaxPage(Math.ceil(res.data.orders.length / dataPerPage));
         setActive(1);
-        setLoading(false);
       })
       .catch((error) => {
         console.error("Có lỗi xảy ra khi lấy dữ liệu thống kê!", error);

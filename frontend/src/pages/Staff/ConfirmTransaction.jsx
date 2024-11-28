@@ -36,12 +36,20 @@ const ConfirmTransaction = () => {
 
   useEffect(() => {
     if (cookies.jwt) {
-      const staff = jwtDecode(cookies.jwt);
-      setStaff({
-        fullname: staff.fullname,
-        email: staff.email,
-        username: staff.username,
-      });
+      const id = jwtDecode(cookies.jwt).id;
+      api
+        .get(`/staffs/${id}`, {
+          headers: {
+            Authorization: `Bearer ${cookies.jwt}`,
+          },
+        })
+        .then((res) => {
+          const { data } = res.data;
+          setStaff(data);
+        })
+        .catch((error) => {
+          console.error("Có lỗi xảy ra khi lấy thông tin nhân viên!", error);
+        });
     }
   }, [cookies.jwt]);
 
@@ -69,7 +77,6 @@ const ConfirmTransaction = () => {
           subTotal: product.subTotal,
         };
       });
-      console.log(item);
       api
         .post(
           "/orders",
@@ -97,6 +104,7 @@ const ConfirmTransaction = () => {
 
       navigate("/staff/invoice", {
         state: {
+          staffFullname: staff.fullname,
           addedProduct,
           totalAmount,
           receivedAmount,

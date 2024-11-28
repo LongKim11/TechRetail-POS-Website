@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
+import { api } from "../../app/api/api";
 
 const InvoicePage = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
@@ -18,6 +19,7 @@ const InvoicePage = () => {
   const location = useLocation();
 
   const {
+    staffFullname,
     addedProduct,
     totalAmount,
     receivedAmount,
@@ -28,12 +30,20 @@ const InvoicePage = () => {
 
   useEffect(() => {
     if (cookies.jwt) {
-      const staff = jwtDecode(cookies.jwt);
-      setStaff({
-        fullname: staff.fullname,
-        email: staff.email,
-        username: staff.username,
-      });
+      const id = jwtDecode(cookies.jwt).id;
+      api
+        .get(`/staffs/${id}`, {
+          headers: {
+            Authorization: `Bearer ${cookies.jwt}`,
+          },
+        })
+        .then((res) => {
+          const { data } = res.data;
+          setStaff(data);
+        })
+        .catch((error) => {
+          console.error("Có lỗi xảy ra khi lấy thông tin nhân viên!", error);
+        });
     }
   }, [cookies.jwt]);
 
@@ -77,7 +87,7 @@ const InvoicePage = () => {
           <div className="flex justify-between mt-11">
             <div className="flex gap-x-3">
               <p className="font-semibold">Nhân viên:</p>
-              <Typography className="font-normal">Nguyễn Văn A</Typography>
+              <Typography className="font-normal">{staffFullname}</Typography>
             </div>
             <div className="flex gap-x-3">
               <p className="font-semibold">Ngày:</p>

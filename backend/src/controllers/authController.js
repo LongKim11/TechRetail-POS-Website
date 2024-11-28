@@ -9,7 +9,6 @@ import sendEmail from '../utils/email.js'
 
 const login = catchAsync(async (req, res, next) => {
     const { username, password } = req.body
-    // 1) Check if email and password exist
     if (!username || !password) {
         return next(new AppError('Please provide email and password!', 400))
     }
@@ -42,7 +41,6 @@ const login = catchAsync(async (req, res, next) => {
 
     staff.loginToken = undefined
     staff.loginTokenExpires = undefined
-    staff.status = 'Active'
     await staff.save({ validateBeforeSave: false })
 
     const token = staff.jwtToken()
@@ -61,54 +59,8 @@ const logout = async (req, res) => {
     const cookies = req.cookies
     if (!cookies?.jwt) return res.sendStatus(204) //No content
 
-    const id = await jwt.decode(cookies.jwt).id
-    const staff = await Staff.findById(id).select('+account')
-    staff.status = 'Inactive'
-    await staff.save({ validateBeforeSave: false })
-
     res.clearCookie('jwt')
     res.json({ message: 'Cookie cleared' })
-}
-
-const refresh = (req, res) => {
-    const cookies = req.cookies
-    if (!cookies?.jwt) return res.status(401).json({ message: 'Unauthorized' })
-
-    const refreshToken = cookies.jwt
-    jwt.verify(
-        refreshToken,
-        process.env.JWT_REFRESH_SECRET,
-        catchAsync(async (err, decoded) => {
-            if (err) return res.status(403).json({ message: 'Forbidden' })
-
-            if (decoded.id === 'admin') {
-                const token = jwt.sign(
-                    { id: 'admin', role: 'admin' },
-                    process.env.JWT_SECRET,
-                    {
-                        expiresIn: process.env.JWT_EXPIRES_IN,
-                    },
-                )
-                return res.json({ token })
-            }
-
-            const foundStaff = await Staff.findOne({
-                _id: decoded.id,
-            }).exec()
-
-            if (!foundStaff)
-                return res.status(401).json({ message: 'Unauthorized' })
-
-            const token = jwt.sign(
-                { id: foundStaff._id, role: 'staff' },
-                process.env.JWT_SECRET,
-                {
-                    expiresIn: process.env.JWT_EXPIRES_IN,
-                },
-            )
-            res.json({ token })
-        }),
-    )
 }
 
 const restrictTo = (...roles) => {
@@ -204,15 +156,6 @@ const updatePassword = catchAsync(async (req, res, next) => {
         return next(new AppError('Passwords are not the same', 400))
     }
 
-    if (
-        !(await staff.comparePassword(
-            req.body.oldPassword,
-            staff.account.password,
-        ))
-    ) {
-        return next(new AppError('Your current password is wrong.', 401))
-    }
-
     staff.account.password = req.body.newPassword
     staff.never_login = false
     await staff.save()
@@ -223,29 +166,6 @@ const updatePassword = catchAsync(async (req, res, next) => {
     res.status(200).json({
         status: 'success',
         token,
-    })
-})
-
-const updateMe = catchAsync(async (req, res, next) => {
-    if (req.body.password || req.body.passwordConfirm) {
-        return next(
-            new AppError(
-                'This route is not for password updates. Please use /updateMyPassword.',
-                400,
-            ),
-        )
-    }
-
-    const staff = await Staff.findByIdAndUpdate(req.staff.id, req.body, {
-        new: true,
-        runValidators: true,
-    })
-
-    res.status(200).json({
-        status: 'success',
-        data: {
-            staff,
-        },
     })
 })
 
@@ -262,7 +182,7 @@ const resendLoginEmail = catchAsync(async (req, res, next) => {
     await staff.save({ validateBeforeSave: false })
 
     const url = `${process.env.FE_URL}/?token=${loginToken}`
-    const message = `Your account has been created. Your username is ${staff.account.username}.\nPlease login to ${url} to change your password. (This link is valid for 10 minutes)`
+    const message = `Your account has been created. Your username is ${staff.account.username}.\nPlease login to ${url} to change your password. (This link is valid for 1 minutes)`
     try {
         sendEmail({
             email: staff.email,
@@ -291,11 +211,9 @@ const resendLoginEmail = catchAsync(async (req, res, next) => {
 export {
     login,
     logout,
-    refresh,
     restrictTo,
     forgotPassword,
     resetPassword,
     updatePassword,
-    updateMe,
     resendLoginEmail,
 }

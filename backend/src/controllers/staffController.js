@@ -49,31 +49,37 @@ const getStaffById = catchAsync(async (req, res, next) => {
 })
 
 const createStaff = catchAsync(async (req, res, next) => {
-    console.log(req.body, req.file)
     const avatar = req.file?.filename || 'default-avatar.png'
     const username = req.body.email.split('@')[0]
     const password = username
-
-    const randomToken = crypto.randomBytes(32).toString('hex')
-    const loginToken = crypto
-        .createHash('sha256')
-        .update(randomToken)
-        .digest('hex')
 
     const newStaff = await Staff.create({
         ...req.body,
         account: { username, password },
         avatar,
-        loginToken,
     })
 
     if (!newStaff) {
+        if (req.file) {
+            fs.unlink(
+                `${__dirname}/../public/uploads/avatars/${avatar}`,
+                (err) => {
+                    if (err) {
+                        console.error(err)
+                        return
+                    }
+                },
+            )
+        }
+
         return next(new AppError('Failed to create staff', 400))
     }
 
-    // send email with temporary password
+    const loginToken = newStaff.createLoginToken()
+    await newStaff.save({ validateBeforeSave: false })
+
     const url = `${process.env.FE_URL}/?token=${loginToken}`
-    const message = `Your account has been created. Your username is ${username} and password is ${password}.\nPlease login to ${url} to change your password. (This link is valid for 1 minutes)`
+    const message = `Your account has been created. Your username is ${username} and password is ${password}.\nPlease login to ${url} to change your password. (This link is valid for 1 minute)`
     try {
         sendEmail({
             email: newStaff.email,

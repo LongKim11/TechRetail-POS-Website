@@ -43,7 +43,7 @@ const staffSchema = mongoose.Schema(
             type: String,
             required: [true, 'Status is required'],
             enum: ['Active', 'Inactive'],
-            default: 'Inactive',
+            default: 'Active',
         },
         is_locked: {
             type: String,

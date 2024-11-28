@@ -33,9 +33,9 @@ const HomeStaff = () => {
     totalProductsSold: 0,
   });
 
-  const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
   const { enqueueSnackbar } = useSnackbar();
 
   const [openCPModal, setOpenCPModal] = useState(false);
@@ -84,7 +84,6 @@ const HomeStaff = () => {
       });
   }, [cookies.jwt]);
 
-  const handleOldPasswordChange = (e) => setOldPassword(e.target.value);
   const handleNewPasswordChange = (e) => setNewPassword(e.target.value);
   const handleConfirmPasswordChange = (e) => setConfirmPassword(e.target.value);
 
@@ -97,7 +96,6 @@ const HomeStaff = () => {
       .patch(
         `/auth/updatePassword/${id}`,
         {
-          oldPassword,
           newPassword,
           confirmPassword,
         },
@@ -109,6 +107,9 @@ const HomeStaff = () => {
       )
       .then((res) => {
         enqueueSnackbar("Đổi mật khẩu thành công", { variant: "success" });
+        const { token } = res.data;
+        setCookie("jwt", token, { path: "/" });
+        handleOpenCPModal();
       })
       .catch((err) => {
         enqueueSnackbar("Đổi mật khẩu thất bại", { variant: "error" });
@@ -169,15 +170,6 @@ const HomeStaff = () => {
               >
                 Mật khẩu cần ít nhất 6 kí tự.
               </Typography>
-              <Typography className="" variant="h6">
-                Mật khẩu cũ
-              </Typography>
-              <input
-                type="password"
-                className="border border-slate-300 rounded-lg p-2 w-full focus:outline-none focus:border-blue-500"
-                name="oldPassword"
-                onChange={handleOldPasswordChange}
-              ></input>
               <Typography className="" variant="h6">
                 Mật khẩu mới
               </Typography>

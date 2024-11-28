@@ -72,8 +72,11 @@ const LoginPage = () => {
       if (role === "staff") navigate("/staff/home");
       if (role === "admin") navigate("/admin/home");
     } catch (error) {
-      console.error("Đăng nhập thất bại", error);
-      if (error.data.message === "Login token is wrong") {
+      if (error.data.message === "Incorrect username or password") {
+        enqueueSnackbar("Tên đăng nhập hoặc mật khẩu không đúng", {
+          variant: "error",
+        });
+      } else if (error.data.message === "Login token is wrong") {
         handleOpenLoginViaEmailModal();
       } else if (error.data.message === "Account is locked") {
         handleOpenLockedAccountModal();
@@ -82,10 +85,7 @@ const LoginPage = () => {
           variant: "error",
         });
       } else if (error.data.message === "Login token is expired") {
-        enqueueSnackbar(
-          "Link này đã hết hạn đăng nhập, hãy liên hệ admin để được cấp lại link",
-          { variant: "error" }
-        );
+        handleOpenTokenExpiredModal();
       } else {
         enqueueSnackbar("Đăng nhập thất bại", { variant: "error" });
       }

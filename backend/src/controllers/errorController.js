@@ -54,13 +54,7 @@ export default (err, req, res, next) => {
     err.status = err.status || 'error'
     if (req.file) {
         if (req.file.filename.includes('avatar')) {
-            fs.unlink(`public/img/avatars/${req.file.filename}`, (err) => {
-                if (err) {
-                    console.error(err)
-                }
-            })
-        } else {
-            fs.unlink(`public/img/products/${req.file.filename}`, (err) => {
+            fs.unlink(`public/uploads/avatars/${req.file.filename}`, (err) => {
                 if (err) {
                     console.error(err)
                 }

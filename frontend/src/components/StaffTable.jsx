@@ -161,7 +161,7 @@ const StaffTable = ({ staffs }) => {
                       size="md"
                       withBorder={true}
                       color="blue"
-                      className="border object-contain p-1"
+                      className="border p-1"
                     />
                     <Typography className="font-semibold">
                       {staff.fullname}
@@ -214,9 +214,9 @@ const StaffTable = ({ staffs }) => {
                         unmount: { scale: 0, y: 25 },
                       }}
                     >
-                      <a onClick={() => handleOpenDetailModal(staff)}>
+                      <button onClick={() => handleOpenDetailModal(staff)}>
                         <BsInfoCircle className="text-2xl text-green-600" />
-                      </a>
+                      </button>
                     </Tooltip>
                     {staff.is_locked == "False" ? (
                       <Tooltip
@@ -226,9 +226,9 @@ const StaffTable = ({ staffs }) => {
                           unmount: { scale: 0, y: 25 },
                         }}
                       >
-                        <a onClick={() => handleOpenLockModal(staff)}>
+                        <button onClick={() => handleOpenLockModal(staff)}>
                           <MdLockPerson className="text-2xl text-red-600" />
-                        </a>
+                        </button>
                       </Tooltip>
                     ) : (
                       <Tooltip
@@ -238,9 +238,9 @@ const StaffTable = ({ staffs }) => {
                           unmount: { scale: 0, y: 25 },
                         }}
                       >
-                        <a onClick={() => handleOpenUnlockModal(staff)}>
+                        <button onClick={() => handleOpenUnlockModal(staff)}>
                           <IoMdUnlock className="text-2xl text-blue-600" />
-                        </a>
+                        </button>
                       </Tooltip>
                     )}
                   </div>

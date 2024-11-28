@@ -25,6 +25,7 @@ const LoginPage = () => {
 
   const [openLoginViaEmailModal, setOpenLoginViaEmailModal] = useState(false);
   const [openLockedAccountModal, setOpenLockedAccountModal] = useState(false);
+  const [openTokenExpiredModal, setOpenTokenExpiredModal] = useState(false);
 
   const navigate = useNavigate();
 
@@ -47,6 +48,10 @@ const LoginPage = () => {
 
   const handleOpenLockedAccountModal = () => {
     setOpenLockedAccountModal((cur) => !cur);
+  };
+
+  const handleOpenTokenExpiredModal = () => {
+    setOpenTokenExpiredModal((cur) => !cur);
   };
 
   const handleSubmit = async (event) => {
@@ -195,8 +200,34 @@ const LoginPage = () => {
             variant="gradient"
             color="blue"
             className="focus:outline-none"
+            onClick={handleOpenLockedAccountModal}
           >
-            <a onClick={handleOpenLockedAccountModal}>Thoát</a>
+            Thoát
+          </Button>
+        </DialogFooter>
+      </Dialog>
+      <Dialog
+        open={openTokenExpiredModal}
+        handler={handleOpenTokenExpiredModal}
+        size="sm"
+      >
+        <DialogHeader>Khóa tài khoản</DialogHeader>
+        <DialogBody>
+          <Typography
+            className="font-normal text-slate-500"
+            variant="paragraph"
+          >
+            Liên kết mà bạn truy cập đã hết hạn, vui lòng liên hệ quản trị viên.
+          </Typography>
+        </DialogBody>
+        <DialogFooter>
+          <Button
+            variant="gradient"
+            color="blue"
+            className="focus:outline-none"
+            onClick={handleOpenTokenExpiredModal}
+          >
+            Thoát
           </Button>
         </DialogFooter>
       </Dialog>

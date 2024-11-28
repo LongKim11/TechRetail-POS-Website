@@ -73,7 +73,7 @@ const createStaff = catchAsync(async (req, res, next) => {
 
     // send email with temporary password
     const url = `${process.env.FE_URL}/?token=${loginToken}`
-    const message = `Your account has been created. Your username is ${username} and password is ${password}.\nPlease login to ${url} to change your password. (This link is valid for 10 minutes)`
+    const message = `Your account has been created. Your username is ${username} and password is ${password}.\nPlease login to ${url} to change your password. (This link is valid for 1 minutes)`
     try {
         sendEmail({
             email: newStaff.email,

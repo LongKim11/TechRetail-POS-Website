@@ -3,6 +3,9 @@ import {
   Typography,
   Button,
   Dialog,
+  DialogBody,
+  DialogFooter,
+  DialogHeader,
   Card,
   CardBody,
   CardFooter,
@@ -22,12 +25,14 @@ const ProfileForm = ({ userInfo }) => {
 
   const [openCPModal, setOpenCPModal] = useState(false);
   const [openCAModal, setOpenCAModal] = useState(false);
+  const [openAvatar, setOpenAvatar] = useState(false);
 
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [avatar, setAvatar] = useState(null);
+  const [url, setUrl] = useState("");
 
   const handleOldPasswordChange = (e) => setOldPassword(e.target.value);
   const handleNewPasswordChange = (e) => setNewPassword(e.target.value);
@@ -35,6 +40,10 @@ const ProfileForm = ({ userInfo }) => {
 
   const handleOpenCPModal = () => setOpenCPModal((cur) => !cur);
   const handleOpenCAModal = () => setOpenCAModal((cur) => !cur);
+  const handleOpenAvatar = (url) => {
+    setUrl(url);
+    setOpenAvatar((cur) => !cur);
+  };
 
   const handleChangePassword = () => {
     const token = cookies.jwt;
@@ -102,8 +111,13 @@ const ProfileForm = ({ userInfo }) => {
               alt="avatar"
               size="xl"
               withBorder={true}
-              className="p-1"
+              className="p-1 cursor-pointer shadow-xl hover:shadow-2xl"
               color="blue"
+              onClick={() =>
+                handleOpenAvatar(
+                  "http://localhost:8080/uploads/avatars/" + userInfo.avatar
+                )
+              }
             />
             <div className="ml-5">
               <h1 className="text-2xl font-semibold">
@@ -251,6 +265,82 @@ const ProfileForm = ({ userInfo }) => {
                   </Button>
                 </CardFooter>
               </Card>
+            </Dialog>
+            <Dialog size="md" open={openAvatar} handler={handleOpenAvatar}>
+              <DialogHeader className="justify-between">
+                <div className="flex items-center gap-3">
+                  <Avatar
+                    size="sm"
+                    variant="circular"
+                    alt="tania andrew"
+                    src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"
+                  />
+                  <div className="-mt-px flex flex-col">
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-medium"
+                    >
+                      Tania Andrew
+                    </Typography>
+                    <Typography
+                      variant="small"
+                      color="gray"
+                      className="text-xs font-normal"
+                    >
+                      @emmaroberts
+                    </Typography>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button color="gray" size="sm">
+                    Free Download
+                  </Button>
+                </div>
+              </DialogHeader>
+              <DialogBody>
+                <img
+                  alt="nature"
+                  className="h-[48rem] w-full rounded-lg object-cover object-center"
+                  src={url}
+                />
+              </DialogBody>
+              <DialogFooter className="justify-between">
+                <div className="flex items-center gap-16">
+                  <div>
+                    <Typography
+                      variant="small"
+                      color="gray"
+                      className="font-normal"
+                    >
+                      Views
+                    </Typography>
+                    <Typography color="blue-gray" className="font-medium">
+                      44,082,044
+                    </Typography>
+                  </div>
+                  <div>
+                    <Typography
+                      variant="small"
+                      color="gray"
+                      className="font-normal"
+                    >
+                      Downloads
+                    </Typography>
+                    <Typography color="blue-gray" className="font-medium">
+                      553,031
+                    </Typography>
+                  </div>
+                </div>
+                <Button
+                  size="sm"
+                  variant="outlined"
+                  color="blue-gray"
+                  className="mr-5 flex items-center"
+                >
+                  Share
+                </Button>
+              </DialogFooter>
             </Dialog>
           </div>
         </form>

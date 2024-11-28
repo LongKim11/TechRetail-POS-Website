@@ -351,6 +351,7 @@ const ProductManagementPage = () => {
           <ProductTable
             products={currentProducts}
             onDeleteProduct={handleDeleteProduct}
+            token={cookies.jwt}
           />
         </div>
         <div className="flex items-center gap-8 fixed bottom-4 left-[50%]">

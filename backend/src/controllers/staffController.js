@@ -100,14 +100,6 @@ const updateStaff = catchAsync(async (req, res, next) => {
     const staff = await Staff.findById(req.params.id)
     const oldAvatar = staff.avatar
 
-    // const editStaff = await Staff.findByIdAndUpdate(
-    //     req.params.id,
-    //     { ...req.body, avatar: req.file.filename },
-    //     {
-    //         new: true,
-    //         runValidators: true,
-    //     },
-    // )
     let editStaff
 
     if (req.file) {
@@ -134,7 +126,7 @@ const updateStaff = catchAsync(async (req, res, next) => {
         return next(new AppError('No staff found with that ID', 404))
     }
 
-    if (oldAvatar !== 'default-avatar.png') {
+    if (oldAvatar !== 'default-avatar.png' && req.file) {
         fs.unlink(`public/uploads/avatars/${oldAvatar}`, (err) => {
             if (err) {
                 console.error(err)

@@ -32,7 +32,7 @@ const TABLE_HEAD = [
   "Thao tác",
 ];
 
-const ProductTable = ({ products, onDeleteProduct }) => {
+const ProductTable = ({ products, onDeleteProduct, token }) => {
   const [productsRender, setProductsRender] = useState([]);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openDetailModal, setOpenDetailModal] = useState(false);
@@ -61,7 +61,11 @@ const ProductTable = ({ products, onDeleteProduct }) => {
 
   const handleEditProduct = () => {
     api
-      .put(`/products/${selectedProduct._id}`, selectedProduct)
+      .put(`/products/${selectedProduct._id}`, selectedProduct, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then(() => {
         setProductsRender(
           productsRender.map((product) =>

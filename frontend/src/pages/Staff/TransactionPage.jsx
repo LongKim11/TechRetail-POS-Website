@@ -342,7 +342,7 @@ const TransactionPage = () => {
           </div>
         </div>
 
-        <div className="flex mt-11 fixed bottom-4 right-5">
+        <div className="flex mt-11 fixed bottom-4 right-7">
           <Button
             variant="outlined"
             className="flex items-center gap-3"
@@ -353,7 +353,7 @@ const TransactionPage = () => {
             <FaArrowRight />
           </Button>
         </div>
-        <div className="flex items-center gap-8 fixed bottom-4 left-[15%]">
+        <div className="flex items-center gap-8 fixed bottom-4 left-[18%]">
           <IconButton
             size="sm"
             onClick={prev}

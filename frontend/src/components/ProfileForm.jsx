@@ -270,7 +270,7 @@ const ProfileForm = ({ userInfo }) => {
               <DialogBody>
                 <img
                   alt="nature"
-                  className="h-[45rem] w-full rounded-lg object-cover object-center"
+                  className="h-[30rem] w-full rounded-lg object-cover object-center"
                   src={url}
                 />
               </DialogBody>

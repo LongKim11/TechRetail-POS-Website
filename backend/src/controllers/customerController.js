@@ -4,7 +4,7 @@ import AppError from '../utils/appError.js'
 import { Customer } from '../models/customerModel.js'
 
 const getCustomers = catchAsync(async (req, res, next) => {
-    const customers = await Customer.find()
+    const customers = await Customer.find().sort({ createdAt: -1 })
 
     // Filter customers by phone number
     const { phone, fullname } = req.query

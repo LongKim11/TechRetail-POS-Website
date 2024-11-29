@@ -41,7 +41,11 @@ const NavbarStaff = ({ staff, heading }) => {
               withBorder={true}
               color="blue"
               className="cursor-pointer"
-              src={`http://localhost:8080/uploads/avatars/` + staff.avatar}
+              src={
+                staff.avatar
+                  ? `http://localhost:8080/uploads/avatars/` + staff.avatar
+                  : ""
+              }
             />
           </MenuHandler>
           <MenuList>

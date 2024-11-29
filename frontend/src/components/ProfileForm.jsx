@@ -107,7 +107,11 @@ const ProfileForm = ({ userInfo }) => {
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             <Avatar
-              src={"http://localhost:8080/uploads/avatars/" + userInfo.avatar}
+              src={
+                userInfo.avatar
+                  ? "http://localhost:8080/uploads/avatars/" + userInfo.avatar
+                  : ""
+              }
               alt="avatar"
               size="xl"
               withBorder={true}

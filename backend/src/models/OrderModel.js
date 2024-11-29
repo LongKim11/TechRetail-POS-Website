@@ -1,3 +1,5 @@
+// Change OrderModel.js to orderModel.js
+
 import { mongoose, Schema } from 'mongoose'
 
 const itemsSchema = mongoose.Schema(

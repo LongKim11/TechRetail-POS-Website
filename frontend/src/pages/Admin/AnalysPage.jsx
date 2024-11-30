@@ -113,6 +113,7 @@ const AnalysPage = () => {
         setTotalLength(res.data.orders.length);
         setMaxPage(Math.ceil(res.data.orders.length / dataPerPage));
         setActive(1);
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Có lỗi xảy ra khi lấy dữ liệu thống kê!", error);

@@ -8,25 +8,22 @@
 
 ## Video thuyết trình
 
-- Video thuyết trình được tải lên youtube ở địa chỉ "https://www.youtube.com/watch?v=0UQL77HyDgs".
+- Video thuyết trình được tải lên youtube ở địa chỉ "https://youtu.be/oswTraarpOY".
 
-## Tài khoản hệ thống
+## Tài khoản đăng nhập hệ thống
 
 **Đối với Admin**
 
-- Tài khoản: admin
-
-- Mật khẩu: admin
+| Tài khoản | Mật khẩu |
+| --------- | -------- |
+| admin     | admin    |
 
 **Đối với Staff**
 
-- Tài khoản: drvkee11
-
-- Mật khẩu: 123
-
-- Tài khoản: dangminh08152
-
-- Mật khẩu: 123
+| Tài khoản      | Mật khẩu |
+| -------------- | -------- |
+| vokimlong11.cs | 123      |
+| longsn113      | 123      |
 
 ## Cách chạy Project
 

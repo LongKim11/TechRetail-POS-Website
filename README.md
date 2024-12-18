@@ -1,40 +1,32 @@
 # Caesar POS Website
 
-- Xây dựng một website cung cấp dịch vụ POS cho các cửa hàng bán lẻ điện thoại và phụ kiện.
+- Develop a website offering POS services for phone and accessories retail stores.
 
-- Người dùng chính của website gồm có **quản trị viên** và **người bán hàng**.
+- The primary users of the website are **administrators** and **sales staff**.
 
-- Trang web sẽ bảo đảm các chức năng như: quản lý tài khoản, quản lý sản phẩm, quản lý khách hàng, quản lý giao dịch, thống kê và phân tích,..
+- The website will provide functions such as account management, product management, customer management, transaction management, and analytics.
 
-## Video thuyết trình
+## Login Credentials
 
-- Video thuyết trình được tải lên youtube ở địa chỉ "https://youtu.be/oswTraarpOY".
+**Admin**
 
-## Tài khoản đăng nhập hệ thống
+| Username | Password |
+| -------- | -------- |
+| admin    | admin    |
 
-**Đối với Admin**
+**Staff**
 
-| Tài khoản | Mật khẩu |
-| --------- | -------- |
-| admin     | admin    |
-
-**Đối với Staff**
-
-| Tài khoản      | Mật khẩu |
+| Username       | Password |
 | -------------- | -------- |
 | vokimlong11.cs | 123      |
 | longsn113      | 123      |
 
-## Cách chạy Project
+## How to Run the Project
 
-- Sử dụng lệnh `git clone` để clone repository về thư mục.
+- Use the `git clone` command to clone the repository into a directory.
 
-- Chuyển đường dẫn đến thư mục backend, chạy lệnh `npm install` và làm tương tự với thư mục frontend.
+- Navigate to the `backend` folder, run `npm install`, and repeat the same process for the `frontend` folder.
 
-- Sau khi cài đặt xong, chạy `npm start` đối với backend để chạy server.
+- Once installation is complete, start the server by running `npm start` in the `backend` folder.
 
-- Đối với frontend, chạy `npm run dev` và truy cập đường dẫn.
-
-## Deploy Project
-
-- Trang web được deploy tại địa chỉ "https://ceasar-pos-app-client.vercel.app/".
+- For the frontend, run `npm run dev` and access the provided URL.

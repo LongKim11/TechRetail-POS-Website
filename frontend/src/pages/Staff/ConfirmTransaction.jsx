@@ -403,16 +403,18 @@ const ConfirmTransaction = () => {
             </table>
           </div>
         </div>
-        <div className="flex justify-end mt-11 fixed bottom-4 right-5">
-          <Button
-            variant="outlined"
-            className="flex items-center gap-3"
-            color="blue"
-            onClick={handleConfirm}
-          >
-            Xác nhận
-            <FaArrowRight />
-          </Button>
+        <div className="flex justify-end">
+          <div className="flex justify-end mt-11 fixed bottom-3">
+            <Button
+              variant="outlined"
+              className="flex items-center gap-3"
+              color="blue"
+              onClick={handleConfirm}
+            >
+              Xác nhận
+              <FaArrowRight />
+            </Button>
+          </div>
         </div>
       </div>
     </div>

@@ -356,38 +356,42 @@ const TransactionPage = () => {
               </div>
             </div>
 
-            <div className="flex mt-11 fixed bottom-4 right-7">
-              <Button
-                variant="outlined"
-                className="flex items-center gap-3"
-                color="blue"
-                onClick={handleNext}
-              >
-                Tiếp theo
-                <FaArrowRight />
-              </Button>
+            <div className="flex justify-end">
+              <div className="flex mt-11 fixed bottom-3">
+                <Button
+                  variant="outlined"
+                  className="flex items-center gap-3"
+                  color="blue"
+                  onClick={handleNext}
+                >
+                  Tiếp theo
+                  <FaArrowRight />
+                </Button>
+              </div>
             </div>
-            <div className="flex items-center gap-8 fixed bottom-4 left-[18%]">
-              <IconButton
-                size="sm"
-                onClick={prev}
-                disabled={active === 1}
-                className="bg-blue-600"
-              >
-                <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" />
-              </IconButton>
-              <Typography color="gray" className="font-normal">
-                Page <strong className="text-gray-900">{active}</strong> of{" "}
-                <strong className="text-gray-900">{maxPage}</strong>
-              </Typography>
-              <IconButton
-                size="sm"
-                className="bg-blue-600"
-                onClick={next}
-                disabled={active === maxPage}
-              >
-                <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
-              </IconButton>
+            <div className="flex justify-start">
+              <div className="flex items-center gap-8 fixed bottom-3">
+                <IconButton
+                  size="sm"
+                  onClick={prev}
+                  disabled={active === 1}
+                  className="bg-blue-600"
+                >
+                  <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" />
+                </IconButton>
+                <Typography color="gray" className="font-normal">
+                  Page <strong className="text-gray-900">{active}</strong> of{" "}
+                  <strong className="text-gray-900">{maxPage}</strong>
+                </Typography>
+                <IconButton
+                  size="sm"
+                  className="bg-blue-600"
+                  onClick={next}
+                  disabled={active === maxPage}
+                >
+                  <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
+                </IconButton>
+              </div>
             </div>
           </>
         )}

@@ -49,12 +49,20 @@ const ProfileStaff = () => {
     <div className="flex">
       <SidebarStaff></SidebarStaff>
       <div className="flex-1 p-7 bg-slate-100">
-        {loading && <CircleLoader></CircleLoader>}
-        <NavbarStaff heading="Thông tin cá nhân" staff={staff}></NavbarStaff>
-        <ProfileForm
-          avatar="./src/assets/user-avatar.png"
-          userInfo={staff}
-        ></ProfileForm>
+        {loading ? (
+          <CircleLoader></CircleLoader>
+        ) : (
+          <>
+            <NavbarStaff
+              heading="Thông tin cá nhân"
+              staff={staff}
+            ></NavbarStaff>
+            <ProfileForm
+              avatar="./src/assets/user-avatar.png"
+              userInfo={staff}
+            ></ProfileForm>
+          </>
+        )}
       </div>
     </div>
   );

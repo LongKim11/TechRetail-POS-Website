@@ -135,76 +135,81 @@ const HomeStaff = () => {
     <div className="flex">
       <SidebarStaff />
       <div className="flex-1 p-7 bg-slate-100">
-        {loading && <CircleLoader />}
-        <NavbarStaff heading="Hi, Welcome back 👋" staff={staff} />
-        <DashboardBoxStaff
-          customers={overallStatistics.totalCustomers}
-          bills={overallStatistics.totalOrders}
-          income={overallStatistics.totalAmount}
-          products={overallStatistics.totalProductsSold}
-        />
-        <div className="mt-6">
-          <div className="flex items-center gap-x-3 justify-end text-slate-500 cursor-pointer mb-3">
-            <Link to={"/staff/analys"}>
-              {" "}
-              <p className="text-sm font-semibold">Đi tới trang thống kê</p>
-            </Link>
-            <Link to={"/staff/analys"}>
-              <FaArrowRightLong />
-            </Link>
-          </div>
+        {loading ? (
+          <CircleLoader />
+        ) : (
+          <>
+            <NavbarStaff heading="Hi, Welcome back 👋" staff={staff} />
+            <DashboardBoxStaff
+              customers={overallStatistics.totalCustomers}
+              bills={overallStatistics.totalOrders}
+              income={overallStatistics.totalAmount}
+              products={overallStatistics.totalProductsSold}
+            />
+            <div className="mt-6">
+              <div className="flex items-center gap-x-3 justify-end text-slate-500 cursor-pointer mb-3">
+                <Link to={"/staff/analys"}>
+                  {" "}
+                  <p className="text-sm font-semibold">Đi tới trang thống kê</p>
+                </Link>
+                <Link to={"/staff/analys"}>
+                  <FaArrowRightLong />
+                </Link>
+              </div>
 
-          <ChartStaff
-            totalProductByMonth={totalProductByMonth}
-            months={months}
-          />
-        </div>
-        <Dialog
-          size="sm"
-          open={openCPModal}
-          className="bg-transparent shadow-none"
-        >
-          <Card className="mx-auto w-full max-w-[28rem]">
-            <CardBody className="flex flex-col gap-4">
-              <Typography variant="h4" color="blue-gray">
-                Đổi mật khẩu mới
-              </Typography>
-              <Typography
-                className="font-normal text-slate-400"
-                variant="paragraph"
-              >
-                Mật khẩu cần ít nhất 6 kí tự.
-              </Typography>
-              <Typography className="" variant="h6">
-                Mật khẩu mới
-              </Typography>
-              <input
-                type="password"
-                className="border border-slate-300 rounded-lg p-2 w-full focus:outline-none focus:border-blue-500"
-                name="newPassword"
-                onChange={handleNewPasswordChange}
-              ></input>
-              <Typography className="" variant="h6">
-                Nhập lại mật khẩu mới
-              </Typography>
-              <input
-                type="password"
-                className="border border-slate-300 rounded-lg p-2 w-full focus:outline-none focus:border-blue-500"
-                name="confirmPassword"
-                onChange={handleConfirmPasswordChange}
-              ></input>
-            </CardBody>
-            <CardFooter className="pt-0">
-              <Button
-                variant="gradient"
-                onClick={handleChangePassword}
-                fullWidth
-              >
-                Đổi mật khẩu
-              </Button>
-            </CardFooter>
-          </Card>
-        </Dialog>
+              <ChartStaff
+                totalProductByMonth={totalProductByMonth}
+                months={months}
+              />
+            </div>
+            <Dialog
+              size="sm"
+              open={openCPModal}
+              className="bg-transparent shadow-none"
+            >
+              <Card className="mx-auto w-full max-w-[28rem]">
+                <CardBody className="flex flex-col gap-4">
+                  <Typography variant="h4" color="blue-gray">
+                    Đổi mật khẩu mới
+                  </Typography>
+                  <Typography
+                    className="font-normal text-slate-400"
+                    variant="paragraph"
+                  >
+                    Mật khẩu cần ít nhất 6 kí tự.
+                  </Typography>
+                  <Typography className="" variant="h6">
+                    Mật khẩu mới
+                  </Typography>
+                  <input
+                    type="password"
+                    className="border border-slate-300 rounded-lg p-2 w-full focus:outline-none focus:border-blue-500"
+                    name="newPassword"
+                    onChange={handleNewPasswordChange}
+                  ></input>
+                  <Typography className="" variant="h6">
+                    Nhập lại mật khẩu mới
+                  </Typography>
+                  <input
+                    type="password"
+                    className="border border-slate-300 rounded-lg p-2 w-full focus:outline-none focus:border-blue-500"
+                    name="confirmPassword"
+                    onChange={handleConfirmPasswordChange}
+                  ></input>
+                </CardBody>
+                <CardFooter className="pt-0">
+                  <Button
+                    variant="gradient"
+                    onClick={handleChangePassword}
+                    fullWidth
+                  >
+                    Đổi mật khẩu
+                  </Button>
+                </CardFooter>
+              </Card>
+            </Dialog>
+          </>
+        )}
       </div>
     </div>
   );

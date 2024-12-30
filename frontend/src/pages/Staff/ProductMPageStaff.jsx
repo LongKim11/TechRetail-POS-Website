@@ -112,13 +112,13 @@ const ProductMPageStaff = () => {
   return (
     <div className="flex">
       <SidebarStaff />
-      <div className="flex-1 p-7 bg-slate-100">
+      <div className="flex-1 p-7 bg-slate-100 overflow-hidden">
         {loading && <CircleLoader />}
         <NavbarStaff heading="Quản lý sản phẩm" staff={staff} />
         <div className="mt-11">
           <h1 className="text-2xl font-semibold">Danh sách</h1>
         </div>
-        <div className="w-full bg-white rounded-xl mt-7 border border-slate-200">
+        <div className="w-full bg-white rounded-xl mt-7 border border-slate-200 overflow-hidden">
           <div className="flex justify-between items-center p-5">
             <div className="flex gap-x-3">
               <form>
@@ -170,7 +170,11 @@ const ProductMPageStaff = () => {
               </Button>
             </div>
           </div>
-          <ProductTableStaff products={currentProducts} />
+          <div className="w-full overflow-x-auto">
+            <div className="min-w-full">
+              <ProductTableStaff products={currentProducts} />
+            </div>
+          </div>
         </div>
         <div className="flex items-center gap-8 fixed bottom-4 left-[50%]">
           <IconButton

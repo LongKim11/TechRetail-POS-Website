@@ -135,7 +135,7 @@ const ProductTable = ({ products, onDeleteProduct, token }) => {
                     {format(product.createdAt, "dd-MM-yyyy")}
                   </Typography>
                 </td>
-                <td className="p-4 flex justify-center">
+                <td className="p-4 flex justify-center whitespace-nowrap">
                   <div className="flex items-center gap-x-5">
                     <Tooltip
                       content="Xem chi tiết"

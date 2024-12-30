@@ -45,8 +45,8 @@ const ChangePasswordForm = () => {
 
   return (
     <div className="px-11 mt-11">
-      <div className="flex items-center justify-between">
-        <div className="w-1/2">
+      <div className="grid md:grid-cols-2 items-center gap-10">
+        <div className="w-full">
           <h1 className="text-2xl text-black font-semibold">
             Thay đổi mật khẩu
           </h1>
@@ -100,7 +100,7 @@ const ChangePasswordForm = () => {
             Đổi mật khẩu
           </button>
         </div>
-        <div className="w-1/2 ml-20">
+        <div className="w-full">
           <img src={ChangeBG} className="mix-blend-multiply"></img>
         </div>
       </div>

@@ -5,7 +5,6 @@ import {
   Dialog,
   DialogBody,
   DialogFooter,
-  DialogHeader,
   Card,
   CardBody,
   CardFooter,
@@ -102,9 +101,9 @@ const ProfileForm = ({ userInfo }) => {
       });
   };
   return (
-    <div className="px-11 mx-auto mt-11 flex items-center">
-      <div className="w-1/2">
-        <div className="flex justify-between items-center">
+    <div className="px-11 mx-auto mt-11 grid md:grid-cols-2 items-center">
+      <div className="w-full">
+        <div className="lg:flex justify-between items-center">
           <div className="flex items-center">
             <Avatar
               src={
@@ -132,7 +131,7 @@ const ProfileForm = ({ userInfo }) => {
           </div>
           <Button
             variant="gradient"
-            className="flex items-center gap-3"
+            className="flex items-center gap-3 mt-5"
             color="blue"
             onClick={handleOpenCAModal}
           >
@@ -313,8 +312,8 @@ const ProfileForm = ({ userInfo }) => {
           </div>
         </form>
       </div>
-      <div className="w-1/2 ml-20">
-        <img src={ProfileBG} className="mix-blend-multiply w-full"></img>
+      <div className="w-full">
+        <img src={ProfileBG} className="mix-blend-multiply"></img>
       </div>
     </div>
   );

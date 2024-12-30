@@ -54,9 +54,14 @@ const Profile = () => {
     <div className="flex">
       <Sidebar></Sidebar>
       <div className="flex-1 p-7 bg-slate-100">
-        {loading && <CircleLoader />}
-        <Navbar heading="Thông tin cá nhân" staff={admin}></Navbar>
-        <ProfileForm userInfo={admin}></ProfileForm>
+        {loading ? (
+          <CircleLoader />
+        ) : (
+          <>
+            <Navbar heading="Thông tin cá nhân" staff={admin}></Navbar>
+            <ProfileForm userInfo={admin}></ProfileForm>
+          </>
+        )}
       </div>
     </div>
   );

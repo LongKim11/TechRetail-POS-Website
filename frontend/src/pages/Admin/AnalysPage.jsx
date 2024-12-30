@@ -7,7 +7,7 @@ import AnalystTable from "../../components/AnalysTable";
 import { TbDeviceIpadCheck } from "react-icons/tb";
 import { TbDevicesDollar } from "react-icons/tb";
 import { GrMoney } from "react-icons/gr";
-import { format, set } from "date-fns";
+import { format } from "date-fns";
 import { useCookies } from "react-cookie";
 import { Navigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";

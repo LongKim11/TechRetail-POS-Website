@@ -73,7 +73,7 @@ const InvoicePage = () => {
       <div className="flex-1 p-7 bg-slate-100">
         <NavbarStaff heading="Xuất hóa đơn" staff={staff} />
         <div
-          className="mx-auto bg-white rounded-lg w-1/2 p-5 mt-11 border-slate-200 border shadow-md"
+          className="mx-auto bg-white rounded-lg w-full lg:w-3/4 xl:w-2/3 2xl:w-1/2 p-5 mt-11 border-slate-200 border shadow-md"
           id="printablediv"
         >
           <div className="flex items-center justify-center gap-x-5">

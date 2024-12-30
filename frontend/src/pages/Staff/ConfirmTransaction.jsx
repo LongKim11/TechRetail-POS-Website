@@ -207,10 +207,10 @@ const ConfirmTransaction = () => {
   return (
     <div className="flex">
       <SidebarStaff />
-      <div className="flex-1 p-7 bg-slate-100">
+      <div className="flex-1 p-7 bg-slate-100 overflow-hidden">
         <NavbarStaff heading="Trang xác nhận mua hàng" staff={staff} />
-        <div className="flex gap-x-5 mt-11">
-          <div className="w-1/3 bg-white rounded-lg shadow-md">
+        <div className="flex 2xl:flex-row flex-col gap-5 mt-11">
+          <div className="w-full md:w-2/3 md:mx-auto 2xl:w-1/3 bg-white rounded-lg shadow-md overflow-x-auto">
             <div className="p-3">
               <h3 className="text-xl font-semibold my-3 text-center">
                 Thông tin thanh toán
@@ -276,7 +276,7 @@ const ConfirmTransaction = () => {
               </tbody>
             </table>
           </div>
-          <div className="w-1/3 bg-white rounded-lg shadow-md">
+          <div className="w-full md:w-2/3 md:mx-auto 2xl:w-1/3 bg-white rounded-lg shadow-md">
             <div className="p-3">
               <div className="flex gap-x-3 items-center justify-center">
                 <h3 className="text-xl font-semibold my-3">
@@ -340,7 +340,7 @@ const ConfirmTransaction = () => {
               </div>
             </div>
           </div>
-          <div className="w-1/3 bg-white rounded-lg shadow-md">
+          <div className="w-full md:w-2/3 md:mx-auto 2xl:w-1/3 bg-white rounded-lg shadow-md overflow-x-auto">
             <div className="p-3">
               <h3 className="text-xl font-semibold my-3 text-center">
                 Thông tin hóa đơn

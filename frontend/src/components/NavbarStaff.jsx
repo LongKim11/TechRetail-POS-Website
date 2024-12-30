@@ -8,7 +8,6 @@ import {
 } from "@material-tailwind/react";
 import { FaRegUserCircle, FaFingerprint, FaSignOutAlt } from "react-icons/fa";
 import { MdSettings } from "react-icons/md";
-import UserAvatar from "../assets/user-avatar.png";
 import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { api } from "../app/api/api";
@@ -32,7 +31,9 @@ const NavbarStaff = ({ staff, heading }) => {
     <div className="flex justify-between items-center">
       <h1 className="text-2xl font-semibold ">{heading}</h1>
       <div className="flex items-center gap-4">
-        <Typography variant="h6">{staff.account?.username}</Typography>
+        <Typography variant="h6" className="hidden sm:flex">
+          {staff.account?.username}
+        </Typography>
         <Menu placement="bottom-end">
           <MenuHandler>
             <Avatar

@@ -31,7 +31,9 @@ const Navbar = ({ staff, heading }) => {
     <div className="flex justify-between items-center">
       <h1 className="text-2xl font-semibold ">{heading}</h1>
       <div className="flex items-center gap-4">
-        <Typography variant="h6">{staff.account?.username}</Typography>
+        <Typography variant="h6" className="hidden sm:flex">
+          {staff.account?.username}
+        </Typography>
         <Menu placement="bottom-end">
           <MenuHandler>
             <Avatar

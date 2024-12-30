@@ -111,47 +111,49 @@ const PurchaseHistoryTable = ({ orders }) => {
           </Typography>
         </DialogHeader>
         <DialogBody>
-          <table className="w-full min-w-max table-auto">
-            <thead>
-              <tr>
-                {TABLE_HEAD2.map((head) => (
-                  <th key={head} className="p-4">
-                    <Typography variant="h6" color="black">
-                      {head}
-                    </Typography>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {selectedOrder?.items.map((item, index) => {
-                return (
-                  <tr key={index} className="hover:bg-slate-50">
-                    <td className="px-2 py-4 text-center">
-                      <Typography className="font-semibold text-slate-500">
-                        {item.name}
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-max table-auto">
+              <thead>
+                <tr>
+                  {TABLE_HEAD2.map((head) => (
+                    <th key={head} className="p-4">
+                      <Typography variant="h6" color="black">
+                        {head}
                       </Typography>
-                    </td>
-                    <td className="px-2 py-4 text-center">
-                      <Typography className="font-semibold text-slate-500">
-                        {item.quantity}
-                      </Typography>
-                    </td>
-                    <td className="px-2 py-4 text-center">
-                      <Typography className="font-semibold text-slate-500">
-                        {item.retail_price}
-                      </Typography>
-                    </td>
-                    <td className="px-2 py-4 text-center">
-                      <Typography className="font-semibold text-slate-500">
-                        {item.subTotal}
-                      </Typography>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {selectedOrder?.items.map((item, index) => {
+                  return (
+                    <tr key={index} className="hover:bg-slate-50">
+                      <td className="px-2 py-4 text-center">
+                        <Typography className="font-semibold text-slate-500">
+                          {item.name}
+                        </Typography>
+                      </td>
+                      <td className="px-2 py-4 text-center">
+                        <Typography className="font-semibold text-slate-500">
+                          {item.quantity}
+                        </Typography>
+                      </td>
+                      <td className="px-2 py-4 text-center">
+                        <Typography className="font-semibold text-slate-500">
+                          {item.retail_price}
+                        </Typography>
+                      </td>
+                      <td className="px-2 py-4 text-center">
+                        <Typography className="font-semibold text-slate-500">
+                          {item.subTotal}
+                        </Typography>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </DialogBody>
         <DialogFooter>
           <Button

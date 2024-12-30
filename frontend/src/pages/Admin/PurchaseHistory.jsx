@@ -125,7 +125,7 @@ const PurchaseHistory = () => {
                   Lịch sử mua hàng
                 </h3>
               </div>
-              <div className="w-full over-flow-x-auto">
+              <div className="w-full overflow-x-auto">
                 <div className="min-w-full">
                   <PurchaseHistoryTable
                     orders={currentOrders}

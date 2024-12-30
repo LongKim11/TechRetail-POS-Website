@@ -33,12 +33,12 @@ const AnalystTable = ({ orders }) => {
   };
 
   return (
-    <Card className="h-full w-full">
-      <table className="w-full min-w-max table-auto">
+    <Card className="overflow-x-auto">
+      <table className="w-full table-auto">
         <thead className="">
           <tr>
             {TABLE_HEAD1.map((head) => (
-              <th key={head} className="p-4 bg-gray-100">
+              <th key={head} className="p-4 bg-gray-100 whitespace-nowrap">
                 <Typography variant="h6" color="black">
                   {head}
                 </Typography>
@@ -51,27 +51,27 @@ const AnalystTable = ({ orders }) => {
             return (
               <tr key={index} className="hover:bg-slate-50">
                 <td className="p-4 text-center">
-                  <Typography className="font-semibold text-orange-500">
+                  <Typography className="font-semibold text-orange-500 whitespace-nowrap">
                     {order._id}
                   </Typography>
                 </td>
                 <td className="p-4 text-center">
-                  <Typography className="font-semibold text-slate-600">
+                  <Typography className="font-semibold text-slate-600 whitespace-nowrap">
                     {order.customer_id.fullname}
                   </Typography>
                 </td>
                 <td className="p-4 text-center">
-                  <Typography className="font-semibold text-slate-600">
+                  <Typography className="font-semibold text-slate-600 whitespace-nowrap">
                     {order.totalAmount}
                   </Typography>
                 </td>
                 <td className="p-4 text-center">
-                  <Typography className="font-semibold text-slate-600">
+                  <Typography className="font-semibold text-slate-600 whitespace-nowrap">
                     {format(order.createdAt, "dd/MM/yyyy")}
                   </Typography>
                 </td>
                 <td className="p-4 text-center">
-                  <Typography className="font-semibold text-slate-600">
+                  <Typography className="font-semibold text-slate-600 whitespace-nowrap">
                     {order.items.reduce((sum, item) => sum + item.quantity, 0)}
                   </Typography>
                 </td>
@@ -107,47 +107,49 @@ const AnalystTable = ({ orders }) => {
           </Typography>
         </DialogHeader>
         <DialogBody>
-          <table className="w-full min-w-max table-auto">
-            <thead>
-              <tr>
-                {TABLE_HEAD2.map((head) => (
-                  <th key={head} className="p-4">
-                    <Typography variant="h6" color="black">
-                      {head}
-                    </Typography>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {selectedOrder?.items.map((order, index) => {
-                return (
-                  <tr key={index} className="hover:bg-slate-50">
-                    <td className="px-2 py-4 text-center">
-                      <Typography className="font-semibold text-slate-500">
-                        {order.name}
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-max table-auto">
+              <thead>
+                <tr>
+                  {TABLE_HEAD2.map((head) => (
+                    <th key={head} className="p-4">
+                      <Typography variant="h6" color="black">
+                        {head}
                       </Typography>
-                    </td>
-                    <td className="px-2 py-4 text-center">
-                      <Typography className="font-semibold text-slate-500">
-                        {order.quantity}
-                      </Typography>
-                    </td>
-                    <td className="px-2 py-4 text-center">
-                      <Typography className="font-semibold text-slate-500">
-                        {order.retail_price}
-                      </Typography>
-                    </td>
-                    <td className="px-2 py-4 text-center">
-                      <Typography className="font-semibold text-slate-500">
-                        {order.subTotal}
-                      </Typography>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {selectedOrder?.items.map((order, index) => {
+                  return (
+                    <tr key={index} className="hover:bg-slate-50">
+                      <td className="px-2 py-4 text-center">
+                        <Typography className="font-semibold text-slate-500">
+                          {order.name}
+                        </Typography>
+                      </td>
+                      <td className="px-2 py-4 text-center">
+                        <Typography className="font-semibold text-slate-500">
+                          {order.quantity}
+                        </Typography>
+                      </td>
+                      <td className="px-2 py-4 text-center">
+                        <Typography className="font-semibold text-slate-500">
+                          {order.retail_price}
+                        </Typography>
+                      </td>
+                      <td className="px-2 py-4 text-center">
+                        <Typography className="font-semibold text-slate-500">
+                          {order.subTotal}
+                        </Typography>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </DialogBody>
         <DialogFooter>
           <Button

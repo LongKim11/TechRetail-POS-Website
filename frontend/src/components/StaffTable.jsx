@@ -134,7 +134,7 @@ const StaffTable = ({ staffs }) => {
   };
 
   return (
-    <Card className="h-full w-full">
+    <Card className="overflow-x-auto">
       <table className="w-full table-auto text-left">
         <thead className="">
           <tr>

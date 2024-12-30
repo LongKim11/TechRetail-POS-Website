@@ -250,7 +250,7 @@ const StaffManagementPage = () => {
                 </div>
               </div>
               <div className="w-full overflow-x-auto">
-                <div style={{ minWidth: "800px" }}>
+                <div className="min-w-full">
                   <StaffTable staffs={currentStaffs} />
                 </div>
               </div>

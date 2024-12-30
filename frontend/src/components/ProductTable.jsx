@@ -88,12 +88,12 @@ const ProductTable = ({ products, onDeleteProduct, token }) => {
   };
 
   return (
-    <Card className="h-full w-full">
-      <table className="w-full min-w-max table-auto">
+    <Card className="overflow-x-auto">
+      <table className="w-full table-auto">
         <thead className="">
           <tr>
             {TABLE_HEAD.map((head) => (
-              <th key={head} className="p-4 bg-gray-100">
+              <th key={head} className="p-4 bg-gray-100 whitespace-nowrap">
                 <Typography variant="h6" color="black">
                   {head}
                 </Typography>
@@ -105,32 +105,32 @@ const ProductTable = ({ products, onDeleteProduct, token }) => {
           {productsRender.map((product, index) => {
             return (
               <tr key={index} className="hover:bg-slate-50">
-                <td className="p-4 text-center">
+                <td className="p-4 text-center whitespace-nowrap">
                   <Typography className="font-semibold text-orange-600">
                     {product.barcode}
                   </Typography>
                 </td>
-                <td className="p-4 text-center">
+                <td className="p-4 text-center whitespace-nowrap">
                   <Typography className="font-semibold text-blue-700">
                     {product.name}
                   </Typography>
                 </td>
-                <td className="p-4 text-center">
+                <td className="p-4 text-center whitespace-nowrap">
                   <Typography className="font-semibold text-green-500">
                     {product.import_price}$
                   </Typography>
                 </td>
-                <td className="p-4 text-center">
+                <td className="p-4 text-center whitespace-nowrap">
                   <Typography className="font-semibold text-green-500">
                     {product.retail_price}$
                   </Typography>
                 </td>
-                <td className="p-4 text-center">
+                <td className="p-4 text-center whitespace-nowrap">
                   <Typography className="font-semibold text-pink-500">
                     {product.category}
                   </Typography>
                 </td>
-                <td className="p-4 text-center">
+                <td className="p-4 text-center whitespace-nowrap">
                   <Typography className="font-semibold text-slate-500">
                     {format(product.createdAt, "dd-MM-yyyy")}
                   </Typography>

@@ -83,25 +83,33 @@ const Home = () => {
     <div className="flex">
       <Sidebar />
       <div className="flex-1 p-7 bg-slate-100">
-        {loading && <CircleLoader />}
-        <Navbar heading="Hi, Welcome back 👋" staff={admin} />
-        <DashboardBox
-          employees={overallStatistics.totalStaff}
-          bills={overallStatistics.totalOrders}
-          income={overallStatistics.totalAmount}
-          products={overallStatistics.totalProductsSold}
-        />
-        <div className="mt-6">
-          <div className="flex items-center gap-x-3 justify-end text-slate-500 cursor-pointer mb-3">
-            <Link to={"/admin/analys"}>
-              <p className="text-sm font-semibold">Đi tới trang thống kê</p>
-            </Link>
-            <Link to={"/admin/analys"}>
-              <FaArrowRightLong />
-            </Link>
-          </div>
-          <ChartAdmin totalAmountByMonth={totalAmountByMonth} months={months} />
-        </div>
+        {loading ? (
+          <CircleLoader />
+        ) : (
+          <>
+            <Navbar heading="Hi, Welcome back 👋" staff={admin} />
+            <DashboardBox
+              employees={overallStatistics.totalStaff}
+              bills={overallStatistics.totalOrders}
+              income={overallStatistics.totalAmount}
+              products={overallStatistics.totalProductsSold}
+            />
+            <div className="mt-6">
+              <div className="flex items-center gap-x-3 justify-end text-slate-500 cursor-pointer mb-3">
+                <Link to={"/admin/analys"}>
+                  <p className="text-sm font-semibold">Đi tới trang thống kê</p>
+                </Link>
+                <Link to={"/admin/analys"}>
+                  <FaArrowRightLong />
+                </Link>
+              </div>
+              <ChartAdmin
+                totalAmountByMonth={totalAmountByMonth}
+                months={months}
+              />
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

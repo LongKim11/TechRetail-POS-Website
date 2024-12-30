@@ -135,11 +135,11 @@ const StaffTable = ({ staffs }) => {
 
   return (
     <Card className="h-full w-full">
-      <table className="w-full min-w-max table-auto text-left">
+      <table className="w-full table-auto text-left">
         <thead className="">
           <tr>
             {TABLE_HEAD.map((head) => (
-              <th key={head} className="p-4 bg-gray-100">
+              <th key={head} className="p-4 bg-gray-100 whitespace-nowrap">
                 <Typography variant="h6" color="black">
                   {head}
                 </Typography>
@@ -151,7 +151,7 @@ const StaffTable = ({ staffs }) => {
           {staffs.map((staff, index) => {
             return (
               <tr key={index} className="hover:bg-slate-50">
-                <td className="p-4">
+                <td className="p-4 whitespace-nowrap">
                   <div className="flex items-center gap-x-3">
                     <Avatar
                       src={
@@ -168,12 +168,12 @@ const StaffTable = ({ staffs }) => {
                     </Typography>
                   </div>
                 </td>
-                <td className="p-4">
+                <td className="p-4 whitespace-nowrap">
                   <Typography className="font-semibold">
                     {format(staff.createdAt, "dd-MM-yyyy")}
                   </Typography>
                 </td>
-                <td className="p-4">
+                <td className="p-4 whitespace-nowrap">
                   <div className="w-max">
                     <Chip
                       size="lg"
@@ -183,7 +183,7 @@ const StaffTable = ({ staffs }) => {
                     />
                   </div>
                 </td>
-                <td className="p-4">
+                <td className="p-4 whitespace-nowrap">
                   <div className="w-max">
                     <Chip
                       size="lg"
@@ -193,7 +193,7 @@ const StaffTable = ({ staffs }) => {
                     />
                   </div>
                 </td>
-                <td className="p-4">
+                <td className="p-4 whitespace-nowrap">
                   <Button
                     className="flex items-center gap-3"
                     size="sm"
@@ -205,7 +205,7 @@ const StaffTable = ({ staffs }) => {
                     Gửi
                   </Button>
                 </td>
-                <td className="p-4">
+                <td className="p-4 whitespace-nowrap">
                   <div className="flex items-center gap-x-5">
                     <Tooltip
                       content="Xem chi tiết"
@@ -250,6 +250,7 @@ const StaffTable = ({ staffs }) => {
           })}
         </tbody>
       </table>
+
       <Dialog
         open={openDetailModal}
         handler={() => setOpenDetailModal(!openDetailModal)}
@@ -258,7 +259,7 @@ const StaffTable = ({ staffs }) => {
         <DialogHeader className="relative m-0 block">
           <Typography variant="h3">Chi tiết nhân viên</Typography>
           <Typography className="mt-1 font-normal text-slate-500">
-            Mã nhân viên: {selectedStaff?.id}
+            Mã nhân viên: {selectedStaff?._id}
           </Typography>
         </DialogHeader>
         <DialogBody>

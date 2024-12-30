@@ -95,55 +95,68 @@ const PurchaseHistory = () => {
   return (
     <div className="flex">
       <Sidebar></Sidebar>
-      <div className="flex-1 p-7 bg-slate-100">
-        {loading && <CircleLoader></CircleLoader>}
-        <Navbar heading="Đơn hàng đã mua" staff={admin}></Navbar>
-        <div className="my-7 text-slate-700">
-          <div className="flex gap-x-3 items-center mb-3">
-            <span className="font-semibold text-black">Họ và tên:</span>
-            <span className="font-semibold">{name}</span>
-          </div>
-          <div className="flex gap-x-3 items-center mb-3">
-            <span className="font-semibold text-black">Số điện thoại:</span>
-            <span className="font-semibold">{phone}</span>
-          </div>
-          <div className="flex gap-x-3 items-center">
-            <span className="font-semibold text-black">Địa chỉ:</span>
-            <span className="font-semibold">{address}</span>
-          </div>
-        </div>
-        <div className="w-full bg-white rounded-xl mt-7 border border-slate-200">
-          <div className="flex items-center justify-center gap-x-3">
-            <IoCaretBackCircleOutline
-              className="text-4xl cursor-pointer text-blue-600"
-              onClick={() => navigate("/admin/customers")}
-            />
-            <h3 className="text-2xl font-semibold my-6">Lịch sử mua hàng</h3>
-          </div>
-          <PurchaseHistoryTable orders={currentOrders}></PurchaseHistoryTable>
-        </div>
-        <div className="flex items-center gap-8 fixed bottom-4 left-[50%]">
-          <IconButton
-            size="sm"
-            onClick={prev}
-            disabled={active === 1}
-            className="bg-blue-600"
-          >
-            <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" />
-          </IconButton>
-          <Typography color="gray" className="font-normal">
-            Page <strong className="text-gray-900">{active}</strong> of{" "}
-            <strong className="text-gray-900">{maxPage}</strong>
-          </Typography>
-          <IconButton
-            size="sm"
-            className="bg-blue-600"
-            onClick={next}
-            disabled={active === maxPage}
-          >
-            <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
-          </IconButton>
-        </div>
+      <div className="flex-1 p-7 bg-slate-100 overflow-hidden">
+        {loading ? (
+          <CircleLoader></CircleLoader>
+        ) : (
+          <>
+            <Navbar heading="Đơn hàng đã mua" staff={admin}></Navbar>
+            <div className="my-7 text-slate-700">
+              <div className="flex gap-x-3 items-center mb-3">
+                <span className="font-semibold text-black">Họ và tên:</span>
+                <span className="font-semibold">{name}</span>
+              </div>
+              <div className="flex gap-x-3 items-center mb-3">
+                <span className="font-semibold text-black">Số điện thoại:</span>
+                <span className="font-semibold">{phone}</span>
+              </div>
+              <div className="flex gap-x-3 items-center">
+                <span className="font-semibold text-black">Địa chỉ:</span>
+                <span className="font-semibold">{address}</span>
+              </div>
+            </div>
+            <div className="w-full bg-white rounded-xl mt-7 border border-slate-200 overflow-hidden">
+              <div className="flex items-center justify-center gap-x-3">
+                <IoCaretBackCircleOutline
+                  className="text-4xl cursor-pointer text-blue-600"
+                  onClick={() => navigate("/admin/customers")}
+                />
+                <h3 className="text-2xl font-semibold my-6">
+                  Lịch sử mua hàng
+                </h3>
+              </div>
+              <div className="w-full over-flow-x-auto">
+                <div className="min-w-full">
+                  <PurchaseHistoryTable
+                    orders={currentOrders}
+                  ></PurchaseHistoryTable>
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center gap-8 fixed bottom-4 left-[50%]">
+              <IconButton
+                size="sm"
+                onClick={prev}
+                disabled={active === 1}
+                className="bg-blue-600"
+              >
+                <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" />
+              </IconButton>
+              <Typography color="gray" className="font-normal">
+                Page <strong className="text-gray-900">{active}</strong> of{" "}
+                <strong className="text-gray-900">{maxPage}</strong>
+              </Typography>
+              <IconButton
+                size="sm"
+                className="bg-blue-600"
+                onClick={next}
+                disabled={active === maxPage}
+              >
+                <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
+              </IconButton>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

@@ -34,12 +34,12 @@ const PurchaseHistoryTable = ({ orders }) => {
   };
 
   return (
-    <Card className="h-full w-full">
-      <table className="w-full min-w-max table-auto">
+    <Card className="overflow-x-auto">
+      <table className="w-full table-auto">
         <thead className="">
           <tr>
             {TABLE_HEAD1.map((head) => (
-              <th key={head} className="p-4 bg-gray-100">
+              <th key={head} className="p-4 bg-gray-100 whitespace-nowrap">
                 <Typography variant="h6" color="black">
                   {head}
                 </Typography>
@@ -51,37 +51,37 @@ const PurchaseHistoryTable = ({ orders }) => {
           {orders.map((order, index) => {
             return (
               <tr key={index} className="hover:bg-slate-50">
-                <td className="p-4 text-center">
+                <td className="p-4 text-center whitespace-nowrap">
                   <Typography className="font-semibold text-orange-500">
                     {order._id}
                   </Typography>
                 </td>
-                <td className="p-4 text-center">
+                <td className="p-4 text-center whitespace-nowrap">
                   <Typography className="font-semibold text-slate-600">
                     {order.totalAmount}
                   </Typography>
                 </td>
-                <td className="p-4 text-center">
+                <td className="p-4 text-center whitespace-nowrap">
                   <Typography className="font-semibold text-slate-600">
                     {order.receivedAmount}
                   </Typography>
                 </td>
-                <td className="p-4 text-center">
+                <td className="p-4 text-center whitespace-nowrap">
                   <Typography className="font-semibold text-slate-600">
                     {order.change}
                   </Typography>
                 </td>
-                <td className="p-4 text-center">
+                <td className="p-4 text-center whitespace-nowrap">
                   <Typography className="font-semibold text-slate-600">
                     {format(order.createdAt, "dd-MM-yyyy")}
                   </Typography>
                 </td>
-                <td className="p-4 text-center">
+                <td className="p-4 text-center whitespace-nowrap">
                   <Typography className="font-semibold text-slate-600">
                     {order.items.length}
                   </Typography>
                 </td>
-                <td className="p-4 flex justify-center">
+                <td className="p-4 flex justify-center whitespace-nowrap">
                   <Tooltip
                     content="Xem chi tiết"
                     animate={{

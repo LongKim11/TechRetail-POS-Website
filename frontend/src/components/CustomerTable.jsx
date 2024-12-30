@@ -13,12 +13,12 @@ const TABLE_HEAD = [
 
 const CustomerTable = ({ customers }) => {
   return (
-    <Card className="h-full w-full">
-      <table className="w-full min-w-max table-auto">
+    <Card className="overflow-x-auto">
+      <table className="w-full table-auto">
         <thead className="">
           <tr>
             {TABLE_HEAD.map((head) => (
-              <th key={head} className="p-4 bg-gray-100">
+              <th key={head} className="p-4 bg-gray-100 whitespace-nowrap">
                 <Typography variant="h6" color="black">
                   {head}
                 </Typography>
@@ -30,27 +30,27 @@ const CustomerTable = ({ customers }) => {
           {customers.map((customer, index) => {
             return (
               <tr key={index} className="hover:bg-slate-50">
-                <td className="p-4 text-center">
+                <td className="p-4 text-center whitespace-nowrap">
                   <Typography className="font-semibold text-blue-700">
                     {customer.fullname}
                   </Typography>
                 </td>
-                <td className="p-4 text-center">
+                <td className="p-4 text-center whitespace-nowrap">
                   <Typography className="font-semibold text-slate-600">
                     {customer.address}
                   </Typography>
                 </td>
-                <td className="p-4 text-center">
+                <td className="p-4 text-center whitespace-nowrap">
                   <Typography className="font-semibold text-slate-600">
                     {customer.phone}
                   </Typography>
                 </td>
-                <td className="p-4 text-center">
+                <td className="p-4 text-center whitespace-nowrap">
                   <Typography className="font-semibold text-slate-600">
                     {format(customer.createdAt, "dd-MM-yyyy")}
                   </Typography>
                 </td>
-                <td className="p-4 flex justify-center">
+                <td className="p-4 flex justify-center whitespace-nowrap">
                   <Tooltip
                     content="Lịch sử mua hàng"
                     animate={{

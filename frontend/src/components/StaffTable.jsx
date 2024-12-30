@@ -152,7 +152,7 @@ const StaffTable = ({ staffs }) => {
             return (
               <tr key={index} className="hover:bg-slate-50">
                 <td className="p-4 whitespace-nowrap">
-                  <div className="flex items-center gap-x-3">
+                  <div className="flex items-center gap-x-3 w-max">
                     <Avatar
                       src={
                         "http://localhost:8080/uploads/avatars/" + staff.avatar

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { FaTachometerAlt } from "react-icons/fa";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { FaUserPlus } from "react-icons/fa6";
@@ -12,7 +11,6 @@ import { useCookies } from "react-cookie";
 import { api } from "../app/api/api";
 
 const Sidebar = () => {
-  const [open, setOpen] = useState(true);
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
 
   const handleLogout = () => {

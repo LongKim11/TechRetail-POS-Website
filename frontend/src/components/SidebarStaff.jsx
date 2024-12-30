@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { FaTachometerAlt } from "react-icons/fa";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { FaUsers } from "react-icons/fa";
@@ -13,7 +12,6 @@ import { useCookies } from "react-cookie";
 import { api } from "../app/api/api";
 
 const SidebarStaff = () => {
-  const [open, setOpen] = useState(true);
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
 
   const handleLogout = () => {
@@ -29,30 +27,11 @@ const SidebarStaff = () => {
   };
 
   return (
-    <div
-      className={` ${
-        open ? "w-60" : "w-20 "
-      } bg-dark-purple min-h-screen p-5 pt-8 relative duration-300 `}
-    >
-      <img
-        src={Control}
-        className={`absolute cursor-pointer -right-3 top-9 w-7 border-dark-purple
-             border-2 rounded-full  ${!open && "rotate-180"}`}
-        onClick={() => setOpen(!open)}
-      />
+    <div className="w-20 lg:w-64 bg-dark-purple min-h-screen p-5 pt-8 relative">
       <Link to={"/staff/home"}>
         <div className="flex gap-x-4 items-center">
-          <img
-            src={YellowLogo}
-            className={`cursor-pointer duration-500 ${
-              open && "rotate-[360deg]"
-            }  w-[40px] h-[40px]`}
-          />
-          <h1
-            className={`text-yellow-300 origin-left font-medium text-xl duration-300 ${
-              !open && "scale-0"
-            }`}
-          >
+          <img src={YellowLogo} className="cursor-pointer w-[40px] h-[40px]" />
+          <h1 className="hidden lg:flex text-yellow-300 font-medium text-xl">
             CaesarPOS
           </h1>
         </div>
@@ -63,9 +42,7 @@ const SidebarStaff = () => {
             <span className="text-2xl text-white">
               <FaTachometerAlt></FaTachometerAlt>
             </span>
-            <span className={`${!open && "hidden"} origin-left duration-200`}>
-              Dashboard
-            </span>
+            <span className="hidden lg:flex">Dashboard</span>
           </li>
         </Link>
         <Link to={"/staff/profile"}>
@@ -73,9 +50,7 @@ const SidebarStaff = () => {
             <span className="text-2xl text-white">
               <FaRegCircleUser></FaRegCircleUser>
             </span>
-            <span className={`${!open && "hidden"} origin-left duration-200`}>
-              Profile
-            </span>
+            <span className="hidden lg:flex">Profile</span>
           </li>
         </Link>
         <Link to={"/staff/transaction"}>
@@ -83,9 +58,7 @@ const SidebarStaff = () => {
             <span className="text-2xl text-white">
               <GrTransaction></GrTransaction>
             </span>
-            <span className={`${!open && "hidden"} origin-left duration-200`}>
-              Transaction
-            </span>
+            <span className="hidden lg:flex">Transaction</span>
           </li>
         </Link>
         <Link to={"/staff/products"}>
@@ -93,9 +66,7 @@ const SidebarStaff = () => {
             <span className="text-2xl text-white">
               <PiDevicesFill></PiDevicesFill>
             </span>
-            <span className={`${!open && "hidden"} origin-left duration-200`}>
-              Products
-            </span>
+            <span className="hidden lg:flex">Products</span>
           </li>
         </Link>
         <Link to={"/staff/customers"}>
@@ -103,9 +74,7 @@ const SidebarStaff = () => {
             <span className="text-2xl text-white">
               <FaUsers></FaUsers>
             </span>
-            <span className={`${!open && "hidden"} origin-left duration-200`}>
-              Customers
-            </span>
+            <span className="hidden lg:flex">Customers</span>
           </li>
         </Link>
         <Link to={"/staff/analys"}>
@@ -113,9 +82,7 @@ const SidebarStaff = () => {
             <span className="text-2xl text-white">
               <FaChartLine></FaChartLine>
             </span>
-            <span className={`${!open && "hidden"} origin-left duration-200`}>
-              Analys
-            </span>
+            <span className="hidden lg:flex">Analys</span>
           </li>
         </Link>
         <a onClick={handleLogout}>
@@ -123,9 +90,7 @@ const SidebarStaff = () => {
             <span className="text-2xl text-white">
               <FiLogOut></FiLogOut>
             </span>
-            <span className={`${!open && "hidden"} origin-left duration-200`}>
-              Log Out
-            </span>
+            <span className="hidden lg:flex">Log Out</span>
           </li>
         </a>
       </ul>

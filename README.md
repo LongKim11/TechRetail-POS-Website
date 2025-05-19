@@ -19,13 +19,11 @@ A modern web-based Point of Sale (POS) system tailored for phone and accessories
 
 ## 🎬 Presentation Video
 
-Watch the full project walkthrough here:  
-[https://youtu.be/oswTraarpOY](https://youtu.be/oswTraarpOY)
+Watch the full project walkthrough here:  [https://youtu.be/oswTraarpOY](https://youtu.be/oswTraarpOY)
 
 ## 🚀 Deployment
 
-The live application is hosted and accessible at:  
-[https://ceasar-pos-app-client.vercel.app/](https://ceasar-pos-app-client.vercel.app/)
+The live application is hosted and accessible at:  [https://ceasar-pos-app-client.vercel.app/](https://ceasar-pos-app-client.vercel.app/)
 
 ## 👤 Login Credentials
 

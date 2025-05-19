@@ -27,8 +27,6 @@ Watch the full project walkthrough here:
 The live application is hosted and accessible at:  
 [https://ceasar-pos-app-client.vercel.app/](https://ceasar-pos-app-client.vercel.app/)
 
----
-
 ## 👤 Login Credentials
 
 The system supports two user roles with distinct access levels to ensure secure and efficient operations:

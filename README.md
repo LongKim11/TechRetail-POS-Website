@@ -2,12 +2,16 @@
 
 A modern web-based Point of Sale (POS) system tailored for phone and accessories retail stores. Built to empower **administrators** and **sales staff** with seamless management and real-time insights.
 
+---
+
 ## 🚀 Tech Stack
 
 - **Frontend:** React.js and Material Tailwind for user-friendly UI
 - **Backend:** Node.js + Express.js REST API  
 - **Database:** MongoDB for scalable data storage  
 - **Authentication:** JWT-based session management  
+
+---
 
 ## ✨ Key Features
 
@@ -17,13 +21,19 @@ A modern web-based Point of Sale (POS) system tailored for phone and accessories
 - Powerful **analytics dashboard** offering detailed sales and performance reports  
 - Responsive, user-friendly interface optimized for quick checkout  
 
+---
+
 ## 🎬 Presentation Video
 
 Watch the full project walkthrough here:  [https://youtu.be/oswTraarpOY](https://youtu.be/oswTraarpOY)
 
+---
+
 ## 🚀 Deployment
 
 The live application is hosted and accessible at:  [https://ceasar-pos-app-client.vercel.app/](https://ceasar-pos-app-client.vercel.app/)
+
+---
 
 ## 👤 Login Credentials
 

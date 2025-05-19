@@ -1,32 +1,43 @@
 # Caesar POS Website
 
-- Develop a website offering POS services for phone and accessories retail stores.
+A modern web-based Point of Sale (POS) system tailored for phone and accessories retail stores. Built to empower **administrators** and **sales staff** with seamless management and real-time insights.
 
-- The primary users of the website are **administrators** and **sales staff**.
+## 🚀 Tech Stack
 
-- The website will provide functions such as account management, product management, customer management, transaction management, and analytics.
+- **Frontend:** React.js and Material Tailwind for user-friendly UI
+- **Backend:** Node.js + Express.js REST API  
+- **Database:** MongoDB for scalable data storage  
+- **Authentication:** JWT-based session management  
 
-## Login Credentials
+## ✨ Key Features
 
-**Admin**
+- User **account management** with role-based access (Admin & Staff)  
+- Comprehensive **product and inventory management**  
+- Smooth **customer management** and **sales transactions**  
+- Powerful **analytics dashboard** offering detailed sales and performance reports  
+- Responsive, user-friendly interface optimized for quick checkout  
 
-| Username | Password |
-| -------- | -------- |
-| admin    | admin    |
+## 🎬 Presentation Video
 
-**Staff**
+Watch the full project walkthrough here:  
+[https://youtu.be/oswTraarpOY](https://youtu.be/oswTraarpOY)
 
-| Username       | Password |
-| -------------- | -------- |
-| vokimlong11.cs | 123      |
-| longsn113      | 123      |
+## 🚀 Deployment
 
-## How to Run the Project
+The live application is hosted and accessible at:  
+[https://ceasar-pos-app-client.vercel.app/](https://ceasar-pos-app-client.vercel.app/)
 
-- Use the `git clone` command to clone the repository into a directory.
+---
 
-- Navigate to the `backend` folder, run `npm install`, and repeat the same process for the `frontend` folder.
+## 👤 Login Credentials
 
-- Once installation is complete, start the server by running `npm start` in the `backend` folder.
+The system supports two user roles with distinct access levels to ensure secure and efficient operations:
 
-- For the frontend, run `npm run dev` and access the provided URL.
+- **Admin:** Full access to all features including user management, product control, and analytics.
+- **Staff:** Limited access focused on sales transactions and customer management.
+
+| Role   | Username       | Password |
+| ------ | -------------- | -------- |
+| Admin  | admin          | admin    |
+| Staff  | vokimlong11.cs | 123      |
+| Staff  | longsn113      | 123      |

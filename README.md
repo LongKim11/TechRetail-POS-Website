@@ -1,4 +1,4 @@
-# Caesar POS Website
+# 🛒 Caesar POS Website
 
 A modern web-based Point of Sale (POS) system tailored for phone and accessories retail stores. Built to empower **administrators** and **sales staff** with seamless management and real-time insights.
 
